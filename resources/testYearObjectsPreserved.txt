@@ -1,0 +1,256 @@
+{
+  "$id": "1",
+  "Accounts": {
+    "$id": "2",
+    "checking": {
+      "$id": "3",
+      "$type": "BudgetToolLib.CheckingAccount, BudgetToolLib",
+      "Balance": 5000.0,
+      "Name": "checking"
+    }
+  },
+  "IncomeSources": {
+    "$id": "4",
+    "analog": {
+      "$id": "5",
+      "Name": "analog",
+      "UnitAmount": 2437.0,
+      "IncomeFrequency": 2,
+      "DepositAccount": {
+        "$ref": "3"
+      },
+      "FirstDeposit": "2020-01-10T00:00:00",
+      "LastDeposit": "0001-01-01T00:00:00",
+      "LastDepositWeekNumber": 0,
+      "AnnualAmount": 63362.0
+    }
+  },
+  "BudgetGroups": [
+    {
+      "$id": "6",
+      "HardBills": {
+        "$id": "7",
+        "car insurance": {
+          "$id": "8",
+          "Name": "car insurance",
+          "Amount": 1000.0,
+          "DayOfMonthPaid": 0,
+          "PaymentAccount": {
+            "$ref": "3"
+          },
+          "LastMonthPaid": 0
+        }
+      },
+      "SoftBills": {
+        "$id": "9",
+        "japan": {
+          "$id": "10",
+          "Name": "japan",
+          "Amount": 7500.0
+        }
+      },
+      "Purchases": []
+    },
+    {
+      "$id": "11",
+      "HardBills": {
+        "$id": "12",
+        "cable": {
+          "$id": "13",
+          "Name": "cable",
+          "Amount": 80.0,
+          "DayOfMonthPaid": 15,
+          "PaymentAccount": {
+            "$ref": "3"
+          },
+          "LastMonthPaid": 0
+        }
+      },
+      "SoftBills": {
+        "$id": "14",
+        "food": {
+          "$id": "15",
+          "Name": "food",
+          "Amount": 500.0
+        }
+      },
+      "Purchases": []
+    },
+    {
+      "$id": "16",
+      "HardBills": {
+        "$id": "17",
+        "cable": {
+          "$ref": "13"
+        }
+      },
+      "SoftBills": {
+        "$id": "18",
+        "food": {
+          "$ref": "15"
+        }
+      },
+      "Purchases": []
+    },
+    {
+      "$id": "19",
+      "HardBills": {
+        "$id": "20",
+        "cable": {
+          "$ref": "13"
+        }
+      },
+      "SoftBills": {
+        "$id": "21",
+        "food": {
+          "$ref": "15"
+        }
+      },
+      "Purchases": []
+    },
+    {
+      "$id": "22",
+      "HardBills": {
+        "$id": "23",
+        "cable": {
+          "$ref": "13"
+        }
+      },
+      "SoftBills": {
+        "$id": "24",
+        "food": {
+          "$ref": "15"
+        }
+      },
+      "Purchases": []
+    },
+    {
+      "$id": "25",
+      "HardBills": {
+        "$id": "26",
+        "cable": {
+          "$ref": "13"
+        }
+      },
+      "SoftBills": {
+        "$id": "27",
+        "food": {
+          "$ref": "15"
+        }
+      },
+      "Purchases": []
+    },
+    {
+      "$id": "28",
+      "HardBills": {
+        "$id": "29",
+        "cable": {
+          "$ref": "13"
+        }
+      },
+      "SoftBills": {
+        "$id": "30",
+        "food": {
+          "$ref": "15"
+        }
+      },
+      "Purchases": []
+    },
+    {
+      "$id": "31",
+      "HardBills": {
+        "$id": "32",
+        "cable": {
+          "$ref": "13"
+        }
+      },
+      "SoftBills": {
+        "$id": "33",
+        "food": {
+          "$ref": "15"
+        }
+      },
+      "Purchases": []
+    },
+    {
+      "$id": "34",
+      "HardBills": {
+        "$id": "35",
+        "cable": {
+          "$ref": "13"
+        }
+      },
+      "SoftBills": {
+        "$id": "36",
+        "food": {
+          "$ref": "15"
+        }
+      },
+      "Purchases": []
+    },
+    {
+      "$id": "37",
+      "HardBills": {
+        "$id": "38",
+        "cable": {
+          "$ref": "13"
+        }
+      },
+      "SoftBills": {
+        "$id": "39",
+        "food": {
+          "$ref": "15"
+        }
+      },
+      "Purchases": []
+    },
+    {
+      "$id": "40",
+      "HardBills": {
+        "$id": "41",
+        "cable": {
+          "$ref": "13"
+        }
+      },
+      "SoftBills": {
+        "$id": "42",
+        "food": {
+          "$ref": "15"
+        }
+      },
+      "Purchases": []
+    },
+    {
+      "$id": "43",
+      "HardBills": {
+        "$id": "44",
+        "cable": {
+          "$ref": "13"
+        }
+      },
+      "SoftBills": {
+        "$id": "45",
+        "food": {
+          "$ref": "15"
+        }
+      },
+      "Purchases": []
+    },
+    {
+      "$id": "46",
+      "HardBills": {
+        "$id": "47",
+        "cable": {
+          "$ref": "13"
+        }
+      },
+      "SoftBills": {
+        "$id": "48",
+        "food": {
+          "$ref": "15"
+        }
+      },
+      "Purchases": []
+    }
+  ]
+}
