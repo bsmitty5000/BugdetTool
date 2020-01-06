@@ -61,10 +61,10 @@
             this.SoftBillsStarting,
             this.SoftBillsCurrent});
       this.monthlySbLv.HideSelection = false;
-      this.monthlySbLv.Location = new System.Drawing.Point(18, 129);
+      this.monthlySbLv.Location = new System.Drawing.Point(22, 129);
       this.monthlySbLv.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
       this.monthlySbLv.Name = "monthlySbLv";
-      this.monthlySbLv.Size = new System.Drawing.Size(295, 147);
+      this.monthlySbLv.Size = new System.Drawing.Size(416, 367);
       this.monthlySbLv.TabIndex = 19;
       this.monthlySbLv.UseCompatibleStateImageBehavior = false;
       this.monthlySbLv.View = System.Windows.Forms.View.Details;
@@ -72,15 +72,17 @@
       // SoftBillsName
       // 
       this.SoftBillsName.Text = "Name";
-      this.SoftBillsName.Width = 83;
+      this.SoftBillsName.Width = 183;
       // 
       // SoftBillsStarting
       // 
       this.SoftBillsStarting.Text = "Starting";
+      this.SoftBillsStarting.Width = 82;
       // 
       // SoftBillsCurrent
       // 
       this.SoftBillsCurrent.Text = "Current";
+      this.SoftBillsCurrent.Width = 93;
       // 
       // label6
       // 
@@ -105,7 +107,7 @@
       // label2
       // 
       this.label2.AutoSize = true;
-      this.label2.Location = new System.Drawing.Point(345, 103);
+      this.label2.Location = new System.Drawing.Point(478, 103);
       this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
       this.label2.Name = "label2";
       this.label2.Size = new System.Drawing.Size(84, 20);
@@ -118,10 +120,10 @@
             this.PurchasesMerchant,
             this.PurchasesAmount});
       this.purchasesLv.HideSelection = false;
-      this.purchasesLv.Location = new System.Drawing.Point(350, 129);
+      this.purchasesLv.Location = new System.Drawing.Point(483, 129);
       this.purchasesLv.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
       this.purchasesLv.Name = "purchasesLv";
-      this.purchasesLv.Size = new System.Drawing.Size(358, 147);
+      this.purchasesLv.Size = new System.Drawing.Size(477, 367);
       this.purchasesLv.TabIndex = 22;
       this.purchasesLv.UseCompatibleStateImageBehavior = false;
       this.purchasesLv.View = System.Windows.Forms.View.Details;
@@ -129,11 +131,12 @@
       // PurchasesMerchant
       // 
       this.PurchasesMerchant.Text = "Merchant";
-      this.PurchasesMerchant.Width = 83;
+      this.PurchasesMerchant.Width = 190;
       // 
       // PurchasesAmount
       // 
       this.PurchasesAmount.Text = "Amount";
+      this.PurchasesAmount.Width = 144;
       // 
       // prevBtn
       // 
@@ -221,7 +224,7 @@
       // 
       // doneBtn
       // 
-      this.doneBtn.Location = new System.Drawing.Point(22, 318);
+      this.doneBtn.Location = new System.Drawing.Point(22, 575);
       this.doneBtn.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
       this.doneBtn.Name = "doneBtn";
       this.doneBtn.Size = new System.Drawing.Size(112, 35);

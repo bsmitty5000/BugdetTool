@@ -35,6 +35,9 @@ namespace BudgetToolLib
           case IncomeFrequencyEnum.BiWeekly:
             annualAmount = UnitAmount * 26;
             break;
+          case IncomeFrequencyEnum.Annualy:
+            annualAmount = UnitAmount * 1;
+            break;
           default:
             throw new ArgumentException("Invalid Income Frequency");
         }

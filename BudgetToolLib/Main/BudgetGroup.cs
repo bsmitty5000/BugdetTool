@@ -35,14 +35,6 @@ namespace BudgetToolLib
 
     public void AddPurchase(Purchase purchase)
     {
-      foreach (var softBill in SoftBills)
-      {
-        if(!purchase.SoftBillSplit.ContainsKey(softBill.Key))
-        {
-          throw new ArgumentException("Purchase does not contain: " + softBill.Key);
-        }
-      }
-
       decimal amount = 0;
       foreach (var softBill in purchase.SoftBillSplit)
       {

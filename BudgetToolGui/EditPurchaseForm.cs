@@ -16,6 +16,7 @@ namespace BudgetToolGui
     private YearTop _year;
     private Purchase _purchase;
     public event EventHandler<NewPurchaseAddedEventArgs> NewPurchaseAdded;
+    private bool _eventsOn;
     public EditPurchaseForm(Purchase purchase, YearTop year, int month)
     {
       InitializeComponent();
@@ -36,8 +37,18 @@ namespace BudgetToolGui
       else
       {
         _purchase = new Purchase();
-        _purchase.DateOfPurchase = new DateTime(DateTime.Today.Year, month, 1);
-        
+        if(month == 0)
+        {
+          _purchase.DateOfPurchase = new DateTime(DateTime.Today.Year, 1, 1);
+          dateDtp.MinDate = _purchase.DateOfPurchase;
+          dateDtp.MaxDate = new DateTime(_purchase.DateOfPurchase.Year, 12, 31);
+        }
+        else
+        {
+          _purchase.DateOfPurchase = new DateTime(DateTime.Today.Year, month, 1);
+          dateDtp.MinDate = _purchase.DateOfPurchase;
+          dateDtp.MaxDate = new DateTime(_purchase.DateOfPurchase.Year, _purchase.DateOfPurchase.Month, DateTime.DaysInMonth(_purchase.DateOfPurchase.Year, _purchase.DateOfPurchase.Month));
+        }
       }
 
       vendorTb.Text = _purchase.Vendor;
@@ -52,21 +63,14 @@ namespace BudgetToolGui
 
       if (_purchase.SoftBillSplit.Count == 0)
       {
-        foreach (var sb in _year.BudgetGroups[0].SoftBills)
-        {
-          _purchase.SoftBillSplit.Add(sb.Value.Name, 0);
-        }
-        /* this works because all months are the same
-         * if the option to change softbills each month is
-         * added this must be updated
-         */
-        foreach (var sb in _year.BudgetGroups[1].SoftBills)
+        foreach (var sb in _year.BudgetGroups[month].SoftBills)
         {
           _purchase.SoftBillSplit.Add(sb.Value.Name, 0);
         }
       }
 
       int i = 0;
+      _eventsOn = false;
       foreach (var kvp in _purchase.SoftBillSplit)
       {
         softBillSplitTpl.RowStyles.Add(new RowStyle(SizeType.AutoSize));
@@ -94,21 +98,26 @@ namespace BudgetToolGui
         remainder.Dock = DockStyle.Fill;
         remainder.Click += new EventHandler(remainder_Click);
         remainder.Name = kvp.Key + "_btn";
+        remainder.AutoSize = true;
         softBillSplitTpl.Controls.Add(remainder, 2, i);
 
         i++;
       }
+      _eventsOn = true;
 
     }
 
     private void softBillSplit_TextChanged(object sender, EventArgs e)
     {
-      TextBox textBox = (TextBox)sender;
-      string name = textBox.Name.Split('_')[0];
+      if (!_eventsOn)
+        return;
 
-      if(_purchase.SoftBillSplit.ContainsKey(textBox.Name))
+      TextBox textBox = (TextBox)sender;
+      string sbKey = textBox.Name.Split('_')[0];
+
+      if(_purchase.SoftBillSplit.ContainsKey(sbKey))
       {
-        _purchase.SoftBillSplit[textBox.Name] = Decimal.Parse(textBox.Text);
+        _purchase.SoftBillSplit[sbKey] = Decimal.Parse(textBox.Text);
       }
 
     }

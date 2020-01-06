@@ -17,6 +17,7 @@ namespace BudgetToolGui
     private int _currentMonth;
     private List<string> months = new List<string>
     {
+      "Annual",
       "January",
       "February",
       "March",
@@ -72,7 +73,7 @@ namespace BudgetToolGui
       }
 
       // minus 1 here because months are not zero indexed but the months array is
-      currentMonthLbl.Text = string.Format("Current Month: {0}", months[_currentMonth - 1]);
+      currentMonthLbl.Text = string.Format("Current Month: {0}", months[_currentMonth]);
     }
     #endregion
 
@@ -214,7 +215,7 @@ namespace BudgetToolGui
     {
       if (e.NewPurchase != null)
       {
-        _year.BudgetGroups[e.NewPurchase.DateOfPurchase.Month].AddPurchase(e.NewPurchase);
+        _year.BudgetGroups[_currentMonth].AddPurchase(e.NewPurchase);
       }
       RefreshPage();
     }
@@ -223,7 +224,7 @@ namespace BudgetToolGui
     #region Buttons
     private void prevBtn_Click(object sender, EventArgs e)
     {
-      if(_currentMonth > 1)
+      if(_currentMonth > 0)
       {
         _currentMonth--;
       }
@@ -232,7 +233,7 @@ namespace BudgetToolGui
 
     private void nextBtn_Click(object sender, EventArgs e)
     {
-      if (_currentMonth < 12)
+      if (_currentMonth < months.Count - 1)
       {
         _currentMonth++;
       }

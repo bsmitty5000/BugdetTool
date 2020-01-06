@@ -31,8 +31,9 @@ namespace BudgetToolLib
       BudgetGroups = new List<BudgetGroup>();
       /* BudgetGroup[0] = Year
        * BudgetGroup[1:12] = Months
+       * BudgetGroup[13] = Copy of Months
        */
-      for (int i = 0; i < 13; i++)
+      for (int i = 0; i < 14; i++)
       {
         BudgetGroups.Add(new BudgetGroup());
       }
