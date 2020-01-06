@@ -20,5 +20,11 @@ namespace BudgetToolLib
     {
       Amount = amount;
     }
+
+    public SoftBill(SoftBill sb)
+    {
+      this.Name = sb.Name;
+      this.Amount = sb.Amount;
+    }
   }
 }

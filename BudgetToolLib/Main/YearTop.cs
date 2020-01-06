@@ -95,7 +95,7 @@ namespace BudgetToolLib
         {
           throw new ArgumentException("Group of same name already exists for the year");
         }
-        BudgetGroups[0].SoftBills.Add(softBill.Name, softBill);
+        BudgetGroups[0].SoftBills.Add(softBill.Name, new SoftBill(softBill));
       }
       else
       {
@@ -107,7 +107,7 @@ namespace BudgetToolLib
         /* important to start at 1 here */
         for (int i = 1; i < BudgetGroups.Count; i++)
         {
-          BudgetGroups[i].SoftBills.Add(softBill.Name, softBill);
+          BudgetGroups[i].SoftBills.Add(softBill.Name, new SoftBill(softBill));
         }
       }
     }
@@ -133,7 +133,7 @@ namespace BudgetToolLib
         {
           RemoveHardBill(bill.Name, annualGroup);
         }
-        BudgetGroups[0].HardBills.Add(bill.Name, bill);
+        BudgetGroups[0].HardBills.Add(bill.Name, new HardBill(bill));
       }
       else
       {
@@ -144,7 +144,7 @@ namespace BudgetToolLib
         }
         for (int i = 1; i < BudgetGroups.Count; i++)
         {
-          BudgetGroups[i].HardBills.Add(bill.Name, bill);
+          BudgetGroups[i].HardBills.Add(bill.Name, new HardBill(bill));
         }
       }
     }

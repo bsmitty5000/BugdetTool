@@ -49,7 +49,7 @@ namespace BudgetToolGui
       Account tempAccount = null;
       if(!_account.GetType().Name.Equals(typeCb.SelectedItem))
       {
-        switch(typeCb.SelectedItem)
+        switch(typeCb.SelectedItem.ToString())
         {
           case "CheckingAccount":
             tempAccount = new CheckingAccount();

@@ -16,7 +16,7 @@ namespace BudgetToolGui
     private YearTop _year;
     private Purchase _purchase;
     public event EventHandler<NewPurchaseAddedEventArgs> NewPurchaseAdded;
-    public EditPurchaseForm(Purchase purchase, YearTop year)
+    public EditPurchaseForm(Purchase purchase, YearTop year, int month)
     {
       InitializeComponent();
 
@@ -36,7 +36,13 @@ namespace BudgetToolGui
       else
       {
         _purchase = new Purchase();
+        _purchase.DateOfPurchase = new DateTime(DateTime.Today.Year, month, 1);
+        
       }
+
+      vendorTb.Text = _purchase.Vendor;
+      amountTb.Text = _purchase.Amount.ToString();
+      dateDtp.Value = _purchase.DateOfPurchase;
 
       foreach (var account in _year.Accounts)
       {
@@ -92,6 +98,7 @@ namespace BudgetToolGui
 
         i++;
       }
+
     }
 
     private void softBillSplit_TextChanged(object sender, EventArgs e)
@@ -109,6 +116,7 @@ namespace BudgetToolGui
     {
       decimal currentTotal = 0;
       string tbpKey = ((Button)sender).Name.Split('_')[0] + "_tb";
+      string sbKey = tbpKey.Split('_')[0];
       foreach (var sub in _purchase.SoftBillSplit.Values)
       {
         currentTotal += sub;
@@ -116,6 +124,7 @@ namespace BudgetToolGui
 
       decimal remainderTotal = _purchase.Amount - currentTotal;
       softBillSplitTpl.Controls[tbpKey].Text = remainderTotal.ToString();
+      _purchase.SoftBillSplit[sbKey] = remainderTotal;
     }
 
     private void vendorTb_TextChanged(object sender, EventArgs e)
@@ -141,12 +150,9 @@ namespace BudgetToolGui
     private void saveBtn_Click(object sender, EventArgs e)
     {
       NewPurchaseAddedEventArgs args = new NewPurchaseAddedEventArgs();
-      foreach (var kvp in _purchase.SoftBillSplit)
+      foreach (var item in _purchase.SoftBillSplit.Where(kvp => kvp.Value == 0).ToList())
       {
-        if(kvp.Value == 0)
-        {
-          _purchase.SoftBillSplit.Remove(kvp.Key);
-        }
+        _purchase.SoftBillSplit.Remove(item.Key);
       }
       args.NewPurchase = _purchase;
       OnNewPurchaseBillAdded(args);

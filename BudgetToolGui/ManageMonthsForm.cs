@@ -62,6 +62,15 @@ namespace BudgetToolGui
         monthlySbLv.Items.Add(lvi);
       }
 
+      purchasesLv.Items.Clear();
+      foreach (var purchase in _year.BudgetGroups[_currentMonth].Purchases)
+      {
+        ListViewItem lvi = new ListViewItem(purchase.Vendor);
+        lvi.SubItems.Add(purchase.Amount.ToString());
+        lvi.Tag = purchase;
+        purchasesLv.Items.Add(lvi);
+      }
+
       // minus 1 here because months are not zero indexed but the months array is
       currentMonthLbl.Text = string.Format("Current Month: {0}", months[_currentMonth - 1]);
     }
@@ -181,9 +190,7 @@ namespace BudgetToolGui
     }
     private void purchasesAdd_Click(object sender, EventArgs e)
     {
-      Purchase purchase = new Purchase();
-
-      var editPurchaseForm = new EditPurchaseForm(purchase, _year);
+      var editPurchaseForm = new EditPurchaseForm(null, _year, _currentMonth);
       editPurchaseForm.NewPurchaseAdded += NewPurchase_Added;
       editPurchaseForm.Show();
     }
@@ -198,7 +205,7 @@ namespace BudgetToolGui
     {
       Purchase purchase = purchasesLv.SelectedItems[0].Tag as Purchase;
 
-      var editPurchaseForm = new EditPurchaseForm(purchase, _year);
+      var editPurchaseForm = new EditPurchaseForm(purchase, _year, 0);
       //editSoftBill.NewSoftBillAdded += NewMonthlySoftBill_Added;
       editPurchaseForm.ShowDialog();
       RefreshPage();

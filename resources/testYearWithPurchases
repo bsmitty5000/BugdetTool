@@ -71,42 +71,70 @@
         "food": {
           "$id": "15",
           "Name": "food",
-          "Amount": 500.0
+          "Amount": 450.0
         }
       },
-      "Purchases": []
-    },
-    {
-      "$id": "16",
-      "HardBills": {
-        "$id": "17",
-        "phone": {
-          "$id": "18",
-          "Name": "phone",
-          "Amount": 100.0,
-          "DayOfMonthPaid": 23,
+      "Purchases": [
+        {
+          "$id": "16",
+          "Vendor": "food lion",
           "PaymentAccount": {
             "$ref": "3"
           },
-          "LastMonthPaid": 0
+          "DateOfPurchase": "0001-01-01T00:00:00",
+          "Amount": 50.0,
+          "SoftBillSplit": {
+            "$id": "17",
+            "food": 50.0
+          }
         }
-      },
-      "SoftBills": {
+      ]
+    },
+    {
+      "$id": "18",
+      "HardBills": {
         "$id": "19",
-        "food": {
+        "phone": {
           "$id": "20",
-          "Name": "food",
-          "Amount": 500.0
+          "Name": "phone",
+          "Amount": 100.0,
+          "DayOfMonthPaid": 23,
+          "PaymentAccount": {
+            "$ref": "3"
+          },
+          "LastMonthPaid": 0
         }
       },
-      "Purchases": []
-    },
-    {
-      "$id": "21",
-      "HardBills": {
-        "$id": "22",
-        "phone": {
+      "SoftBills": {
+        "$id": "21",
+        "food": {
+          "$id": "22",
+          "Name": "food",
+          "Amount": 493.0
+        }
+      },
+      "Purchases": [
+        {
           "$id": "23",
+          "Vendor": "lowes",
+          "PaymentAccount": {
+            "$ref": "3"
+          },
+          "DateOfPurchase": "2020-02-01T00:00:00",
+          "Amount": 7.0,
+          "SoftBillSplit": {
+            "$id": "24",
+            "food": 7.0
+          }
+        }
+      ]
+    },
+    {
+      "$id": "25",
+      "HardBills": {
+        "$id": "26",
+        "phone": {
+          "$id": "27",
           "Name": "phone",
           "Amount": 100.0,
           "DayOfMonthPaid": 23,
@@ -117,9 +145,9 @@
         }
       },
       "SoftBills": {
-        "$id": "24",
+        "$id": "28",
         "food": {
-          "$id": "25",
+          "$id": "29",
           "Name": "food",
           "Amount": 500.0
         }
@@ -127,11 +155,11 @@
       "Purchases": []
     },
     {
-      "$id": "26",
+      "$id": "30",
       "HardBills": {
-        "$id": "27",
+        "$id": "31",
         "phone": {
-          "$id": "28",
+          "$id": "32",
           "Name": "phone",
           "Amount": 100.0,
           "DayOfMonthPaid": 23,
@@ -142,9 +170,9 @@
         }
       },
       "SoftBills": {
-        "$id": "29",
+        "$id": "33",
         "food": {
-          "$id": "30",
+          "$id": "34",
           "Name": "food",
           "Amount": 500.0
         }
@@ -152,11 +180,11 @@
       "Purchases": []
     },
     {
-      "$id": "31",
+      "$id": "35",
       "HardBills": {
-        "$id": "32",
+        "$id": "36",
         "phone": {
-          "$id": "33",
+          "$id": "37",
           "Name": "phone",
           "Amount": 100.0,
           "DayOfMonthPaid": 23,
@@ -167,9 +195,9 @@
         }
       },
       "SoftBills": {
-        "$id": "34",
+        "$id": "38",
         "food": {
-          "$id": "35",
+          "$id": "39",
           "Name": "food",
           "Amount": 500.0
         }
@@ -177,11 +205,11 @@
       "Purchases": []
     },
     {
-      "$id": "36",
+      "$id": "40",
       "HardBills": {
-        "$id": "37",
+        "$id": "41",
         "phone": {
-          "$id": "38",
+          "$id": "42",
           "Name": "phone",
           "Amount": 100.0,
           "DayOfMonthPaid": 23,
@@ -192,9 +220,9 @@
         }
       },
       "SoftBills": {
-        "$id": "39",
+        "$id": "43",
         "food": {
-          "$id": "40",
+          "$id": "44",
           "Name": "food",
           "Amount": 500.0
         }
@@ -202,11 +230,11 @@
       "Purchases": []
     },
     {
-      "$id": "41",
+      "$id": "45",
       "HardBills": {
-        "$id": "42",
+        "$id": "46",
         "phone": {
-          "$id": "43",
+          "$id": "47",
           "Name": "phone",
           "Amount": 100.0,
           "DayOfMonthPaid": 23,
@@ -217,9 +245,9 @@
         }
       },
       "SoftBills": {
-        "$id": "44",
+        "$id": "48",
         "food": {
-          "$id": "45",
+          "$id": "49",
           "Name": "food",
           "Amount": 500.0
         }
@@ -227,11 +255,11 @@
       "Purchases": []
     },
     {
-      "$id": "46",
+      "$id": "50",
       "HardBills": {
-        "$id": "47",
+        "$id": "51",
         "phone": {
-          "$id": "48",
+          "$id": "52",
           "Name": "phone",
           "Amount": 100.0,
           "DayOfMonthPaid": 23,
@@ -242,9 +270,9 @@
         }
       },
       "SoftBills": {
-        "$id": "49",
+        "$id": "53",
         "food": {
-          "$id": "50",
+          "$id": "54",
           "Name": "food",
           "Amount": 500.0
         }
@@ -252,11 +280,11 @@
       "Purchases": []
     },
     {
-      "$id": "51",
+      "$id": "55",
       "HardBills": {
-        "$id": "52",
+        "$id": "56",
         "phone": {
-          "$id": "53",
+          "$id": "57",
           "Name": "phone",
           "Amount": 100.0,
           "DayOfMonthPaid": 23,
@@ -267,9 +295,9 @@
         }
       },
       "SoftBills": {
-        "$id": "54",
+        "$id": "58",
         "food": {
-          "$id": "55",
+          "$id": "59",
           "Name": "food",
           "Amount": 500.0
         }
@@ -277,11 +305,11 @@
       "Purchases": []
     },
     {
-      "$id": "56",
+      "$id": "60",
       "HardBills": {
-        "$id": "57",
+        "$id": "61",
         "phone": {
-          "$id": "58",
+          "$id": "62",
           "Name": "phone",
           "Amount": 100.0,
           "DayOfMonthPaid": 23,
@@ -292,9 +320,9 @@
         }
       },
       "SoftBills": {
-        "$id": "59",
+        "$id": "63",
         "food": {
-          "$id": "60",
+          "$id": "64",
           "Name": "food",
           "Amount": 500.0
         }
@@ -302,11 +330,11 @@
       "Purchases": []
     },
     {
-      "$id": "61",
+      "$id": "65",
       "HardBills": {
-        "$id": "62",
+        "$id": "66",
         "phone": {
-          "$id": "63",
+          "$id": "67",
           "Name": "phone",
           "Amount": 100.0,
           "DayOfMonthPaid": 23,
@@ -317,9 +345,9 @@
         }
       },
       "SoftBills": {
-        "$id": "64",
+        "$id": "68",
         "food": {
-          "$id": "65",
+          "$id": "69",
           "Name": "food",
           "Amount": 500.0
         }
@@ -327,11 +355,11 @@
       "Purchases": []
     },
     {
-      "$id": "66",
+      "$id": "70",
       "HardBills": {
-        "$id": "67",
+        "$id": "71",
         "phone": {
-          "$id": "68",
+          "$id": "72",
           "Name": "phone",
           "Amount": 100.0,
           "DayOfMonthPaid": 23,
@@ -342,9 +370,9 @@
         }
       },
       "SoftBills": {
-        "$id": "69",
+        "$id": "73",
         "food": {
-          "$id": "70",
+          "$id": "74",
           "Name": "food",
           "Amount": 500.0
         }

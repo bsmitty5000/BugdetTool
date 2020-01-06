@@ -26,6 +26,15 @@ namespace BudgetToolLib
       LastMonthPaid = 0;
     }
 
+    public HardBill(HardBill hb)
+    {
+      this.Name = hb.Name;
+      this.Amount = hb.Amount;
+      this.DayOfMonthPaid = hb.DayOfMonthPaid;
+      this.PaymentAccount = hb.PaymentAccount;
+      this.LastMonthPaid = hb.LastMonthPaid;
+    }
+
     public void PayBill(DateTime date)
     {
       var cal = new GregorianCalendar();
