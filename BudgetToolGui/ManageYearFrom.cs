@@ -44,9 +44,10 @@ namespace BudgetToolGui
       accountsLv.Items.Clear();
       foreach (var account in _year.Accounts)
       {
+        BalanceEntry lastEntry = account.Value.BalanceHistory.Last();
         ListViewItem lvi = new ListViewItem(account.Key);
         lvi.SubItems.Add(account.Value.GetType().Name);
-        lvi.SubItems.Add(account.Value.Balance.ToString());
+        lvi.SubItems.Add(lastEntry.Amount.ToString());
         lvi.Tag = account.Value;
         accountsLv.Items.Add(lvi);
       }
@@ -76,8 +77,9 @@ namespace BudgetToolGui
       annualSbLv.Items.Clear();
       foreach (var softBill in _year.BudgetGroups[0].SoftBills)
       {
+        BalanceEntry lastEntry = softBill.Value.BalanceHistory.Last();
         ListViewItem lvi = new ListViewItem(softBill.Key);
-        lvi.SubItems.Add(softBill.Value.Amount.ToString());
+        lvi.SubItems.Add(lastEntry.Amount.ToString());
         lvi.Tag = softBill.Value;
         annualSbLv.Items.Add(lvi);
       }
@@ -101,8 +103,9 @@ namespace BudgetToolGui
       monthlySbLv.Items.Clear();
       foreach (var softBill in _year.BudgetGroups[1].SoftBills)
       {
+        BalanceEntry lastEntry = softBill.Value.BalanceHistory.Last();
         ListViewItem lvi = new ListViewItem(softBill.Key);
-        lvi.SubItems.Add(softBill.Value.Amount.ToString());
+        lvi.SubItems.Add(lastEntry.Amount.ToString());
         lvi.Tag = softBill.Value;
         monthlySbLv.Items.Add(lvi);
       }
@@ -129,12 +132,10 @@ namespace BudgetToolGui
         if (index > -1)
         {
           deleteAccount.Enabled = true;
-          editAccount.Enabled = true;
         }
         else
         {
           deleteAccount.Enabled = false;
-          editAccount.Enabled = false;
         }
         accountCms.Show(this, new Point(e.X + ((Control)sender).Left + 20, e.Y + ((Control)sender).Top + 20));
         //accountCms.Show(this, new Point(e.X, e.Y));
@@ -149,20 +150,9 @@ namespace BudgetToolGui
 
     private void addAccount_Click(object sender, EventArgs e)
     {
-      Account accountSelected = new CheckingAccount();
-
-      var createNewGroup = new EditAccountForm(accountSelected);
+      var createNewGroup = new EditAccountForm();
       createNewGroup.NewAccountAdded += NewAccount_Added;
       createNewGroup.Show();
-    }
-    private void editAccount_Click(object sender, EventArgs e)
-    {
-      Account accountSelected = accountsLv.SelectedItems[0].Tag as Account;
-
-      var createNewGroup = new EditAccountForm(accountSelected);
-      //createNewGroup.NewAccountAdded += NewAccount_Added;
-      createNewGroup.ShowDialog();
-      RefreshPage();
     }
     private void NewAccount_Added(object sender, NewAccountAddedEventArgs e)
     {
@@ -360,9 +350,7 @@ namespace BudgetToolGui
     }
     private void annualSbAdd_Click_1(object sender, EventArgs e)
     {
-      SoftBill softBill = new SoftBill();
-
-      var editSoftBill = new EditSoftBillForm(softBill, _year);
+      var editSoftBill = new EditSoftBillForm(string.Empty, 0);
       editSoftBill.NewSoftBillAdded += NewAnnualSoftBill_Added;
       editSoftBill.Show();
     }
@@ -376,19 +364,14 @@ namespace BudgetToolGui
     {
       SoftBill softBill = annualSbLv.SelectedItems[0].Tag as SoftBill;
 
-      var editSoftBill = new EditSoftBillForm(softBill, _year);
-      //editSoftBill.NewSoftBillAdded += NewAnnualSoftBill_Added;
+      var editSoftBill = new EditSoftBillForm(softBill.Name, softBill.BalanceHistory[0].Amount);
+      editSoftBill.NewSoftBillAdded += NewAnnualSoftBill_Added;
       editSoftBill.ShowDialog();
       RefreshPage();
     }
     private void NewAnnualSoftBill_Added(object sender, NewSoftBillAddedEventArgs e)
     {
-      if (e.NewSoftBill != null)
-        if (e.NewSoftBill != null)
-          if (e.NewSoftBill != null)
-      {
-        _year.AddSoftBill(e.NewSoftBill, true);
-      }
+      _year.AddSoftBill(e.Name, e.Amount, true);
       RefreshPage();
     }
     #endregion
@@ -504,9 +487,7 @@ namespace BudgetToolGui
     }
     private void monthlySbAdd_Click(object sender, EventArgs e)
     {
-      SoftBill softBill = new SoftBill();
-
-      var editSoftBill = new EditSoftBillForm(softBill, _year);
+      var editSoftBill = new EditSoftBillForm(string.Empty, 0);
       editSoftBill.NewSoftBillAdded += NewMonthlySoftBill_Added;
       editSoftBill.Show();
     }
@@ -520,17 +501,14 @@ namespace BudgetToolGui
     {
       SoftBill softBill = monthlySbLv.SelectedItems[0].Tag as SoftBill;
 
-      var editSoftBill = new EditSoftBillForm(softBill, _year);
-      //editSoftBill.NewSoftBillAdded += NewMonthlySoftBill_Added;
+      var editSoftBill = new EditSoftBillForm(softBill.Name, softBill.BalanceHistory[0].Amount);
+      editSoftBill.NewSoftBillAdded += NewMonthlySoftBill_Added;
       editSoftBill.ShowDialog();
       RefreshPage();
     }
     private void NewMonthlySoftBill_Added(object sender, NewSoftBillAddedEventArgs e)
     {
-      if (e.NewSoftBill != null)
-      {
-        _year.AddSoftBill(e.NewSoftBill, false);
-      }
+      _year.AddSoftBill(e.Name, e.Amount, false);
       RefreshPage();
     }
     #endregion
@@ -561,7 +539,7 @@ namespace BudgetToolGui
 
       using (OpenFileDialog openFileDialog = new OpenFileDialog())
       {
-        openFileDialog.InitialDirectory = "c:\\";
+        openFileDialog.InitialDirectory = @"C:\Users\Batman\budgets";
         openFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
         openFileDialog.FilterIndex = 2;
         openFileDialog.RestoreDirectory = true;

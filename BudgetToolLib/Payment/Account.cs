@@ -6,32 +6,94 @@ using System.Threading.Tasks;
 
 namespace BudgetToolLib
 {
+  public class BalanceEntry
+  {
+    public DateTime Date { get; set; }
+    public decimal Amount { get; set; }
+  }
+
   public abstract class Account
   {
-    public decimal Balance { get; set; }
+    public List<BalanceEntry> BalanceHistory { get; set; }
     public string Name { get; set; }
 
     public Account()
     {
     }
 
-    public void NewDebitTransaction(decimal amount)
+    public Account(Account account)
     {
-      Balance -= amount;
+      this.BalanceHistory = new List<BalanceEntry>(account.BalanceHistory);
+      this.Name = account.Name;
     }
 
-    public void NewCreditTransaction(decimal amount)
+    public Account(string name, decimal startingAmount)
     {
-      Balance += amount;
+      //Make sure starting entry is the very first
+      BalanceEntry startingEntry = new BalanceEntry() { Date = new DateTime(1900, 1, 1), Amount = startingAmount };
+      BalanceHistory = new List<BalanceEntry>() { startingEntry };
+      Name = name;
     }
 
-    public override string ToString()
+    virtual public void InsertDebitTransaction(BalanceEntry balanceEntry)
     {
-      var sb = new StringBuilder();
-      sb.Append(Name + "\t");
-      sb.Append(Balance);
+      for(int i = 0; i < BalanceHistory.Count; i++)
+      {
+        if(BalanceHistory[i].Date == balanceEntry.Date)
+        {
+          unravelRemainingDebitEntries(i, balanceEntry.Amount);
+          return;
+        }
+        else if(BalanceHistory[i].Date < balanceEntry.Date)
+        {
+          // Create a new BalanceEtnry that carries over the total from the previous day with the new amount added in
+          BalanceHistory.Insert(i + 1, new BalanceEntry() { Date = balanceEntry.Date, Amount = (BalanceHistory[i].Amount - balanceEntry.Amount) });
 
-      return sb.ToString();
+          // after the new entry update all remaining entries
+          unravelRemainingDebitEntries(i + 2, balanceEntry.Amount);
+          return;
+        }
+      }
+      //if we've made it here then the new entry is the latest date
+      BalanceHistory.Add(new BalanceEntry() { Date = balanceEntry.Date, Amount = (BalanceHistory[BalanceHistory.Count - 1].Amount - balanceEntry.Amount) });
+    }
+
+    private void unravelRemainingDebitEntries(int index, decimal amount)
+    {
+      for (int j = index; j < BalanceHistory.Count; j++)
+      {
+        BalanceHistory[j].Amount -= amount;
+      }
+    }
+
+    virtual public void InsertCreditTransaction(BalanceEntry balanceEntry)
+    {
+      for (int i = 0; i < BalanceHistory.Count; i++)
+      {
+        if (BalanceHistory[i].Date == balanceEntry.Date)
+        {
+          unravelRemainingCreditEntries(i, balanceEntry.Amount);
+          return;
+        }
+        else if (BalanceHistory[i].Date < balanceEntry.Date)
+        {
+          // Create a new BalanceEtnry that carries over the total from the previous day with the new amount added in
+          BalanceHistory.Insert(i + 1, new BalanceEntry() { Date = balanceEntry.Date, Amount = (BalanceHistory[i].Amount + balanceEntry.Amount) });
+
+          // after the new entry update all remaining entries
+          unravelRemainingCreditEntries(i + 2, balanceEntry.Amount);
+          return;
+        }
+      }
+      //if we've made it here then the new entry is the latest date
+      BalanceHistory.Add(new BalanceEntry() { Date = balanceEntry.Date, Amount = (BalanceHistory[BalanceHistory.Count - 1].Amount + balanceEntry.Amount) });
+    }
+    private void unravelRemainingCreditEntries(int index, decimal amount)
+    {
+      for (int j = index; j < BalanceHistory.Count; j++)
+      {
+        BalanceHistory[j].Amount += amount;
+      }
     }
   }
 }

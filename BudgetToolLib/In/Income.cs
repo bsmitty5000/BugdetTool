@@ -73,9 +73,9 @@ namespace BudgetToolLib
 
       for(int i = 0; i < numOfPaydaysToProcess; i++)
       {
-        DepositAccount.NewCreditTransaction(UnitAmount);
-        LastDepositWeekNumber += (int)IncomeFrequency;
         LastDeposit = LastDeposit.AddDays((double)IncomeFrequency * 7);
+        DepositAccount.InsertCreditTransaction(new BalanceEntry() { Date = LastDeposit, Amount = UnitAmount });
+        LastDepositWeekNumber += (int)IncomeFrequency;
       }
     }
 

@@ -52,8 +52,9 @@ namespace BudgetToolLib
 
       foreach (var softBill in purchase.SoftBillSplit)
       {
-        SoftBills[softBill.Key].Amount -= softBill.Value;
+        SoftBills[softBill.Key].InsertDebitTransaction(new BalanceEntry() { Date = purchase.DateOfPurchase, Amount = softBill.Value });
       }
+      purchase.PaymentAccount.InsertDebitTransaction(new BalanceEntry() { Date = purchase.DateOfPurchase, Amount = purchase.Amount });
       Purchases.Add(purchase);
     }
 
@@ -65,37 +66,13 @@ namespace BudgetToolLib
       }
       else
       {
-        Purchases.Remove(purchase);
-
         foreach (var softBill in purchase.SoftBillSplit)
         {
-          SoftBills[softBill.Key].Amount += softBill.Value;
+          SoftBills[softBill.Key].InsertCreditTransaction(new BalanceEntry() { Date = purchase.DateOfPurchase, Amount = softBill.Value });
         }
+        purchase.PaymentAccount.InsertCreditTransaction(new BalanceEntry() { Date = purchase.DateOfPurchase, Amount = purchase.Amount });
+        Purchases.Remove(purchase);
       }
-    }
-
-    public override string ToString()
-    {
-      var sb = new StringBuilder();
-      foreach (var bill in HardBills)
-      {
-        sb.Append("(");
-        sb.Append(bill.Key + ",");
-        sb.Append(bill.Value.Amount + ",");
-        sb.Append(bill.Value.PaymentAccount.Name + ",");
-        sb.Append(bill.Value.DayOfMonthPaid + ",");
-        sb.Append(bill.Value.LastMonthPaid);
-        sb.Append(")");
-      }
-      foreach (var bill in SoftBills)
-      {
-        sb.Append("(");
-        sb.Append(bill.Key + ",");
-        sb.Append(bill.Value.Amount);
-        sb.Append(")");
-      }
-
-      return sb.ToString();
     }
   }
 }

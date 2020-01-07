@@ -6,25 +6,22 @@ using System.Threading.Tasks;
 
 namespace BudgetToolLib
 {
-  public class SoftBill
+  public class SoftBill : Account
   {
-    public string Name { get; set; }
-    public decimal Amount { get; set; }
-
     public SoftBill()
     {
 
     }
 
-    public SoftBill(decimal amount)
+    public SoftBill(string name, decimal startingAmount) : base(name, startingAmount)
     {
-      Amount = amount;
     }
 
     public SoftBill(SoftBill sb)
     {
-      this.Name = sb.Name;
-      this.Amount = sb.Amount;
+      Name = sb.Name;
+      BalanceHistory = new List<BalanceEntry>(sb.BalanceHistory);
     }
+
   }
 }

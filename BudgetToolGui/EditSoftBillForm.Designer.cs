@@ -34,8 +34,6 @@
       this.label1 = new System.Windows.Forms.Label();
       this.cancelBtn = new System.Windows.Forms.Button();
       this.saveBtn = new System.Windows.Forms.Button();
-      this.monthsClb = new System.Windows.Forms.CheckedListBox();
-      this.label3 = new System.Windows.Forms.Label();
       this.SuspendLayout();
       // 
       // amountTb
@@ -74,7 +72,7 @@
       // 
       // cancelBtn
       // 
-      this.cancelBtn.Location = new System.Drawing.Point(155, 304);
+      this.cancelBtn.Location = new System.Drawing.Point(145, 78);
       this.cancelBtn.Name = "cancelBtn";
       this.cancelBtn.Size = new System.Drawing.Size(75, 23);
       this.cancelBtn.TabIndex = 21;
@@ -84,7 +82,7 @@
       // 
       // saveBtn
       // 
-      this.saveBtn.Location = new System.Drawing.Point(47, 304);
+      this.saveBtn.Location = new System.Drawing.Point(37, 78);
       this.saveBtn.Name = "saveBtn";
       this.saveBtn.Size = new System.Drawing.Size(75, 23);
       this.saveBtn.TabIndex = 20;
@@ -92,32 +90,11 @@
       this.saveBtn.UseVisualStyleBackColor = true;
       this.saveBtn.Click += new System.EventHandler(this.saveBtn_Click);
       // 
-      // monthsClb
-      // 
-      this.monthsClb.CheckOnClick = true;
-      this.monthsClb.FormattingEnabled = true;
-      this.monthsClb.Location = new System.Drawing.Point(120, 79);
-      this.monthsClb.Name = "monthsClb";
-      this.monthsClb.Size = new System.Drawing.Size(120, 214);
-      this.monthsClb.TabIndex = 22;
-      this.monthsClb.SelectedIndexChanged += new System.EventHandler(this.monthsClb_SelectedIndexChanged);
-      // 
-      // label3
-      // 
-      this.label3.AutoSize = true;
-      this.label3.Location = new System.Drawing.Point(9, 79);
-      this.label3.Name = "label3";
-      this.label3.Size = new System.Drawing.Size(42, 13);
-      this.label3.TabIndex = 23;
-      this.label3.Text = "Months";
-      // 
       // EditSoftBillForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(278, 339);
-      this.Controls.Add(this.label3);
-      this.Controls.Add(this.monthsClb);
+      this.ClientSize = new System.Drawing.Size(278, 113);
       this.Controls.Add(this.cancelBtn);
       this.Controls.Add(this.saveBtn);
       this.Controls.Add(this.amountTb);
@@ -139,7 +116,5 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button cancelBtn;
         private System.Windows.Forms.Button saveBtn;
-        private System.Windows.Forms.CheckedListBox monthsClb;
-        private System.Windows.Forms.Label label3;
     }
 }

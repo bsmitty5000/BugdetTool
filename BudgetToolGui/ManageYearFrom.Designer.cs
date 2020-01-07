@@ -43,7 +43,6 @@
       this.accountCms = new System.Windows.Forms.ContextMenuStrip(this.components);
       this.addAccount = new System.Windows.Forms.ToolStripMenuItem();
       this.deleteAccount = new System.Windows.Forms.ToolStripMenuItem();
-      this.editAccount = new System.Windows.Forms.ToolStripMenuItem();
       this.incomeCms = new System.Windows.Forms.ContextMenuStrip(this.components);
       this.incomeAdd = new System.Windows.Forms.ToolStripMenuItem();
       this.incomeDelete = new System.Windows.Forms.ToolStripMenuItem();
@@ -133,6 +132,7 @@
       // IncomeName
       // 
       this.IncomeName.Text = "Name";
+      this.IncomeName.Width = 86;
       // 
       // IncomeAmount
       // 
@@ -141,11 +141,12 @@
       // IncomeFreq
       // 
       this.IncomeFreq.Text = "Freq";
+      this.IncomeFreq.Width = 51;
       // 
       // IncomeDepositAccount
       // 
       this.IncomeDepositAccount.Text = "DepositAccount";
-      this.IncomeDepositAccount.Width = 99;
+      this.IncomeDepositAccount.Width = 89;
       // 
       // accountsLv
       // 
@@ -156,7 +157,7 @@
       this.accountsLv.HideSelection = false;
       this.accountsLv.Location = new System.Drawing.Point(16, 28);
       this.accountsLv.Name = "accountsLv";
-      this.accountsLv.Size = new System.Drawing.Size(270, 97);
+      this.accountsLv.Size = new System.Drawing.Size(294, 97);
       this.accountsLv.TabIndex = 5;
       this.accountsLv.UseCompatibleStateImageBehavior = false;
       this.accountsLv.View = System.Windows.Forms.View.Details;
@@ -164,7 +165,7 @@
       // AccountsName
       // 
       this.AccountsName.Text = "Name";
-      this.AccountsName.Width = 97;
+      this.AccountsName.Width = 137;
       // 
       // AccountType
       // 
@@ -179,10 +180,9 @@
       // 
       this.accountCms.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addAccount,
-            this.deleteAccount,
-            this.editAccount});
+            this.deleteAccount});
       this.accountCms.Name = "accountCms";
-      this.accountCms.Size = new System.Drawing.Size(108, 70);
+      this.accountCms.Size = new System.Drawing.Size(181, 70);
       // 
       // addAccount
       // 
@@ -197,13 +197,6 @@
       this.deleteAccount.Size = new System.Drawing.Size(107, 22);
       this.deleteAccount.Text = "Delete";
       this.deleteAccount.Click += new System.EventHandler(this.deleteAccount_Click);
-      // 
-      // editAccount
-      // 
-      this.editAccount.Name = "editAccount";
-      this.editAccount.Size = new System.Drawing.Size(107, 22);
-      this.editAccount.Text = "Edit";
-      this.editAccount.Click += new System.EventHandler(this.editAccount_Click);
       // 
       // incomeCms
       // 
@@ -291,15 +284,17 @@
       // AnnualHbName
       // 
       this.AnnualHbName.Text = "Name";
-      this.AnnualHbName.Width = 82;
+      this.AnnualHbName.Width = 113;
       // 
       // AnnualHbAmount
       // 
       this.AnnualHbAmount.Text = "Amount";
+      this.AnnualHbAmount.Width = 48;
       // 
       // AnnualHbDay
       // 
       this.AnnualHbDay.Text = "Pay Day";
+      this.AnnualHbDay.Width = 52;
       // 
       // AnnualHbPaymentAccount
       // 
@@ -323,7 +318,7 @@
       this.annualSbLv.HideSelection = false;
       this.annualSbLv.Location = new System.Drawing.Point(342, 164);
       this.annualSbLv.Name = "annualSbLv";
-      this.annualSbLv.Size = new System.Drawing.Size(170, 97);
+      this.annualSbLv.Size = new System.Drawing.Size(321, 97);
       this.annualSbLv.TabIndex = 12;
       this.annualSbLv.UseCompatibleStateImageBehavior = false;
       this.annualSbLv.View = System.Windows.Forms.View.Details;
@@ -331,7 +326,7 @@
       // AnnualSbName
       // 
       this.AnnualSbName.Text = "Name";
-      this.AnnualSbName.Width = 83;
+      this.AnnualSbName.Width = 245;
       // 
       // AnnualSbAmount
       // 
@@ -405,7 +400,7 @@
       this.monthlySbLv.HideSelection = false;
       this.monthlySbLv.Location = new System.Drawing.Point(342, 427);
       this.monthlySbLv.Name = "monthlySbLv";
-      this.monthlySbLv.Size = new System.Drawing.Size(170, 97);
+      this.monthlySbLv.Size = new System.Drawing.Size(321, 97);
       this.monthlySbLv.TabIndex = 17;
       this.monthlySbLv.UseCompatibleStateImageBehavior = false;
       this.monthlySbLv.View = System.Windows.Forms.View.Details;
@@ -413,7 +408,7 @@
       // columnHeader1
       // 
       this.columnHeader1.Text = "Name";
-      this.columnHeader1.Width = 83;
+      this.columnHeader1.Width = 245;
       // 
       // columnHeader2
       // 
@@ -446,15 +441,17 @@
       // columnHeader3
       // 
       this.columnHeader3.Text = "Name";
-      this.columnHeader3.Width = 82;
+      this.columnHeader3.Width = 105;
       // 
       // columnHeader4
       // 
       this.columnHeader4.Text = "Amount";
+      this.columnHeader4.Width = 50;
       // 
       // columnHeader5
       // 
       this.columnHeader5.Text = "Pay Day";
+      this.columnHeader5.Width = 54;
       // 
       // columnHeader6
       // 
@@ -553,7 +550,7 @@
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(720, 543);
+      this.ClientSize = new System.Drawing.Size(1035, 543);
       this.Controls.Add(this.manageMonthsBtn);
       this.Controls.Add(this.monthlySbLv);
       this.Controls.Add(this.label6);
@@ -595,7 +592,6 @@
     private System.Windows.Forms.ContextMenuStrip accountCms;
     private System.Windows.Forms.ToolStripMenuItem addAccount;
     private System.Windows.Forms.ToolStripMenuItem deleteAccount;
-    private System.Windows.Forms.ToolStripMenuItem editAccount;
         private System.Windows.Forms.ColumnHeader IncomeName;
         private System.Windows.Forms.ColumnHeader IncomeAmount;
         private System.Windows.Forms.ColumnHeader IncomeFreq;

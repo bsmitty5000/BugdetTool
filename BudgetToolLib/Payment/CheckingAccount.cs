@@ -11,5 +11,9 @@ namespace BudgetToolLib
     public CheckingAccount()
     {
     }
+
+    public CheckingAccount(string name, decimal startingAmount) : base(name, startingAmount)
+    {
+    }
   }
 }

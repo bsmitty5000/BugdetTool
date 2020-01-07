@@ -11,86 +11,42 @@ using BudgetToolLib;
 
 namespace BudgetToolGui
 {
-  public enum Months
-  {
-    January     = 0x1,
-    February    = 0x2,
-    March       = 0x4,
-    April       = 0x8,
-    May         = 0x10,
-    June        = 0x20,
-    July        = 0x40,
-    August      = 0x80,
-    September   = 0x100,
-    October     = 0x200,
-    November    = 0x400,
-    December    = 0x800,
-    All         = 0xFFF,
-    Annual      = 0x1000
-  }
-
   public partial class EditSoftBillForm : Form
   {
     private YearTop _year;
-    private SoftBill _softBill;
+    private string _name;
+    private decimal _startingAmount;
     public event EventHandler<NewSoftBillAddedEventArgs> NewSoftBillAdded;
-    private int _monthMask;
 
-    public EditSoftBillForm(SoftBill softBill, YearTop year)
+    public EditSoftBillForm(string name, decimal startingAmount)
     {
       InitializeComponent();
 
-      if (softBill != null)
-      {
-        _softBill = softBill;
-      }
-      else
-      {
-        _softBill = new SoftBill();
-      }
-
-      if (year == null)
-      {
-        throw new ArgumentException("Year has not been initialized yet.");
-      }
-      else
-      {
-        _year = year;
-      }
-
-      Array Values = System.Enum.GetValues(typeof(Months));
-
-      foreach (int Value in Values)
-      {
-        string Display = Enum.GetName(typeof(Months), Value);
-
-        monthsClb.Items.Add(Display);
-      }
-      monthsClb.SetItemChecked(12, true);
-
+      _name = name;
+      _startingAmount = startingAmount;
       RefreshForm();
     }
     private void RefreshForm()
     {
-      nameTb.Text = _softBill.Name;
-      amountTb.Text = _softBill.Amount.ToString();
+      nameTb.Text = _name;
+      amountTb.Text = _startingAmount.ToString();
     }
 
     private void nameTb_TextChanged(object sender, EventArgs e)
     {
-      _softBill.Name = nameTb.Text;
+      _name = nameTb.Text;
     }
 
     private void amountTb_TextChanged(object sender, EventArgs e)
     {
-      _softBill.Amount = Decimal.Parse(amountTb.Text);
+      _startingAmount = Decimal.Parse(amountTb.Text);
     }
 
     private void saveBtn_Click(object sender, EventArgs e)
     {
       NewSoftBillAddedEventArgs args = new NewSoftBillAddedEventArgs();
-      args.NewSoftBill = _softBill;
-      args.MonthMask = _monthMask;
+      args.Name = _name;
+      args.Amount = _startingAmount;
       OnNewSoftBillAdded(args);
 
       this.Close();
@@ -104,21 +60,10 @@ namespace BudgetToolGui
     {
       this.Close();
     }
-
-    private void monthsClb_SelectedIndexChanged(object sender, EventArgs e)
-    {
-      _monthMask = 0;
-      Months months;
-      foreach (var item in monthsClb.CheckedItems)
-      {
-        Enum.TryParse(item.ToString(), out months);
-        _monthMask |= (int)months;
-      }
-    }
   }
   public class NewSoftBillAddedEventArgs : EventArgs
   {
-    public SoftBill NewSoftBill { get; set; }
-    public int MonthMask { get; set; }
+    public string Name { get; set; }
+    public decimal Amount { get; set; }
   }
 }

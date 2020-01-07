@@ -88,6 +88,48 @@ namespace BudgetToolLib
         }
       }
     }
+    public void AddSoftBill(string name, decimal startingAmount, Boolean annualGroup)
+    {
+      if (annualGroup)
+      {
+        if (BudgetGroups[0].SoftBills.ContainsKey(name))
+        {
+          decimal difference = BudgetGroups[0].SoftBills[name].BalanceHistory[0].Amount - startingAmount;
+          BalanceEntry newStartingEntry = new BalanceEntry() { Date = BudgetGroups[0].SoftBills[name].BalanceHistory[0].Date, Amount = difference };
+          BudgetGroups[0].SoftBills[name].InsertDebitTransaction(newStartingEntry);
+        }
+        else
+        {
+          BudgetGroups[0].SoftBills.Add(name, new SoftBill(name, startingAmount ));
+        }
+      }
+      else
+      {
+        /* important to start at 1 here */
+        for (int i = 1; i < BudgetGroups.Count; i++)
+        {
+          if (BudgetGroups[i].SoftBills.ContainsKey(name))
+          {
+            decimal difference = BudgetGroups[i].SoftBills[name].BalanceHistory[0].Amount - startingAmount;
+            BalanceEntry newStartingEntry = new BalanceEntry() { Date = BudgetGroups[i].SoftBills[name].BalanceHistory[0].Date, Amount = difference };
+            BudgetGroups[i].SoftBills[name].InsertDebitTransaction(newStartingEntry);
+          }
+          else
+          {
+            if(i < 13)
+            {
+              BudgetGroups[i].SoftBills.Add(name, new SoftBill(name, startingAmount ));
+            }
+            else
+            {
+              //keeping an untouched copy for now just in case.
+              BudgetGroups[i].SoftBills.Add(name, new SoftBill(name, startingAmount ));
+            }
+          }
+        }
+      }
+    }
+
     public void AddSoftBill(SoftBill softBill, Boolean annualGroup)
     {
       if(annualGroup)
@@ -151,7 +193,7 @@ namespace BudgetToolLib
     }
     public Purchase CreatePurchase(DateTime dateOfPurchase, bool annual)
     {
-      Purchase purchase = null;
+      Purchase purchase;
 
       if (annual)
       {

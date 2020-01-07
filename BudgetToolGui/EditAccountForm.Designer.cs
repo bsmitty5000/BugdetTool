@@ -71,7 +71,7 @@
       this.nameTb.Name = "nameTb";
       this.nameTb.Size = new System.Drawing.Size(100, 20);
       this.nameTb.TabIndex = 3;
-      this.nameTb.TextChanged += new System.EventHandler(this.nameTb_TextChanged);
+      this.nameTb.TextChanged += new System.EventHandler(this.NameTb_TextChanged);
       // 
       // balanceTb
       // 
@@ -79,7 +79,7 @@
       this.balanceTb.Name = "balanceTb";
       this.balanceTb.Size = new System.Drawing.Size(100, 20);
       this.balanceTb.TabIndex = 4;
-      this.balanceTb.TextChanged += new System.EventHandler(this.balanceTb_TextChanged);
+      this.balanceTb.TextChanged += new System.EventHandler(this.BalanceTb_TextChanged);
       // 
       // saveBtn
       // 
@@ -89,7 +89,7 @@
       this.saveBtn.TabIndex = 6;
       this.saveBtn.Text = "Save";
       this.saveBtn.UseVisualStyleBackColor = true;
-      this.saveBtn.Click += new System.EventHandler(this.saveBtn_Click);
+      this.saveBtn.Click += new System.EventHandler(this.SaveBtn_Click);
       // 
       // cancelBtn
       // 
@@ -108,7 +108,7 @@
       this.typeCb.Name = "typeCb";
       this.typeCb.Size = new System.Drawing.Size(121, 21);
       this.typeCb.TabIndex = 8;
-      this.typeCb.SelectedIndexChanged += new System.EventHandler(this.typeCb_SelectedIndexChanged);
+      this.typeCb.SelectedIndexChanged += new System.EventHandler(this.TypeCb_SelectedIndexChanged);
       // 
       // EditAccountForm
       // 

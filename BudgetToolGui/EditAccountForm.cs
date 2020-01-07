@@ -14,8 +14,10 @@ namespace BudgetToolGui
   public partial class EditAccountForm : Form
   {
     private Account _account;
+    private decimal _startingAmount;
+    private string _name;
     public event EventHandler<NewAccountAddedEventArgs> NewAccountAdded;
-    public EditAccountForm(Account account)
+    public EditAccountForm()
     {
       InitializeComponent();
 
@@ -23,28 +25,21 @@ namespace BudgetToolGui
       string[] AccountTypes = new string[] { "CheckingAccount", "CreditCard" };
       typeCb.Items.AddRange(AccountTypes);
 
-      if (account != null)
-      {
-        _account = account;
-      }
-      else
-      {
-        _account = new CheckingAccount();
-      }
+      _account = new CheckingAccount();
 
       RefreshForm();
     }
 
-    private void nameTb_TextChanged(object sender, EventArgs e)
+    private void NameTb_TextChanged(object sender, EventArgs e)
     {
-      _account.Name = nameTb.Text;
+      _name = nameTb.Text;
     }
 
-    private void balanceTb_TextChanged(object sender, EventArgs e)
+    private void BalanceTb_TextChanged(object sender, EventArgs e)
     {
-      _account.Balance = Decimal.Parse(balanceTb.Text);
+      _startingAmount = Decimal.Parse(balanceTb.Text);
     }
-    private void typeCb_SelectedIndexChanged(object sender, EventArgs e)
+    private void TypeCb_SelectedIndexChanged(object sender, EventArgs e)
     {
       Account tempAccount = null;
       if(!_account.GetType().Name.Equals(typeCb.SelectedItem))
@@ -59,13 +54,13 @@ namespace BudgetToolGui
             break;
         }
 
-        tempAccount.Balance = _account.Balance;
-        tempAccount.Name = _account.Name;
         _account = tempAccount;
       }
     }
-    private void saveBtn_Click(object sender, EventArgs e)
+    private void SaveBtn_Click(object sender, EventArgs e)
     {
+      _account.Name = _name;
+      _account.BalanceHistory = new List<BalanceEntry>() { new BalanceEntry() { Date = DateTime.Today, Amount = _startingAmount } };
       NewAccountAddedEventArgs args = new NewAccountAddedEventArgs();
       args.NewAccount = _account;
       OnNewAccountAdded(args);
@@ -85,7 +80,7 @@ namespace BudgetToolGui
     private void RefreshForm()
     {
       nameTb.Text = _account.Name;
-      balanceTb.Text = _account.Balance.ToString();
+      balanceTb.Text = _startingAmount.ToString();
       typeCb.SelectedItem = _account.GetType().Name;
     }
   }

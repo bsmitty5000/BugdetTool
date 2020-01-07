@@ -45,7 +45,6 @@ namespace BudgetToolGui
       }
       _currentMonth = 1;
 
-      monthlySbLv.MouseUp += new MouseEventHandler(monthlySbLv_MouseUp);
       purchasesLv.MouseUp += new MouseEventHandler(purchasesLv_MouseUp);
 
       RefreshPage();
@@ -57,8 +56,11 @@ namespace BudgetToolGui
       monthlySbLv.Items.Clear();
       foreach (var softBill in _year.BudgetGroups[_currentMonth].SoftBills)
       {
+        BalanceEntry firstEntry = softBill.Value.BalanceHistory[0];
+        BalanceEntry lastEntry = softBill.Value.BalanceHistory.Last();
         ListViewItem lvi = new ListViewItem(softBill.Key);
-        lvi.SubItems.Add(softBill.Value.Amount.ToString());
+        lvi.SubItems.Add(firstEntry.Amount.ToString());
+        lvi.SubItems.Add(lastEntry.Amount.ToString());
         lvi.Tag = softBill.Value;
         monthlySbLv.Items.Add(lvi);
       }
@@ -75,79 +77,6 @@ namespace BudgetToolGui
       // minus 1 here because months are not zero indexed but the months array is
       currentMonthLbl.Text = string.Format("Current Month: {0}", months[_currentMonth]);
     }
-    #endregion
-
-    #region Monthly Stuff
-    private void monthlySbLv_MouseUp(object sender, MouseEventArgs e)
-    {
-      int index = -1;
-
-      if (e.Button == MouseButtons.Right)
-      {
-        if (monthlySbLv.Items.Count > 0)
-        {
-          ListViewItem selectedItem = monthlySbLv.GetItemAt(e.X, e.Y);
-          if (selectedItem != null)
-          {
-            index = selectedItem.Index;
-          }
-        }
-
-        if (_year.Accounts.Count > 0)
-        {
-          monthlySbAdd.Enabled = true;
-        }
-        else
-        {
-          monthlySbAdd.Enabled = false;
-        }
-
-        if (index > -1)
-        {
-          monthlySbDelete.Enabled = true;
-          monthlySbEdit.Enabled = true;
-        }
-        else
-        {
-          monthlySbDelete.Enabled = false;
-          monthlySbEdit.Enabled = false;
-        }
-        monthlySbCms.Show(this, new Point(e.X + ((Control)sender).Left + 20, e.Y + ((Control)sender).Top + 20));
-        //accountCms.Show(this, new Point(e.X, e.Y));
-      }
-    }
-    private void monthlySbAdd_Click(object sender, EventArgs e)
-    {
-      SoftBill softBill = new SoftBill();
-
-      var editSoftBill = new EditSoftBillForm(softBill, _year);
-      editSoftBill.NewSoftBillAdded += NewMonthlySoftBill_Added;
-      editSoftBill.Show();
-    }
-    private void monthlySbDelete_Click(object sender, EventArgs e)
-    {
-      SoftBill softBill = monthlySbLv.SelectedItems[0].Tag as SoftBill;
-      _year.RemoveSoftBill(softBill.Name, true);
-      RefreshPage();
-    }
-    private void monthlySbEdit_Click(object sender, EventArgs e)
-    {
-      SoftBill softBill = monthlySbLv.SelectedItems[0].Tag as SoftBill;
-
-      var editSoftBill = new EditSoftBillForm(softBill, _year);
-      //editSoftBill.NewSoftBillAdded += NewMonthlySoftBill_Added;
-      editSoftBill.ShowDialog();
-      RefreshPage();
-    }
-    private void NewMonthlySoftBill_Added(object sender, NewSoftBillAddedEventArgs e)
-    {
-      if (e.NewSoftBill != null)
-      {
-        _year.AddSoftBill(e.NewSoftBill, false);
-      }
-      RefreshPage();
-    }
-
     #endregion
 
     #region Purchase Stuff
