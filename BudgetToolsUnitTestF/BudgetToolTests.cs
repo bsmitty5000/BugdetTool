@@ -76,17 +76,42 @@ namespace BudgetToolsUnitTestF
     public void SimplePurchaseTest()
     {
       decimal creditStarting = yearTop.Accounts["credit"].BalanceHistory.Last().Amount;
-      decimal total = 100;
+      decimal checkingStarting = yearTop.Accounts["checking"].BalanceHistory.Last().Amount;
+      decimal total;
       Dictionary<string, decimal> sbSplit = new Dictionary<string, decimal>();
-      foreach (var kvp in yearTop.BudgetGroups[1].SoftBills)
-      {
-        sbSplit.Add(kvp.Key, total / yearTop.BudgetGroups[1].SoftBills.Count);
-      }
+      Purchase purchase;
 
-      Purchase grocery = new Purchase("Grocery Store", credit, new DateTime(2020, 1, 15), total, sbSplit);
-      yearTop.BudgetGroups[1].AddPurchase(grocery);
+      total = 100;
+      sbSplit = new Dictionary<string, decimal>() { { "food", total } };
+      purchase = new Purchase("Grocery Store", credit, new DateTime(2020, 1, 15), total, sbSplit);
+      yearTop.BudgetGroups[1].AddPurchase(purchase);
 
       Assert.AreEqual(creditStarting + total, yearTop.Accounts["credit"].BalanceHistory.Last().Amount);
+
+      total = 150;
+      sbSplit = new Dictionary<string, decimal>() { { "gas", total } };
+      purchase = new Purchase("Gas Station", checking, new DateTime(2020, 1, 15), total, sbSplit);
+      yearTop.BudgetGroups[1].AddPurchase(purchase);
+
+      Assert.AreEqual(checkingStarting - total, yearTop.Accounts["checking"].BalanceHistory.Last().Amount);
+    }
+
+    [Test]
+    public void SimpleHardBillTest()
+    {
+      decimal creditStarting = yearTop.Accounts["credit"].BalanceHistory.Last().Amount;
+      decimal checkingStarting = yearTop.Accounts["checking"].BalanceHistory.Last().Amount;
+
+      carRegistration.PayBill(new DateTime())
+
+      Assert.AreEqual(creditStarting + total, yearTop.Accounts["credit"].BalanceHistory.Last().Amount);
+
+      total = 150;
+      sbSplit = new Dictionary<string, decimal>() { { "gas", total } };
+      purchase = new Purchase("Gas Station", checking, new DateTime(2020, 1, 15), total, sbSplit);
+      yearTop.BudgetGroups[1].AddPurchase(purchase);
+
+      Assert.AreEqual(checkingStarting - total, yearTop.Accounts["checking"].BalanceHistory.Last().Amount);
     }
   }
 }
