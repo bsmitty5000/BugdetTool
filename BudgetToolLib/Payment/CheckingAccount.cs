@@ -10,10 +10,14 @@ namespace BudgetToolLib
   {
     public CheckingAccount()
     {
+      InsertDebit = newAdditionEntry;
+      InsertCredit = newSubtractionEntry;
     }
 
     public CheckingAccount(string name, decimal startingAmount) : base(name, startingAmount)
     {
+      InsertDebit = newAdditionEntry;
+      InsertCredit = newSubtractionEntry;
     }
   }
 }

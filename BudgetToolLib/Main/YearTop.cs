@@ -96,7 +96,7 @@ namespace BudgetToolLib
         {
           decimal difference = BudgetGroups[0].SoftBills[name].BalanceHistory[0].Amount - startingAmount;
           BalanceEntry newStartingEntry = new BalanceEntry() { Date = BudgetGroups[0].SoftBills[name].BalanceHistory[0].Date, Amount = difference };
-          BudgetGroups[0].SoftBills[name].InsertDebitTransaction(newStartingEntry);
+          BudgetGroups[0].SoftBills[name].InsertDebit(newStartingEntry);
         }
         else
         {
@@ -112,7 +112,7 @@ namespace BudgetToolLib
           {
             decimal difference = BudgetGroups[i].SoftBills[name].BalanceHistory[0].Amount - startingAmount;
             BalanceEntry newStartingEntry = new BalanceEntry() { Date = BudgetGroups[i].SoftBills[name].BalanceHistory[0].Date, Amount = difference };
-            BudgetGroups[i].SoftBills[name].InsertDebitTransaction(newStartingEntry);
+            BudgetGroups[i].SoftBills[name].InsertDebit(newStartingEntry);
           }
           else
           {

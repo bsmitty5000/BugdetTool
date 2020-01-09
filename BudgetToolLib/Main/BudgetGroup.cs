@@ -52,9 +52,9 @@ namespace BudgetToolLib
 
       foreach (var softBill in purchase.SoftBillSplit)
       {
-        SoftBills[softBill.Key].InsertDebitTransaction(new BalanceEntry() { Date = purchase.DateOfPurchase, Amount = softBill.Value });
+        SoftBills[softBill.Key].InsertDebit(new BalanceEntry() { Date = purchase.DateOfPurchase, Amount = softBill.Value });
       }
-      purchase.PaymentAccount.InsertDebitTransaction(new BalanceEntry() { Date = purchase.DateOfPurchase, Amount = purchase.Amount });
+      purchase.PaymentAccount.InsertDebit(new BalanceEntry() { Date = purchase.DateOfPurchase, Amount = purchase.Amount });
       Purchases.Add(purchase);
     }
 
@@ -68,9 +68,9 @@ namespace BudgetToolLib
       {
         foreach (var softBill in purchase.SoftBillSplit)
         {
-          SoftBills[softBill.Key].InsertCreditTransaction(new BalanceEntry() { Date = purchase.DateOfPurchase, Amount = softBill.Value });
+          SoftBills[softBill.Key].InsertCredit(new BalanceEntry() { Date = purchase.DateOfPurchase, Amount = softBill.Value });
         }
-        purchase.PaymentAccount.InsertCreditTransaction(new BalanceEntry() { Date = purchase.DateOfPurchase, Amount = purchase.Amount });
+        purchase.PaymentAccount.InsertCredit(new BalanceEntry() { Date = purchase.DateOfPurchase, Amount = purchase.Amount });
         Purchases.Remove(purchase);
       }
     }

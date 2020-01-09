@@ -10,15 +10,20 @@ namespace BudgetToolLib
   {
     public SoftBill()
     {
-
+      InsertDebit = newAdditionEntry;
+      InsertCredit = newSubtractionEntry;
     }
 
     public SoftBill(string name, decimal startingAmount) : base(name, startingAmount)
     {
+      InsertDebit = newAdditionEntry;
+      InsertCredit = newSubtractionEntry;
     }
 
     public SoftBill(SoftBill sb)
     {
+      InsertDebit = newAdditionEntry;
+      InsertCredit = newSubtractionEntry;
       Name = sb.Name;
       BalanceHistory = new List<BalanceEntry>(sb.BalanceHistory);
     }

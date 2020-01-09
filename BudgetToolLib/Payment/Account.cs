@@ -17,6 +17,10 @@ namespace BudgetToolLib
     public List<BalanceEntry> BalanceHistory { get; set; }
     public string Name { get; set; }
 
+    public delegate void InsertNewTransaction(BalanceEntry balanceEntry);
+    public InsertNewTransaction InsertDebit;
+    public InsertNewTransaction InsertCredit;
+
     public Account()
     {
     }
@@ -35,13 +39,13 @@ namespace BudgetToolLib
       Name = name;
     }
 
-    virtual public void InsertDebitTransaction(BalanceEntry balanceEntry)
+    protected void newAdditionEntry(BalanceEntry balanceEntry)
     {
       for(int i = 0; i < BalanceHistory.Count; i++)
       {
         if(BalanceHistory[i].Date == balanceEntry.Date)
         {
-          unravelRemainingDebitEntries(i, balanceEntry.Amount);
+          unravelUsingAddition(i, balanceEntry.Amount);
           return;
         }
         else if(BalanceHistory[i].Date < balanceEntry.Date)
@@ -50,7 +54,7 @@ namespace BudgetToolLib
           BalanceHistory.Insert(i + 1, new BalanceEntry() { Date = balanceEntry.Date, Amount = (BalanceHistory[i].Amount - balanceEntry.Amount) });
 
           // after the new entry update all remaining entries
-          unravelRemainingDebitEntries(i + 2, balanceEntry.Amount);
+          unravelUsingAddition(i + 2, balanceEntry.Amount);
           return;
         }
       }
@@ -58,7 +62,7 @@ namespace BudgetToolLib
       BalanceHistory.Add(new BalanceEntry() { Date = balanceEntry.Date, Amount = (BalanceHistory[BalanceHistory.Count - 1].Amount - balanceEntry.Amount) });
     }
 
-    private void unravelRemainingDebitEntries(int index, decimal amount)
+    private void unravelUsingAddition(int index, decimal amount)
     {
       for (int j = index; j < BalanceHistory.Count; j++)
       {
@@ -66,13 +70,13 @@ namespace BudgetToolLib
       }
     }
 
-    virtual public void InsertCreditTransaction(BalanceEntry balanceEntry)
+    virtual public void newSubtractionEntry(BalanceEntry balanceEntry)
     {
       for (int i = 0; i < BalanceHistory.Count; i++)
       {
         if (BalanceHistory[i].Date == balanceEntry.Date)
         {
-          unravelRemainingCreditEntries(i, balanceEntry.Amount);
+          unravelUsingSubtraction(i, balanceEntry.Amount);
           return;
         }
         else if (BalanceHistory[i].Date < balanceEntry.Date)
@@ -81,14 +85,14 @@ namespace BudgetToolLib
           BalanceHistory.Insert(i + 1, new BalanceEntry() { Date = balanceEntry.Date, Amount = (BalanceHistory[i].Amount + balanceEntry.Amount) });
 
           // after the new entry update all remaining entries
-          unravelRemainingCreditEntries(i + 2, balanceEntry.Amount);
+          unravelUsingSubtraction(i + 2, balanceEntry.Amount);
           return;
         }
       }
       //if we've made it here then the new entry is the latest date
       BalanceHistory.Add(new BalanceEntry() { Date = balanceEntry.Date, Amount = (BalanceHistory[BalanceHistory.Count - 1].Amount + balanceEntry.Amount) });
     }
-    private void unravelRemainingCreditEntries(int index, decimal amount)
+    private void unravelUsingSubtraction(int index, decimal amount)
     {
       for (int j = index; j < BalanceHistory.Count; j++)
       {
