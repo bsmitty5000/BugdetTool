@@ -18,8 +18,9 @@ namespace BudgetToolLib
     public HardBill()
     { }
 
-    public HardBill(decimal amount, int dayOfMonthPaid, Account paymentSource)
+    public HardBill(string name, decimal amount, int dayOfMonthPaid, Account paymentSource)
     {
+      Name = name;
       Amount = amount;
       DayOfMonthPaid = dayOfMonthPaid;
       PaymentAccount = paymentSource;

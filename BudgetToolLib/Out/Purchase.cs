@@ -19,6 +19,15 @@ namespace BudgetToolLib
       SoftBillSplit = new Dictionary<string, decimal>();
     }
 
+    public Purchase(string vendor, Account paymentAccount, DateTime dateOfPurchase, decimal amount, Dictionary<string, decimal> softBillSplit)
+    {
+      Vendor = vendor;
+      PaymentAccount = paymentAccount;
+      DateOfPurchase = dateOfPurchase;
+      Amount = amount;
+      SoftBillSplit = softBillSplit;
+    }
+
     public override string ToString()
     {
       var sb = new StringBuilder();
