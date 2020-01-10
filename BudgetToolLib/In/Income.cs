@@ -18,7 +18,7 @@ namespace BudgetToolLib
     public string Name { get; set; }
     public decimal UnitAmount { get; set; }
     public IncomeFrequencyEnum IncomeFrequency { get; set; }
-    public Account DepositAccount { get; set; }
+    public AccountBase DepositAccount { get; set; }
     public DateTime FirstDeposit { get; set; }
     public DateTime LastDeposit { get; private set; }
     public int LastDepositWeekNumber { get; private set; }
@@ -74,7 +74,7 @@ namespace BudgetToolLib
       for(int i = 0; i < numOfPaydaysToProcess; i++)
       {
         LastDeposit = LastDeposit.AddDays((double)IncomeFrequency * 7);
-        DepositAccount.InsertCredit(new BalanceEntry() { Date = LastDeposit, Amount = UnitAmount });
+        DepositAccount.NewCreditTransaction(new BalanceEntry() { Date = LastDeposit, Amount = UnitAmount });
         LastDepositWeekNumber += (int)IncomeFrequency;
       }
     }

@@ -12,13 +12,13 @@ namespace BudgetToolLib
     public string Name { get; set; }
     public decimal Amount { get; set; }
     public int DayOfMonthPaid { get; set; }
-    public Account PaymentAccount { get; set; }
+    public AccountBase PaymentAccount { get; set; }
     public int LastMonthPaid { get; private set; }
 
     public HardBill()
     { }
 
-    public HardBill(string name, decimal amount, int dayOfMonthPaid, Account paymentSource)
+    public HardBill(string name, decimal amount, int dayOfMonthPaid, AccountBase paymentSource)
     {
       Name = name;
       Amount = amount;
@@ -48,7 +48,7 @@ namespace BudgetToolLib
       for (int i = 0; i < (numberOfMonthsToPay - 1); i++)
       {
         DateTime paymentDate = new DateTime(2020, currentMonthNumber + i, DayOfMonthPaid);
-        PaymentAccount.InsertDebit(new BalanceEntry() { Date = paymentDate, Amount = this.Amount });
+        PaymentAccount.NewDebitTransaction(new BalanceEntry() { Date = paymentDate, Amount = this.Amount });
         LastMonthPaid++;
       }
 
@@ -56,7 +56,7 @@ namespace BudgetToolLib
       {
         LastMonthPaid++;
         DateTime paymentDate = new DateTime(2020, LastMonthPaid, DayOfMonthPaid);
-        PaymentAccount.InsertDebit(new BalanceEntry() { Date = paymentDate, Amount = this.Amount });
+        PaymentAccount.NewDebitTransaction(new BalanceEntry() { Date = paymentDate, Amount = this.Amount });
 
         if(LastMonthPaid != currentMonthNumber)
         {

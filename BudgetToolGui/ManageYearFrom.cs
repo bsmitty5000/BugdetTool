@@ -143,7 +143,7 @@ namespace BudgetToolGui
     }
     private void deleteAccount_Click(object sender, EventArgs e)
     {
-      Account accountSelected = accountsLv.SelectedItems[0].Tag as Account;
+      AccountBase accountSelected = accountsLv.SelectedItems[0].Tag as AccountBase;
       _year.Accounts.Remove(accountSelected.Name);
       RefreshPage();
     }

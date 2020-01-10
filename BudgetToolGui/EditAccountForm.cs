@@ -13,7 +13,7 @@ namespace BudgetToolGui
 {
   public partial class EditAccountForm : Form
   {
-    private Account _account;
+    private AccountBase _account;
     private decimal _startingAmount;
     private string _name;
     public event EventHandler<NewAccountAddedEventArgs> NewAccountAdded;
@@ -41,7 +41,7 @@ namespace BudgetToolGui
     }
     private void TypeCb_SelectedIndexChanged(object sender, EventArgs e)
     {
-      Account tempAccount = null;
+      AccountBase tempAccount = null;
       if(!_account.GetType().Name.Equals(typeCb.SelectedItem))
       {
         switch(typeCb.SelectedItem.ToString())
@@ -87,6 +87,6 @@ namespace BudgetToolGui
 
   public class NewAccountAddedEventArgs : EventArgs
   {
-    public Account NewAccount { get; set; }
+    public AccountBase NewAccount { get; set; }
   }
 }

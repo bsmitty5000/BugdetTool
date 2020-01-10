@@ -12,8 +12,8 @@ namespace BudgetToolsUnitTestF
   [TestFixture]
   public class BudgetToolTests
   {
-    private Account checking;
-    private Account credit;
+    private AccountBase checking;
+    private AccountBase credit;
 
     private Income salary;
     private Income bonus;

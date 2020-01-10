@@ -9,7 +9,7 @@ namespace BudgetToolLib
   public class Purchase
   {
     public string Vendor { get; set; }
-    public Account PaymentAccount { get; set; }
+    public AccountBase PaymentAccount { get; set; }
     public DateTime DateOfPurchase { get; set; }
     public decimal Amount { get; set; }
     public Dictionary<string, decimal> SoftBillSplit { get; set; }
@@ -19,7 +19,7 @@ namespace BudgetToolLib
       SoftBillSplit = new Dictionary<string, decimal>();
     }
 
-    public Purchase(string vendor, Account paymentAccount, DateTime dateOfPurchase, decimal amount, Dictionary<string, decimal> softBillSplit)
+    public Purchase(string vendor, AccountBase paymentAccount, DateTime dateOfPurchase, decimal amount, Dictionary<string, decimal> softBillSplit)
     {
       Vendor = vendor;
       PaymentAccount = paymentAccount;

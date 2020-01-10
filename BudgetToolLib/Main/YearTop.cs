@@ -12,7 +12,7 @@ namespace BudgetToolLib
   public class YearTop
   {
     /* Add to dictionary directly */
-    public Dictionary<string, Account> Accounts { get; set; }
+    public Dictionary<string, AccountBase> Accounts { get; set; }
 
     /* Add to dictionary directly */
     public Dictionary<string, Income> IncomeSources { get; set; }
@@ -38,7 +38,7 @@ namespace BudgetToolLib
         BudgetGroups.Add(new BudgetGroup());
       }
       IncomeSources = new Dictionary<string, Income>();
-      Accounts = new Dictionary<string, Account>();
+      Accounts = new Dictionary<string, AccountBase>();
     }
     static public YearTop LoadFromFile(Stream s)
     {
@@ -96,7 +96,7 @@ namespace BudgetToolLib
         {
           decimal difference = BudgetGroups[0].SoftBills[name].BalanceHistory[0].Amount - startingAmount;
           BalanceEntry newStartingEntry = new BalanceEntry() { Date = BudgetGroups[0].SoftBills[name].BalanceHistory[0].Date, Amount = difference };
-          BudgetGroups[0].SoftBills[name].InsertDebit(newStartingEntry);
+          BudgetGroups[0].SoftBills[name].NewDebitTransaction(newStartingEntry);
         }
         else
         {
@@ -112,7 +112,7 @@ namespace BudgetToolLib
           {
             decimal difference = BudgetGroups[i].SoftBills[name].BalanceHistory[0].Amount - startingAmount;
             BalanceEntry newStartingEntry = new BalanceEntry() { Date = BudgetGroups[i].SoftBills[name].BalanceHistory[0].Date, Amount = difference };
-            BudgetGroups[i].SoftBills[name].InsertDebit(newStartingEntry);
+            BudgetGroups[i].SoftBills[name].NewDebitTransaction(newStartingEntry);
           }
           else
           {
