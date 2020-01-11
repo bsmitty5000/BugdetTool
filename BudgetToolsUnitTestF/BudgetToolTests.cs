@@ -86,7 +86,7 @@ namespace BudgetToolsUnitTestF
       total = 100;
       sbSplit = new Dictionary<string, decimal>() { { "food", total } };
       purchase = new Purchase("Grocery Store", credit, new DateTime(2020, 1, 15), total, sbSplit);
-      yearTop.BudgetGroups[1].AddPurchase(purchase);
+      yearTop.MonthlySoftBills[1].AddPurchase(purchase);
 
       creditExpected += total; 
       Assert.AreEqual(creditExpected, yearTop.Accounts["credit"].BalanceHistory.Last().Amount);
@@ -94,7 +94,7 @@ namespace BudgetToolsUnitTestF
       total = 150;
       sbSplit = new Dictionary<string, decimal>() { { "food", total } };
       purchase = new Purchase("Grocery Store", credit, new DateTime(2020, 1, 16), total, sbSplit);
-      yearTop.BudgetGroups[1].AddPurchase(purchase);
+      yearTop.MonthlySoftBills[1].AddPurchase(purchase);
 
       creditExpected += total;
       Assert.AreEqual(creditExpected, yearTop.Accounts["credit"].BalanceHistory.Last().Amount);
@@ -102,7 +102,7 @@ namespace BudgetToolsUnitTestF
       total = 150;
       sbSplit = new Dictionary<string, decimal>() { { "food", total } };
       purchase = new Purchase("Grocery Store", credit, new DateTime(2020, 1, 15), total, sbSplit);
-      yearTop.BudgetGroups[1].AddPurchase(purchase);
+      yearTop.MonthlySoftBills[1].AddPurchase(purchase);
 
       creditExpected += total;
       Assert.AreEqual(creditExpected, yearTop.Accounts["credit"].BalanceHistory.Last().Amount);
@@ -111,7 +111,7 @@ namespace BudgetToolsUnitTestF
       total = 150;
       sbSplit = new Dictionary<string, decimal>() { { "gas", total } };
       purchase = new Purchase("Gas Station", checking, new DateTime(2020, 1, 15), total, sbSplit);
-      yearTop.BudgetGroups[1].AddPurchase(purchase);
+      yearTop.MonthlySoftBills[1].AddPurchase(purchase);
 
       checkingExpected -= total;
       Assert.AreEqual(checkingExpected, yearTop.Accounts["checking"].BalanceHistory.Last().Amount);
@@ -119,7 +119,7 @@ namespace BudgetToolsUnitTestF
       total = 50;
       sbSplit = new Dictionary<string, decimal>() { { "gas", total } };
       purchase = new Purchase("Gas Station", checking, new DateTime(2020, 1, 20), total, sbSplit);
-      yearTop.BudgetGroups[1].AddPurchase(purchase);
+      yearTop.MonthlySoftBills[1].AddPurchase(purchase);
 
       checkingExpected -= total;
       Assert.AreEqual(checkingExpected, yearTop.Accounts["checking"].BalanceHistory.Last().Amount);
@@ -127,7 +127,7 @@ namespace BudgetToolsUnitTestF
       total = 75;
       sbSplit = new Dictionary<string, decimal>() { { "gas", total } };
       purchase = new Purchase("Gas Station", checking, new DateTime(2020, 1, 15), total, sbSplit);
-      yearTop.BudgetGroups[1].AddPurchase(purchase);
+      yearTop.MonthlySoftBills[1].AddPurchase(purchase);
 
       checkingExpected -= total;
       Assert.AreEqual(checkingExpected, yearTop.Accounts["checking"].BalanceHistory.Last().Amount);
@@ -165,6 +165,13 @@ namespace BudgetToolsUnitTestF
 
       checkingExpected -= electricity.Amount;
       Assert.AreEqual(checkingExpected, yearTop.Accounts["checking"].BalanceHistory.Last().Amount);
+    }
+    [Test]
+    public void FastForwardYearTest()
+    {
+      yearTop.FastForward(new DateTime(2020, 12, 31));
+
+      Console.WriteLine("Done");
     }
   }
 }

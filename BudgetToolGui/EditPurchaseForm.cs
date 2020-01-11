@@ -63,7 +63,7 @@ namespace BudgetToolGui
 
       if (_purchase.SoftBillSplit.Count == 0)
       {
-        foreach (var sb in _year.BudgetGroups[month].SoftBills)
+        foreach (var sb in _year.MonthlySoftBills[month].SoftBills)
         {
           _purchase.SoftBillSplit.Add(sb.Value.Name, 0);
         }

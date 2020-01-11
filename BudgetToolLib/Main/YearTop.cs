@@ -20,7 +20,9 @@ namespace BudgetToolLib
     /* BudgetGroups are created in the constructor.
      * SoftBills & HardBills are added later
      */
-    public List<BudgetGroup> BudgetGroups { get; set; }
+    public List<SoftBillGroup> MonthlySoftBills { get; set; }
+    public Dictionary<string, HardBill> HardBills { get; set; }
+    public List<Purchase> Purchases { get; set; }
 
     public YearTop()
     {
@@ -28,17 +30,18 @@ namespace BudgetToolLib
     
     public void InitializeYear()
     {
-      BudgetGroups = new List<BudgetGroup>();
+      MonthlySoftBills = new List<SoftBillGroup>();
       /* BudgetGroup[0] = Year
        * BudgetGroup[1:12] = Months
-       * BudgetGroup[13] = Copy of Months
        */
-      for (int i = 0; i < 14; i++)
+      for (int i = 0; i < 13; i++)
       {
-        BudgetGroups.Add(new BudgetGroup());
+        MonthlySoftBills.Add(new SoftBillGroup());
       }
       IncomeSources = new Dictionary<string, Income>();
       Accounts = new Dictionary<string, AccountBase>();
+      HardBills = new Dictionary<string, HardBill>();
+      Purchases = new List<Purchase>();
     }
     static public YearTop LoadFromFile(Stream s)
     {
@@ -74,120 +77,112 @@ namespace BudgetToolLib
         sw.Write(jsonTypeNameAuto);
       }
     }
-    public void RemoveSoftBill(string name, Boolean annualGroup)
+    public void RemoveSoftBill(string name)
     {
-      if (annualGroup)
+      foreach (var group in MonthlySoftBills)
       {
-        BudgetGroups[0].SoftBills.Remove(name);
-      }
-      else
-      {
-        for(int i = 0; i < BudgetGroups.Count; i++)
-        {
-          BudgetGroups[i].SoftBills.Remove(name);
-        }
+        group.SoftBills.Remove(name);
       }
     }
+
     public void AddSoftBill(string name, decimal startingAmount, Boolean annualGroup)
     {
       if (annualGroup)
       {
-        if (BudgetGroups[0].SoftBills.ContainsKey(name))
+        if(MonthlySoftBills[1].SoftBills.ContainsKey(name))
         {
-          decimal difference = BudgetGroups[0].SoftBills[name].BalanceHistory[0].Amount - startingAmount;
-          Transaction transaction = new Transaction() { Description = name, Date = BudgetGroups[0].SoftBills[name].BalanceHistory[0].Date, Amount = difference };
-          BudgetGroups[0].SoftBills[name].NewDebitTransaction(transaction);
+          throw new ArgumentException("This softbill already exists in the monthly groups.");
+        }
+
+        if (MonthlySoftBills[0].SoftBills.ContainsKey(name))
+        {
+          decimal difference = MonthlySoftBills[0].SoftBills[name].BalanceHistory[0].Amount - startingAmount;
+          Transaction transaction = new Transaction() { Description = name, Date = MonthlySoftBills[0].SoftBills[name].BalanceHistory[0].Date, Amount = difference };
+          MonthlySoftBills[0].SoftBills[name].NewDebitTransaction(transaction);
         }
         else
         {
-          BudgetGroups[0].SoftBills.Add(name, new SoftBill(name, startingAmount ));
+          MonthlySoftBills[0].SoftBills.Add(name, new SoftBill(name, startingAmount ));
         }
       }
       else
       {
-        /* important to start at 1 here */
-        for (int i = 1; i < BudgetGroups.Count; i++)
+        if (MonthlySoftBills[0].SoftBills.ContainsKey(name))
         {
-          if (BudgetGroups[i].SoftBills.ContainsKey(name))
+          throw new ArgumentException("This softbill already exists in the annual group.");
+        }
+
+        /* important to start at 1 here */
+        for (int i = 1; i < MonthlySoftBills.Count; i++)
+        {
+          if (MonthlySoftBills[i].SoftBills.ContainsKey(name))
           {
-            decimal difference = BudgetGroups[i].SoftBills[name].BalanceHistory[0].Amount - startingAmount;
-            Transaction transaction = new Transaction() { Description = name, Date = BudgetGroups[0].SoftBills[name].BalanceHistory[0].Date, Amount = difference };
-            BudgetGroups[i].SoftBills[name].NewDebitTransaction(transaction);
+            decimal difference = MonthlySoftBills[i].SoftBills[name].BalanceHistory[0].Amount - startingAmount;
+            Transaction transaction = new Transaction() { Description = name, Date = MonthlySoftBills[0].SoftBills[name].BalanceHistory[0].Date, Amount = difference };
+            MonthlySoftBills[i].SoftBills[name].NewDebitTransaction(transaction);
           }
           else
           {
-            if(i < 13)
-            {
-              BudgetGroups[i].SoftBills.Add(name, new SoftBill(name, startingAmount ));
-            }
-            else
-            {
-              //keeping an untouched copy for now just in case.
-              BudgetGroups[i].SoftBills.Add(name, new SoftBill(name, startingAmount ));
-            }
+            MonthlySoftBills[i].SoftBills.Add(name, new SoftBill(name, startingAmount));
           }
         }
       }
     }
-
     public void AddSoftBill(SoftBill softBill, Boolean annualGroup)
     {
       if(annualGroup)
       {
-        if(BudgetGroups[0].SoftBills.ContainsKey(softBill.Name))
+        if(MonthlySoftBills[0].SoftBills.ContainsKey(softBill.Name))
         {
           throw new ArgumentException("Group of same name already exists for the year");
         }
-        BudgetGroups[0].SoftBills.Add(softBill.Name, new SoftBill(softBill));
+        MonthlySoftBills[0].SoftBills.Add(softBill.Name, new SoftBill(softBill));
       }
       else
       {
         /* Use 1 here because logic forces them all to be the same */
-        if (BudgetGroups[1].SoftBills.ContainsKey(softBill.Name))
+        if (MonthlySoftBills[1].SoftBills.ContainsKey(softBill.Name))
         {
           throw new ArgumentException("Group of same name already exists in the months");
         }
         /* important to start at 1 here */
-        for (int i = 1; i < BudgetGroups.Count; i++)
+        for (int i = 1; i < MonthlySoftBills.Count; i++)
         {
-          BudgetGroups[i].SoftBills.Add(softBill.Name, new SoftBill(softBill));
+          MonthlySoftBills[i].SoftBills.Add(softBill.Name, new SoftBill(softBill));
         }
       }
     }
-    public void RemoveHardBill(string name, Boolean annualGroup)
+    public void RemoveHardBill(string name)
     {
-      if (annualGroup)
+      foreach (var group in MonthlySoftBills)
       {
-        BudgetGroups[0].HardBills.Remove(name);
-      }
-      else
-      {
-        for (int i = 0; i < BudgetGroups.Count; i++)
-        {
-          BudgetGroups[i].HardBills.Remove(name);
-        }
+        group.HardBills.Remove(name);
       }
     }
-    public void AddHardBill(HardBill bill, Boolean annualGroup)
+    public void AddHardBill(HardBill bill)
     {
-      if (annualGroup)
+      if (bill.Frequency.)
       {
-        if (BudgetGroups[0].HardBills.ContainsKey(bill.Name))
+        if (MonthlySoftBills[0].HardBills.ContainsKey(bill.Name))
         {
           RemoveHardBill(bill.Name, annualGroup);
         }
-        BudgetGroups[0].HardBills.Add(bill.Name, new HardBill(bill));
+        if(bill.Frequency != HardBillFrequencyEnum.Annualy)
+        {
+          throw new Exception("Hardbill frequency added to annual group must be annual");
+        }
+        MonthlySoftBills[0].HardBills.Add(bill.Name, new HardBill(bill));
       }
       else
       {
         /* Use 1 here because logic forces them all to be the same */
-        if (BudgetGroups[1].HardBills.ContainsKey(bill.Name))
+        if (MonthlySoftBills[1].HardBills.ContainsKey(bill.Name))
         {
           RemoveHardBill(bill.Name, annualGroup);
         }
-        for (int i = 1; i < BudgetGroups.Count; i++)
+        for (int i = 1; i < MonthlySoftBills.Count; i++)
         {
-          BudgetGroups[i].HardBills.Add(bill.Name, new HardBill(bill));
+          MonthlySoftBills[i].HardBills.Add(bill.Name, new HardBill(bill));
         }
       }
     }
@@ -197,14 +192,92 @@ namespace BudgetToolLib
 
       if (annual)
       {
-        purchase = BudgetGroups[0].CreatePurchase();
+        purchase = MonthlySoftBills[0].CreatePurchase();
       }
       else
       {
-        purchase = BudgetGroups[dateOfPurchase.Month].CreatePurchase();
+        purchase = MonthlySoftBills[dateOfPurchase.Month].CreatePurchase();
       }
 
       return purchase;
+    }
+    public void AddPurchase(Purchase purchase)
+    {
+      decimal amount = 0;
+
+      foreach (var softBill in purchase.SoftBillSplit)
+      {
+        /* first check if any of the split exists in the annual group */
+        if (MonthlySoftBills[0].SoftBills.ContainsKey(softBill.Key))
+        {
+          MonthlySoftBills[0].SoftBills[softBill.Key].NewDebitTransaction(
+            new Transaction() { Description = purchase.Vendor, Date = purchase.DateOfPurchase, Amount = softBill.Value });
+          amount += softBill.Value;
+        }
+        else if (MonthlySoftBills[purchase.DateOfPurchase.Month].SoftBills.ContainsKey(softBill.Key))
+        {
+          MonthlySoftBills[purchase.DateOfPurchase.Month].SoftBills[softBill.Key].NewDebitTransaction(
+            new Transaction() { Description = purchase.Vendor, Date = purchase.DateOfPurchase, Amount = softBill.Value });
+          amount += softBill.Value;
+        }
+        else
+        {
+          throw new ArgumentException("This softbill name does not exist anywhere: " + softBill.Key);
+        }
+      }
+
+      if (amount != purchase.Amount)
+      {
+        throw new ArgumentException("SoftBill split doesn't add to total purchase.");
+      }
+
+      purchase.PaymentAccount.NewDebitTransaction(new Transaction() { Description = purchase.Vendor, Date = purchase.DateOfPurchase, Amount = purchase.Amount });
+      Purchases.Add(purchase);
+    }
+
+    public void RemovePurchase(Purchase purchase)
+    {
+      if (!Purchases.Contains(purchase))
+      {
+        return;
+      }
+      else
+      {
+        foreach (var softBill in purchase.SoftBillSplit)
+        {
+          /* first the annual group */
+          if (MonthlySoftBills[0].SoftBills.ContainsKey(softBill.Key))
+          {
+            MonthlySoftBills[0].SoftBills[softBill.Key].NewCreditTransaction(
+              new Transaction() { Description = purchase.Vendor, Date = purchase.DateOfPurchase, Amount = softBill.Value });
+          }
+          else if (MonthlySoftBills[purchase.DateOfPurchase.Month].SoftBills.ContainsKey(softBill.Key))
+          {
+            MonthlySoftBills[purchase.DateOfPurchase.Month].SoftBills[softBill.Key].NewCreditTransaction(
+              new Transaction() { Description = purchase.Vendor, Date = purchase.DateOfPurchase, Amount = softBill.Value });
+          }
+          else
+          {
+            throw new ArgumentException("This softbill name does not exist anywhere: " + softBill.Key);
+          }
+        }
+
+        purchase.PaymentAccount.NewCreditTransaction(new Transaction() { Description = purchase.Vendor, Date = purchase.DateOfPurchase, Amount = purchase.Amount });
+        Purchases.Remove(purchase);
+      }
+    }
+
+    public void FastForward(DateTime date)
+    {
+      foreach (var income in IncomeSources)
+      {
+        income.Value.MakeDeposits(date);
+      }
+
+      foreach (var hb in HardBills)
+      {
+        hb.Value.PayBill(date);
+      }
     }
   }
 }

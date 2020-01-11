@@ -49,7 +49,7 @@
     <Compile Include="Accounts\CreditCard.cs" />
     <Compile Include="Accounts\SoftBill.cs" />
     <Compile Include="In\Income.cs" />
-    <Compile Include="Main\BudgetGroup.cs" />
+    <Compile Include="Main\SoftBillGroup.cs" />
     <Compile Include="Main\YearTop.cs" />
     <Compile Include="Out\HardBill.cs" />
     <Compile Include="Out\Purchase.cs" />

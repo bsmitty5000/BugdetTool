@@ -54,7 +54,7 @@ namespace BudgetToolGui
     private void RefreshPage()
     {
       monthlySbLv.Items.Clear();
-      foreach (var softBill in _year.BudgetGroups[_currentMonth].SoftBills)
+      foreach (var softBill in _year.MonthlySoftBills[_currentMonth].SoftBills)
       {
         BalanceEntry firstEntry = softBill.Value.BalanceHistory[0];
         BalanceEntry lastEntry = softBill.Value.BalanceHistory.Last();
@@ -66,7 +66,7 @@ namespace BudgetToolGui
       }
 
       purchasesLv.Items.Clear();
-      foreach (var purchase in _year.BudgetGroups[_currentMonth].Purchases)
+      foreach (var purchase in _year.MonthlySoftBills[_currentMonth].Purchases)
       {
         ListViewItem lvi = new ListViewItem(purchase.Vendor);
         lvi.SubItems.Add(purchase.Amount.ToString());
@@ -95,7 +95,7 @@ namespace BudgetToolGui
           }
         }
 
-        if (_year.BudgetGroups[1].SoftBills.Count > 0)
+        if (_year.MonthlySoftBills[1].SoftBills.Count > 0)
         {
           purchasesAdd.Enabled = true;
         }
@@ -128,7 +128,7 @@ namespace BudgetToolGui
     {
       Purchase purchase = purchasesLv.SelectedItems[0].Tag as Purchase;
       int month = purchase.DateOfPurchase.Month;
-      _year.BudgetGroups[month].RemovePurchase(purchase);
+      _year.MonthlySoftBills[month].RemovePurchase(purchase);
       RefreshPage();
     }
     private void purchasesEdit_Click(object sender, EventArgs e)
@@ -144,7 +144,7 @@ namespace BudgetToolGui
     {
       if (e.NewPurchase != null)
       {
-        _year.BudgetGroups[_currentMonth].AddPurchase(e.NewPurchase);
+        _year.MonthlySoftBills[_currentMonth].AddPurchase(e.NewPurchase);
       }
       RefreshPage();
     }

@@ -64,7 +64,7 @@ namespace BudgetToolGui
       }
 
       annualHbLv.Items.Clear();
-      foreach (var hardBill in _year.BudgetGroups[0].HardBills)
+      foreach (var hardBill in _year.MonthlySoftBills[0].HardBills)
       {
         ListViewItem lvi = new ListViewItem(hardBill.Key);
         lvi.SubItems.Add(hardBill.Value.Amount.ToString());
@@ -75,7 +75,7 @@ namespace BudgetToolGui
       }
 
       annualSbLv.Items.Clear();
-      foreach (var softBill in _year.BudgetGroups[0].SoftBills)
+      foreach (var softBill in _year.MonthlySoftBills[0].SoftBills)
       {
         BalanceEntry lastEntry = softBill.Value.BalanceHistory.Last();
         ListViewItem lvi = new ListViewItem(softBill.Key);
@@ -90,7 +90,7 @@ namespace BudgetToolGui
        * todo: if in the future months can have different bills this
        * logic needs to be udpated
        */
-      foreach (var hardBill in _year.BudgetGroups[1].HardBills)
+      foreach (var hardBill in _year.MonthlySoftBills[1].HardBills)
       {
         ListViewItem lvi = new ListViewItem(hardBill.Key);
         lvi.SubItems.Add(hardBill.Value.Amount.ToString());
@@ -101,7 +101,7 @@ namespace BudgetToolGui
       }
 
       monthlySbLv.Items.Clear();
-      foreach (var softBill in _year.BudgetGroups[1].SoftBills)
+      foreach (var softBill in _year.MonthlySoftBills[1].SoftBills)
       {
         BalanceEntry lastEntry = softBill.Value.BalanceHistory.Last();
         ListViewItem lvi = new ListViewItem(softBill.Key);
