@@ -21,6 +21,7 @@ namespace BudgetToolLib
     public AccountBase DepositAccount { get; set; }
     public DateTime FirstDeposit { get; set; }
     public DateTime NextDeposit { get; private set; }
+    public int NumPaydaysPaidThisYear { get; private set; }
     public decimal AnnualAmount
     {
       get
@@ -62,6 +63,7 @@ namespace BudgetToolLib
       DepositAccount = depositAccount;
       FirstDeposit = firstDeposit;
       NextDeposit = FirstDeposit;
+      NumPaydaysPaidThisYear = 0;
     }
 
     public void MakeDeposits(DateTime date)
@@ -78,6 +80,12 @@ namespace BudgetToolLib
       {
         DepositAccount.NewCreditTransaction(new Transaction() { Description = Name, Date = NextDeposit, Amount = PaydayAmount });
         NextDeposit = NextDeposit.AddDays((double)PaydayFrequency * 7);
+        NumPaydaysPaidThisYear++;
+
+        if (cal.GetYear(NextDeposit) > cal.GetYear(FirstDeposit))
+        {
+          break; //passing into next year. for now keep this confined to a single year
+        }
       }
     }
   }

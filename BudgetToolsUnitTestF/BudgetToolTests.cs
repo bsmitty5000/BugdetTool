@@ -151,6 +151,11 @@ namespace BudgetToolsUnitTestF
 
       checkingExpected += salary.PaydayAmount;
       Assert.AreEqual(checkingExpected, yearTop.Accounts["checking"].BalanceHistory.Last().Amount);
+
+      checkingExpected = yearTop.Accounts["checking"].BalanceHistory.First().Amount + salary.AnnualAmount;
+      salary.MakeDeposits(new DateTime(2020, 12, 31));
+
+      Assert.AreEqual(checkingExpected, yearTop.Accounts["checking"].BalanceHistory.Last().Amount);
     }
     [Test]
     public void SimpleHardBillTest()
