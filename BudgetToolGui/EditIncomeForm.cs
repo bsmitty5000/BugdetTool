@@ -51,8 +51,8 @@ namespace BudgetToolGui
     private void RefreshForm()
     {
       nameTb.Text = _income.Name;
-      amountTb.Text = _income.UnitAmount.ToString();
-      frequencyCb.SelectedItem = _income.IncomeFrequency.ToString();
+      amountTb.Text = _income.PaydayAmount.ToString();
+      frequencyCb.SelectedItem = _income.PaydayFrequency.ToString();
       accountCb.SelectedItem = _income.DepositAccount != null ? _income.DepositAccount.Name : string.Empty;
       firstDepositDtp.Value = _income.FirstDeposit;
     }
@@ -64,14 +64,14 @@ namespace BudgetToolGui
 
     private void amountTb_TextChanged(object sender, EventArgs e)
     {
-      _income.UnitAmount = Decimal.Parse(amountTb.Text);
+      _income.PaydayAmount = Decimal.Parse(amountTb.Text);
     }
 
     private void frequencyCb_SelectedIndexChanged(object sender, EventArgs e)
     {
       IncomeFrequencyEnum enumParse;
       Enum.TryParse(frequencyCb.SelectedItem.ToString(), out enumParse);
-      _income.IncomeFrequency = enumParse;
+      _income.PaydayFrequency = enumParse;
     }
 
     private void accountCb_SelectedIndexChanged(object sender, EventArgs e)

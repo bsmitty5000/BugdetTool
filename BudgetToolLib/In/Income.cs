@@ -16,27 +16,26 @@ namespace BudgetToolLib
   public class Income
   {
     public string Name { get; set; }
-    public decimal UnitAmount { get; set; }
-    public IncomeFrequencyEnum IncomeFrequency { get; set; }
+    public decimal PaydayAmount { get; set; }
+    public IncomeFrequencyEnum PaydayFrequency { get; set; }
     public AccountBase DepositAccount { get; set; }
     public DateTime FirstDeposit { get; set; }
-    public DateTime LastDeposit { get; private set; }
-    public int LastDepositWeekNumber { get; private set; }
+    public DateTime NextDeposit { get; private set; }
     public decimal AnnualAmount
     {
       get
       {
         decimal annualAmount;
-        switch (IncomeFrequency)
+        switch (PaydayFrequency)
         {
           case IncomeFrequencyEnum.BiAnnualy:
-            annualAmount = UnitAmount * 2;
+            annualAmount = PaydayAmount * 2;
             break;
           case IncomeFrequencyEnum.BiWeekly:
-            annualAmount = UnitAmount * 26;
+            annualAmount = PaydayAmount * 26;
             break;
           case IncomeFrequencyEnum.Annualy:
-            annualAmount = UnitAmount * 1;
+            annualAmount = PaydayAmount * 1;
             break;
           default:
             throw new ArgumentException("Invalid Income Frequency");
@@ -49,49 +48,37 @@ namespace BudgetToolLib
     public Income()
     {
       Name = string.Empty;
-      UnitAmount = 0;
-      IncomeFrequency = IncomeFrequencyEnum.Annualy;
+      PaydayAmount = 0;
+      PaydayFrequency = IncomeFrequencyEnum.Annualy;
       DepositAccount = null;
       FirstDeposit = DateTime.Today;
     }
 
-    public Income(string name, decimal unitAmount, IncomeFrequencyEnum incomeFrequency, DateTime firstDeposit)
+    public Income(string name, decimal paydayAmount, IncomeFrequencyEnum incomeFrequency, AccountBase depositAccount, DateTime firstDeposit)
     {
       Name = name;
-      UnitAmount = unitAmount;
-      IncomeFrequency = incomeFrequency;
+      PaydayAmount = paydayAmount;
+      PaydayFrequency = incomeFrequency;
+      DepositAccount = depositAccount;
       FirstDeposit = firstDeposit;
-      LastDeposit = FirstDeposit;
+      NextDeposit = FirstDeposit;
     }
 
     public void MakeDeposits(DateTime date)
     {
       var cal = new GregorianCalendar();
-      DayOfWeek firstDay = DayOfWeek.Sunday;
-      int currentWeekNumber = cal.GetWeekOfYear(date, CalendarWeekRule.FirstDay, firstDay);
-      int numOfPaydaysToProcess = (currentWeekNumber - LastDepositWeekNumber) / (int)IncomeFrequency;
+      int currentDayNumber = cal.GetDayOfYear(date);
 
-      for(int i = 0; i < numOfPaydaysToProcess; i++)
+      if(date < NextDeposit)
       {
-        LastDeposit = LastDeposit.AddDays((double)IncomeFrequency * 7);
-        DepositAccount.NewCreditTransaction(new Transaction() { Description = Name, Date = LastDeposit, Amount = UnitAmount });
-        LastDepositWeekNumber += (int)IncomeFrequency;
+        return;
       }
-    }
 
-    public override string ToString()
-    {
-      var sb = new StringBuilder();
-      sb.Append(Name + ",");
-      sb.Append(UnitAmount + ",");
-      sb.Append(IncomeFrequency + ",");
-      sb.Append(DepositAccount.Name + ",");
-      sb.Append(FirstDeposit + ",");
-      sb.Append(LastDeposit + ",");
-      sb.Append(LastDepositWeekNumber);
-
-      return sb.ToString();
-
+      while(cal.GetDayOfYear(NextDeposit) <= currentDayNumber)
+      {
+        DepositAccount.NewCreditTransaction(new Transaction() { Description = Name, Date = NextDeposit, Amount = PaydayAmount });
+        NextDeposit = NextDeposit.AddDays((double)PaydayFrequency * 7);
+      }
     }
   }
 }

@@ -56,8 +56,8 @@ namespace BudgetToolGui
       foreach (var incomeSrc in _year.IncomeSources)
       {
         ListViewItem lvi = new ListViewItem(incomeSrc.Key);
-        lvi.SubItems.Add(incomeSrc.Value.UnitAmount.ToString());
-        lvi.SubItems.Add(incomeSrc.Value.IncomeFrequency.ToString());
+        lvi.SubItems.Add(incomeSrc.Value.PaydayAmount.ToString());
+        lvi.SubItems.Add(incomeSrc.Value.PaydayFrequency.ToString());
         lvi.SubItems.Add(incomeSrc.Value.DepositAccount.Name);
         lvi.Tag = incomeSrc.Value;
         incomeLv.Items.Add(lvi);
