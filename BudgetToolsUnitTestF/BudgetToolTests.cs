@@ -76,8 +76,8 @@ namespace BudgetToolsUnitTestF
     [Test]
     public void SimplePurchaseTest()
     {
-      decimal creditStarting = yearTop.Accounts["credit"].BalanceHistory.Last().Amount;
-      decimal checkingStarting = yearTop.Accounts["checking"].BalanceHistory.Last().Amount;
+      decimal creditExpected = yearTop.Accounts["credit"].BalanceHistory.Last().Amount;
+      decimal checkingExpected = yearTop.Accounts["checking"].BalanceHistory.Last().Amount;
       decimal total;
       Dictionary<string, decimal> sbSplit = new Dictionary<string, decimal>();
       Purchase purchase;
@@ -87,14 +87,32 @@ namespace BudgetToolsUnitTestF
       purchase = new Purchase("Grocery Store", credit, new DateTime(2020, 1, 15), total, sbSplit);
       yearTop.BudgetGroups[1].AddPurchase(purchase);
 
-      Assert.AreEqual(creditStarting + total, yearTop.Accounts["credit"].BalanceHistory.Last().Amount);
+      creditExpected += total; 
+      Assert.AreEqual(creditExpected, yearTop.Accounts["credit"].BalanceHistory.Last().Amount);
+
+      total = 150;
+      sbSplit = new Dictionary<string, decimal>() { { "food", total } };
+      purchase = new Purchase("Grocery Store", credit, new DateTime(2020, 1, 16), total, sbSplit);
+      yearTop.BudgetGroups[1].AddPurchase(purchase);
+
+      creditExpected += total;
+      Assert.AreEqual(creditExpected, yearTop.Accounts["credit"].BalanceHistory.Last().Amount);
+
+      total = 150;
+      sbSplit = new Dictionary<string, decimal>() { { "food", total } };
+      purchase = new Purchase("Grocery Store", credit, new DateTime(2020, 1, 15), total, sbSplit);
+      yearTop.BudgetGroups[1].AddPurchase(purchase);
+
+      creditExpected += total;
+      Assert.AreEqual(creditExpected, yearTop.Accounts["credit"].BalanceHistory.Last().Amount);
 
       total = 150;
       sbSplit = new Dictionary<string, decimal>() { { "gas", total } };
       purchase = new Purchase("Gas Station", checking, new DateTime(2020, 1, 15), total, sbSplit);
       yearTop.BudgetGroups[1].AddPurchase(purchase);
 
-      Assert.AreEqual(checkingStarting - total, yearTop.Accounts["checking"].BalanceHistory.Last().Amount);
+      checkingExpected -= total;
+      Assert.AreEqual(checkingExpected, yearTop.Accounts["checking"].BalanceHistory.Last().Amount);
     }
 
     [Test]
