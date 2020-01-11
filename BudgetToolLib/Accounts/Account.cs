@@ -86,6 +86,7 @@ namespace BudgetToolLib
     {
       //insert the transaction. Transactions is ordered by date
       int insertIndex = Transactions.BinarySearchForMatch<Transaction>((x) => x.Date.CompareTo(transaction.Date));
+      if (insertIndex < 0) insertIndex = ~insertIndex;
       Transactions.Insert(insertIndex, transaction);
 
       for(int i = 0; i < BalanceHistory.Count; i++)
@@ -120,7 +121,8 @@ namespace BudgetToolLib
     virtual public void subtractTransactionAmount(Transaction transaction)
     {
       //insert the transaction. Transactions is ordered by date
-      int insertIndex = Transactions.BinarySearchForMatch<Transaction>((x) => x.Date.CompareTo(transaction.Date));
+      int insertIndex = Transactions.BinarySearchForMatch<Transaction>((x) => x.Date.CompareTo(transaction.Date)); 
+      if (insertIndex < 0) insertIndex = ~insertIndex;
       Transactions.Insert(insertIndex, transaction);
 
       for (int i = 0; i < BalanceHistory.Count; i++)

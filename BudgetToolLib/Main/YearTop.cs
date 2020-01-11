@@ -95,8 +95,8 @@ namespace BudgetToolLib
         if (BudgetGroups[0].SoftBills.ContainsKey(name))
         {
           decimal difference = BudgetGroups[0].SoftBills[name].BalanceHistory[0].Amount - startingAmount;
-          BalanceEntry newStartingEntry = new BalanceEntry() { Date = BudgetGroups[0].SoftBills[name].BalanceHistory[0].Date, Amount = difference };
-          BudgetGroups[0].SoftBills[name].NewDebitTransaction(newStartingEntry);
+          Transaction transaction = new Transaction() { Description = name, Date = BudgetGroups[0].SoftBills[name].BalanceHistory[0].Date, Amount = difference };
+          BudgetGroups[0].SoftBills[name].NewDebitTransaction(transaction);
         }
         else
         {
@@ -111,8 +111,8 @@ namespace BudgetToolLib
           if (BudgetGroups[i].SoftBills.ContainsKey(name))
           {
             decimal difference = BudgetGroups[i].SoftBills[name].BalanceHistory[0].Amount - startingAmount;
-            BalanceEntry newStartingEntry = new BalanceEntry() { Date = BudgetGroups[i].SoftBills[name].BalanceHistory[0].Date, Amount = difference };
-            BudgetGroups[i].SoftBills[name].NewDebitTransaction(newStartingEntry);
+            Transaction transaction = new Transaction() { Description = name, Date = BudgetGroups[0].SoftBills[name].BalanceHistory[0].Date, Amount = difference };
+            BudgetGroups[i].SoftBills[name].NewDebitTransaction(transaction);
           }
           else
           {

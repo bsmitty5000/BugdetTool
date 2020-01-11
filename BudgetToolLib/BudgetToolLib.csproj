@@ -44,15 +44,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Accounts\Account.cs" />
+    <Compile Include="Accounts\CheckingAccount.cs" />
+    <Compile Include="Accounts\CreditCard.cs" />
+    <Compile Include="Accounts\SoftBill.cs" />
     <Compile Include="In\Income.cs" />
     <Compile Include="Main\BudgetGroup.cs" />
     <Compile Include="Main\YearTop.cs" />
     <Compile Include="Out\HardBill.cs" />
-    <Compile Include="Out\SoftBill.cs" />
-    <Compile Include="Payment\CheckingAccount.cs" />
-    <Compile Include="Payment\Account.cs" />
     <Compile Include="Out\Purchase.cs" />
-    <Compile Include="Payment\CreditCard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

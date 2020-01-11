@@ -10,11 +10,11 @@ namespace BudgetToolLib
   {
     public SoftBill()
     {
-      NewDebitTransaction = addTransactionAmount;
+      NewDebitTransaction =  addTransactionAmount;
       NewCreditTransaction = subtractTransactionAmount;
     }
 
-    public SoftBill(string name, decimal startingAmount, DateTime? startingDate) : base(name, startingAmount, startingDate)
+    public SoftBill(string name, decimal startingAmount, DateTime? startingDate = null) : base(name, startingAmount, startingDate)
     {
       NewDebitTransaction = addTransactionAmount;
       NewCreditTransaction = subtractTransactionAmount;

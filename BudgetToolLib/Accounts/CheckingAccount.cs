@@ -10,20 +10,20 @@ namespace BudgetToolLib
   {
     public CheckingAccount()
     {
-      NewDebitTransaction = addTransactionAmount;
-      NewCreditTransaction = subtractTransactionAmount;
+      NewCreditTransaction = addTransactionAmount;
+      NewDebitTransaction  = subtractTransactionAmount;
     }
 
     public CheckingAccount(string name, decimal startingAmount, DateTime? startingDate) : base(name, startingAmount, startingDate)
     {
-      NewDebitTransaction = addTransactionAmount;
-      NewCreditTransaction = subtractTransactionAmount;
+      NewCreditTransaction = addTransactionAmount;
+      NewDebitTransaction  = subtractTransactionAmount;
     }
 
     public CheckingAccount(CheckingAccount ca) : base(ca)
     {
-      NewDebitTransaction = addTransactionAmount;
-      NewCreditTransaction = subtractTransactionAmount;
+      NewCreditTransaction = addTransactionAmount;
+      NewDebitTransaction  = subtractTransactionAmount;
     }
   }
 }

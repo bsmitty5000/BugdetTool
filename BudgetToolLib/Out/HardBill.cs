@@ -48,7 +48,7 @@ namespace BudgetToolLib
       for (int i = 0; i < (numberOfMonthsToPay - 1); i++)
       {
         DateTime paymentDate = new DateTime(2020, currentMonthNumber + i, DayOfMonthPaid);
-        PaymentAccount.NewDebitTransaction(new BalanceEntry() { Date = paymentDate, Amount = this.Amount });
+        PaymentAccount.NewDebitTransaction(new Transaction() { Description = Name, Date = paymentDate, Amount = this.Amount });
         LastMonthPaid++;
       }
 
@@ -56,7 +56,7 @@ namespace BudgetToolLib
       {
         LastMonthPaid++;
         DateTime paymentDate = new DateTime(2020, LastMonthPaid, DayOfMonthPaid);
-        PaymentAccount.NewDebitTransaction(new BalanceEntry() { Date = paymentDate, Amount = this.Amount });
+        PaymentAccount.NewDebitTransaction(new Transaction() { Description = Name, Date = paymentDate, Amount = this.Amount });
 
         if(LastMonthPaid != currentMonthNumber)
         {

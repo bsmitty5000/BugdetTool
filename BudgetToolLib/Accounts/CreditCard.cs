@@ -10,20 +10,20 @@ namespace BudgetToolLib
   {
     public CreditCard()
     {
-      NewDebitTransaction = subtractTransactionAmount;
-      NewCreditTransaction = addTransactionAmount;
+      NewCreditTransaction = subtractTransactionAmount;
+      NewDebitTransaction  = addTransactionAmount;
     }
 
     public CreditCard(string name, decimal startingAmount, DateTime? startingDate) : base(name, startingAmount, startingDate)
     {
-      NewDebitTransaction = subtractTransactionAmount;
-      NewCreditTransaction = addTransactionAmount;
+      NewCreditTransaction = subtractTransactionAmount;
+      NewDebitTransaction  = addTransactionAmount;
     }
 
     public CreditCard(CreditCard cc) :  base(cc)
     {
-      NewDebitTransaction = subtractTransactionAmount;
-      NewCreditTransaction = addTransactionAmount;
+      NewCreditTransaction = subtractTransactionAmount;
+      NewDebitTransaction  = addTransactionAmount;
     }
 
   }
