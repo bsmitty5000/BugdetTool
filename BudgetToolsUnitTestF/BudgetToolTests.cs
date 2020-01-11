@@ -44,12 +44,12 @@ namespace BudgetToolsUnitTestF
       bonus = new Income("bonus", 1500, IncomeFrequencyEnum.BiAnnualy, checking, new DateTime(2020, 1, 10));
 
       //annuals
-      carRegistration = new HardBill("carRegistration", 1000, 1, credit);
+      carRegistration = new HardBill("carRegistration", 1000, new DateTime(2020, 12, 31), HardBillFrequencyEnum.Annualy, credit);
       vacation = new SoftBill("vacation", 7500);
 
       //monthlys
-      electricity = new HardBill("electricity", 150, 15, checking);
-      cable = new HardBill("cable", 75, 20, credit);
+      electricity = new HardBill("electricity", 150, new DateTime(2020, 1, 15), HardBillFrequencyEnum.Monthly, checking);
+      cable = new HardBill("cable", 75, new DateTime(2020, 1, 20), HardBillFrequencyEnum.Monthly, credit);
       food = new SoftBill("food", 500);
       gas = new SoftBill("gas", 400);
 
@@ -160,19 +160,11 @@ namespace BudgetToolsUnitTestF
     [Test]
     public void SimpleHardBillTest()
     {
-    //  decimal creditStarting = yearTop.Accounts["credit"].BalanceHistory.Last().Amount;
-    //  decimal checkingStarting = yearTop.Accounts["checking"].BalanceHistory.Last().Amount;
+      decimal checkingExpected = yearTop.Accounts["checking"].BalanceHistory.Last().Amount;
+      electricity.PayBill(new DateTime(2020, 2, 14));
 
-    //  carRegistration.PayBill(new DateTime());
-
-    //  Assert.AreEqual(creditStarting + total, yearTop.Accounts["credit"].BalanceHistory.Last().Amount);
-
-    //  total = 150;
-    //  sbSplit = new Dictionary<string, decimal>() { { "gas", total } };
-    //  purchase = new Purchase("Gas Station", checking, new DateTime(2020, 1, 15), total, sbSplit);
-    //  yearTop.BudgetGroups[1].AddPurchase(purchase);
-
-    //  Assert.AreEqual(checkingStarting - total, yearTop.Accounts["checking"].BalanceHistory.Last().Amount);
+      checkingExpected -= electricity.Amount;
+      Assert.AreEqual(checkingExpected, yearTop.Accounts["checking"].BalanceHistory.Last().Amount);
     }
   }
 }

@@ -13,6 +13,7 @@ namespace BudgetToolLib
     BiAnnualy = 13,
     Annualy = 25
   }
+
   public class Income
   {
     public string Name { get; set; }
@@ -69,14 +70,13 @@ namespace BudgetToolLib
     public void MakeDeposits(DateTime date)
     {
       var cal = new GregorianCalendar();
-      int currentDayNumber = cal.GetDayOfYear(date);
 
       if(date < NextDeposit)
       {
         return;
       }
 
-      while(cal.GetDayOfYear(NextDeposit) <= currentDayNumber)
+      while(NextDeposit <= date)
       {
         DepositAccount.NewCreditTransaction(new Transaction() { Description = Name, Date = NextDeposit, Amount = PaydayAmount });
         NextDeposit = NextDeposit.AddDays((double)PaydayFrequency * 7);
