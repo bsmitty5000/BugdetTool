@@ -16,12 +16,25 @@ namespace BudgetToolLib
 
   public class HardBill
   {
+    private DateTime _firstBillDue;
+
     public string Name { get; set; }
     public decimal Amount { get; set; }
-    public DateTime FirstBillDue { get; set; }
+    public DateTime FirstBillDue
+    {
+      get
+      {
+        return _firstBillDue;
+      }
+      set
+      {
+        _firstBillDue = value;
+        NextBillDue = value;
+      }
+    }
     public HardBillFrequencyEnum Frequency { get; set; }
     public AccountBase PaymentAccount { get; set; }
-    public DateTime NextBillDue { get; private set; }
+    public DateTime NextBillDue { get; set; }
 
     public decimal AnnualAmount
     {

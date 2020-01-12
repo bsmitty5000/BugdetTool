@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MoreLinq;
 
 namespace BudgetToolLib
 {
@@ -53,7 +54,6 @@ namespace BudgetToolLib
     public List<BalanceEntry> BalanceHistory { get; set; }
     public List<Transaction> Transactions { get; set; }
     public string Name { get; set; }
-
     public decimal CurrentBalance
     {
       get
@@ -87,6 +87,19 @@ namespace BudgetToolLib
     public abstract void NewDebitTransaction(Transaction transaction);
     public abstract void NewCreditTransaction(Transaction transaction);
 
+    public decimal GetCurrentBalance(DateTime date)
+    {
+      BalanceEntry latestEntry = BalanceHistory[0];
+      foreach (var entry in BalanceHistory)
+      {
+        if (entry.Date > date)
+          break;
+        latestEntry = entry;
+      }
+
+      return latestEntry.Amount;
+    }
+
     protected void ProcessNewTransaction(Transaction transaction)
     {
       //insert the transaction. Transactions is ordered by date
@@ -101,18 +114,18 @@ namespace BudgetToolLib
       }
 
       insertIndex = BalanceHistory.BinarySearchForMatch<BalanceEntry>((x) => x.Date.CompareTo(transaction.Date));
-      if (insertIndex > 0)
-      {
-        unravelAndAdjust(insertIndex, transaction.Amount);
-      }
-      else
+      if (insertIndex < 0)
       {
         insertIndex = ~insertIndex;
         // Create a new BalanceEtnry that carries over the total from the previous day with the new amount added in
-        BalanceHistory.Insert(insertIndex, new BalanceEntry() { Date = transaction.Date, Amount = (BalanceHistory[insertIndex-1].Amount + transaction.Amount) });
+        BalanceHistory.Insert(insertIndex, new BalanceEntry() { Date = transaction.Date, Amount = (BalanceHistory[insertIndex - 1].Amount + transaction.Amount) });
 
         // after the new entry update all remaining entries
         unravelAndAdjust(insertIndex + 1, transaction.Amount);
+      }
+      else
+      {
+        unravelAndAdjust(insertIndex, transaction.Amount);
       }
 
       return;

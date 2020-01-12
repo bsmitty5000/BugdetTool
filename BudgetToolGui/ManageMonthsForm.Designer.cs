@@ -34,18 +34,22 @@
       this.SoftBillsStarting = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
       this.SoftBillsCurrent = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
       this.label6 = new System.Windows.Forms.Label();
-      this.currentMonthLbl = new System.Windows.Forms.Label();
       this.label2 = new System.Windows.Forms.Label();
       this.purchasesLv = new System.Windows.Forms.ListView();
       this.PurchasesMerchant = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
       this.PurchasesAmount = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-      this.prevBtn = new System.Windows.Forms.Button();
-      this.nextBtn = new System.Windows.Forms.Button();
       this.purchasesCms = new System.Windows.Forms.ContextMenuStrip(this.components);
       this.purchasesAdd = new System.Windows.Forms.ToolStripMenuItem();
       this.purchasesDelete = new System.Windows.Forms.ToolStripMenuItem();
       this.purchasesEdit = new System.Windows.Forms.ToolStripMenuItem();
       this.doneBtn = new System.Windows.Forms.Button();
+      this.accountsLv = new System.Windows.Forms.ListView();
+      this.AccountsName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+      this.AccountType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+      this.AccountBalance = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+      this.label1 = new System.Windows.Forms.Label();
+      this.label3 = new System.Windows.Forms.Label();
+      this.todayDtp = new System.Windows.Forms.DateTimePicker();
       this.purchasesCms.SuspendLayout();
       this.SuspendLayout();
       // 
@@ -87,15 +91,6 @@
       this.label6.TabIndex = 18;
       this.label6.Text = "Soft Bills";
       // 
-      // currentMonthLbl
-      // 
-      this.currentMonthLbl.AutoSize = true;
-      this.currentMonthLbl.Location = new System.Drawing.Point(12, 13);
-      this.currentMonthLbl.Name = "currentMonthLbl";
-      this.currentMonthLbl.Size = new System.Drawing.Size(120, 13);
-      this.currentMonthLbl.TabIndex = 20;
-      this.currentMonthLbl.Text = "Current Month: xxxxxxxx";
-      // 
       // label2
       // 
       this.label2.AutoSize = true;
@@ -127,26 +122,6 @@
       // 
       this.PurchasesAmount.Text = "Amount";
       this.PurchasesAmount.Width = 144;
-      // 
-      // prevBtn
-      // 
-      this.prevBtn.Location = new System.Drawing.Point(15, 29);
-      this.prevBtn.Name = "prevBtn";
-      this.prevBtn.Size = new System.Drawing.Size(75, 23);
-      this.prevBtn.TabIndex = 23;
-      this.prevBtn.Text = "Prev";
-      this.prevBtn.UseVisualStyleBackColor = true;
-      this.prevBtn.Click += new System.EventHandler(this.prevBtn_Click);
-      // 
-      // nextBtn
-      // 
-      this.nextBtn.Location = new System.Drawing.Point(103, 29);
-      this.nextBtn.Name = "nextBtn";
-      this.nextBtn.Size = new System.Drawing.Size(75, 23);
-      this.nextBtn.TabIndex = 24;
-      this.nextBtn.Text = "Next";
-      this.nextBtn.UseVisualStyleBackColor = true;
-      this.nextBtn.Click += new System.EventHandler(this.nextBtn_Click);
       // 
       // purchasesCms
       // 
@@ -181,7 +156,7 @@
       // 
       // doneBtn
       // 
-      this.doneBtn.Location = new System.Drawing.Point(15, 374);
+      this.doneBtn.Location = new System.Drawing.Point(12, 585);
       this.doneBtn.Name = "doneBtn";
       this.doneBtn.Size = new System.Drawing.Size(75, 23);
       this.doneBtn.TabIndex = 25;
@@ -189,17 +164,72 @@
       this.doneBtn.UseVisualStyleBackColor = true;
       this.doneBtn.Click += new System.EventHandler(this.doneBtn_Click);
       // 
+      // accountsLv
+      // 
+      this.accountsLv.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.AccountsName,
+            this.AccountType,
+            this.AccountBalance});
+      this.accountsLv.HideSelection = false;
+      this.accountsLv.Location = new System.Drawing.Point(12, 351);
+      this.accountsLv.Name = "accountsLv";
+      this.accountsLv.Size = new System.Drawing.Size(294, 90);
+      this.accountsLv.TabIndex = 27;
+      this.accountsLv.UseCompatibleStateImageBehavior = false;
+      this.accountsLv.View = System.Windows.Forms.View.Details;
+      // 
+      // AccountsName
+      // 
+      this.AccountsName.Text = "Name";
+      this.AccountsName.Width = 137;
+      // 
+      // AccountType
+      // 
+      this.AccountType.Text = "Type";
+      this.AccountType.Width = 87;
+      // 
+      // AccountBalance
+      // 
+      this.AccountBalance.Text = "Balance";
+      // 
+      // label1
+      // 
+      this.label1.AutoSize = true;
+      this.label1.Location = new System.Drawing.Point(9, 334);
+      this.label1.Name = "label1";
+      this.label1.Size = new System.Drawing.Size(95, 13);
+      this.label1.TabIndex = 26;
+      this.label1.Text = "Account Snapshot";
+      // 
+      // label3
+      // 
+      this.label3.AutoSize = true;
+      this.label3.Location = new System.Drawing.Point(9, 13);
+      this.label3.Name = "label3";
+      this.label3.Size = new System.Drawing.Size(73, 13);
+      this.label3.TabIndex = 28;
+      this.label3.Text = "Today\'s Date:";
+      // 
+      // todayDtp
+      // 
+      this.todayDtp.Location = new System.Drawing.Point(88, 6);
+      this.todayDtp.Name = "todayDtp";
+      this.todayDtp.Size = new System.Drawing.Size(200, 20);
+      this.todayDtp.TabIndex = 29;
+      this.todayDtp.ValueChanged += new System.EventHandler(this.todayDtp_ValueChanged);
+      // 
       // ManageMonthsForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(800, 450);
+      this.ClientSize = new System.Drawing.Size(1163, 620);
+      this.Controls.Add(this.todayDtp);
+      this.Controls.Add(this.label3);
+      this.Controls.Add(this.accountsLv);
+      this.Controls.Add(this.label1);
       this.Controls.Add(this.doneBtn);
-      this.Controls.Add(this.nextBtn);
-      this.Controls.Add(this.prevBtn);
       this.Controls.Add(this.purchasesLv);
       this.Controls.Add(this.label2);
-      this.Controls.Add(this.currentMonthLbl);
       this.Controls.Add(this.monthlySbLv);
       this.Controls.Add(this.label6);
       this.Name = "ManageMonthsForm";
@@ -216,18 +246,22 @@
         private System.Windows.Forms.ColumnHeader SoftBillsName;
         private System.Windows.Forms.ColumnHeader SoftBillsStarting;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label currentMonthLbl;
         private System.Windows.Forms.ColumnHeader SoftBillsCurrent;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ListView purchasesLv;
         private System.Windows.Forms.ColumnHeader PurchasesMerchant;
         private System.Windows.Forms.ColumnHeader PurchasesAmount;
-        private System.Windows.Forms.Button prevBtn;
-        private System.Windows.Forms.Button nextBtn;
         private System.Windows.Forms.ContextMenuStrip purchasesCms;
         private System.Windows.Forms.ToolStripMenuItem purchasesAdd;
         private System.Windows.Forms.ToolStripMenuItem purchasesDelete;
         private System.Windows.Forms.ToolStripMenuItem purchasesEdit;
         private System.Windows.Forms.Button doneBtn;
+        private System.Windows.Forms.ListView accountsLv;
+        private System.Windows.Forms.ColumnHeader AccountsName;
+        private System.Windows.Forms.ColumnHeader AccountType;
+        private System.Windows.Forms.ColumnHeader AccountBalance;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.DateTimePicker todayDtp;
     }
 }

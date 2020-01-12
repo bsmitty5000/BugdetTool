@@ -43,7 +43,7 @@ namespace BudgetToolGui
       accountsLv.Items.Clear();
       foreach (var account in _year.Accounts)
       {
-        BalanceEntry lastEntry = account.Value.BalanceHistory.Last();
+        BalanceEntry lastEntry = account.Value.BalanceHistory.First();
         ListViewItem lvi = new ListViewItem(account.Key);
         lvi.SubItems.Add(account.Value.GetType().Name);
         lvi.SubItems.Add(lastEntry.Amount.ToString());
@@ -76,7 +76,7 @@ namespace BudgetToolGui
       annualSbLv.Items.Clear();
       foreach (var softBill in _year.MonthlySoftBills[0].SoftBills)
       {
-        BalanceEntry lastEntry = softBill.Value.BalanceHistory.Last();
+        BalanceEntry lastEntry = softBill.Value.BalanceHistory.First();
         ListViewItem lvi = new ListViewItem(softBill.Key);
         lvi.SubItems.Add(lastEntry.Amount.ToString());
         lvi.Tag = softBill.Value;
@@ -86,7 +86,7 @@ namespace BudgetToolGui
       monthlySbLv.Items.Clear();
       foreach (var softBill in _year.MonthlySoftBills[1].SoftBills)
       {
-        BalanceEntry lastEntry = softBill.Value.BalanceHistory.Last();
+        BalanceEntry lastEntry = softBill.Value.BalanceHistory.First();
         ListViewItem lvi = new ListViewItem(softBill.Key);
         lvi.SubItems.Add(lastEntry.Amount.ToString());
         lvi.Tag = softBill.Value;
@@ -104,7 +104,6 @@ namespace BudgetToolGui
       totSoftBillsTb.Text = totalSb.ToString();
       totBillsTb.Text = totalBills.ToString();
       totDiffTb.Text = totalDiff.ToString();
-
     }
 
     #endregion

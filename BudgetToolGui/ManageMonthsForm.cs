@@ -14,7 +14,7 @@ namespace BudgetToolGui
   public partial class ManageMonthsForm : Form
   {
     private YearTop _year;
-    private int _currentMonth;
+    private DateTime _currentDate;
     private List<string> months = new List<string>
     {
       "Annual",
@@ -43,9 +43,13 @@ namespace BudgetToolGui
       {
         _year = year;
       }
-      _currentMonth = 1;
 
       purchasesLv.MouseUp += new MouseEventHandler(purchasesLv_MouseUp);
+
+      _currentDate = DateTime.Today;
+      todayDtp.Value = _currentDate;
+
+      _year.FastForward(new DateTime(DateTime.Today.Year, 12, 31));
 
       RefreshPage();
     }
@@ -53,8 +57,18 @@ namespace BudgetToolGui
     #region Private Helpers
     private void RefreshPage()
     {
+      accountsLv.Items.Clear();
+      foreach (var account in _year.Accounts)
+      {
+        ListViewItem lvi = new ListViewItem(account.Key);
+        lvi.SubItems.Add(account.Value.GetType().Name);
+        lvi.SubItems.Add(account.Value.GetCurrentBalance(_currentDate).ToString());
+        lvi.Tag = account.Value;
+        accountsLv.Items.Add(lvi);
+      }
+
       monthlySbLv.Items.Clear();
-      foreach (var softBill in _year.MonthlySoftBills[_currentMonth].SoftBills)
+      foreach (var softBill in _year.MonthlySoftBills[_currentDate.Month].SoftBills)
       {
         BalanceEntry firstEntry = softBill.Value.BalanceHistory[0];
         BalanceEntry lastEntry = softBill.Value.BalanceHistory.Last();
@@ -66,16 +80,13 @@ namespace BudgetToolGui
       }
 
       purchasesLv.Items.Clear();
-      foreach (var purchase in _year.Purchases.Where(p => (p.DateOfPurchase.Month == _currentMonth)))
+      foreach (var purchase in _year.Purchases.Where(p => (p.DateOfPurchase.Month == _currentDate.Month)))
       {
         ListViewItem lvi = new ListViewItem(purchase.Vendor);
         lvi.SubItems.Add(purchase.Amount.ToString());
         lvi.Tag = purchase;
         purchasesLv.Items.Add(lvi);
       }
-
-      // minus 1 here because months are not zero indexed but the months array is
-      currentMonthLbl.Text = string.Format("Current Month: {0}", months[_currentMonth]);
     }
     #endregion
 
@@ -120,7 +131,7 @@ namespace BudgetToolGui
     }
     private void purchasesAdd_Click(object sender, EventArgs e)
     {
-      var editPurchaseForm = new EditPurchaseForm(null, _year, _currentMonth);
+      var editPurchaseForm = new EditPurchaseForm(null, _year, _currentDate.Month);
       editPurchaseForm.NewPurchaseAdded += NewPurchase_Added;
       editPurchaseForm.Show();
     }
@@ -150,24 +161,13 @@ namespace BudgetToolGui
     }
     #endregion
 
-    #region Buttons
-    private void prevBtn_Click(object sender, EventArgs e)
+    #region Assorted
+    private void todayDtp_ValueChanged(object sender, EventArgs e)
     {
-      if(_currentMonth > 0)
-      {
-        _currentMonth--;
-      }
+      _currentDate = todayDtp.Value;
       RefreshPage();
     }
 
-    private void nextBtn_Click(object sender, EventArgs e)
-    {
-      if (_currentMonth < months.Count - 1)
-      {
-        _currentMonth++;
-      }
-      RefreshPage();
-    }
     #endregion
 
     private void doneBtn_Click(object sender, EventArgs e)
