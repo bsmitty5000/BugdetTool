@@ -152,40 +152,6 @@ namespace BudgetToolLib
         }
       }
     }
-    public void RemoveHardBill(string name)
-    {
-      foreach (var group in MonthlySoftBills)
-      {
-        group.HardBills.Remove(name);
-      }
-    }
-    public void AddHardBill(HardBill bill)
-    {
-      if (bill.Frequency.)
-      {
-        if (MonthlySoftBills[0].HardBills.ContainsKey(bill.Name))
-        {
-          RemoveHardBill(bill.Name, annualGroup);
-        }
-        if(bill.Frequency != HardBillFrequencyEnum.Annualy)
-        {
-          throw new Exception("Hardbill frequency added to annual group must be annual");
-        }
-        MonthlySoftBills[0].HardBills.Add(bill.Name, new HardBill(bill));
-      }
-      else
-      {
-        /* Use 1 here because logic forces them all to be the same */
-        if (MonthlySoftBills[1].HardBills.ContainsKey(bill.Name))
-        {
-          RemoveHardBill(bill.Name, annualGroup);
-        }
-        for (int i = 1; i < MonthlySoftBills.Count; i++)
-        {
-          MonthlySoftBills[i].HardBills.Add(bill.Name, new HardBill(bill));
-        }
-      }
-    }
     public Purchase CreatePurchase(DateTime dateOfPurchase, bool annual)
     {
       Purchase purchase;

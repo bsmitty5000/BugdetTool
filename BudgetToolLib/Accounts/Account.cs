@@ -54,6 +54,14 @@ namespace BudgetToolLib
     public List<Transaction> Transactions { get; set; }
     public string Name { get; set; }
 
+    public decimal CurrentBalance
+    {
+      get
+      {
+        return BalanceHistory.Last().Amount;
+      }
+    }
+
     public delegate void NewTransaction(Transaction transaction);
 
     /* Set by derived classes */
