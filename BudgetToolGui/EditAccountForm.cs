@@ -16,6 +16,8 @@ namespace BudgetToolGui
     private AccountBase _account;
     private decimal _startingAmount;
     private string _name;
+    private string _type;
+    private DateTime _startingDate;
     public event EventHandler<NewAccountAddedEventArgs> NewAccountAdded;
     public EditAccountForm()
     {
@@ -25,7 +27,10 @@ namespace BudgetToolGui
       string[] AccountTypes = new string[] { "CheckingAccount", "CreditCard" };
       typeCb.Items.AddRange(AccountTypes);
 
-      _account = new CheckingAccount();
+      _name = string.Empty;
+      _startingAmount = 0;
+      _type = AccountTypes[0];
+      _startingDate = DateTime.MinValue;
 
       RefreshForm();
     }
@@ -41,26 +46,24 @@ namespace BudgetToolGui
     }
     private void TypeCb_SelectedIndexChanged(object sender, EventArgs e)
     {
-      AccountBase tempAccount = null;
-      if(!_account.GetType().Name.Equals(typeCb.SelectedItem))
-      {
-        switch(typeCb.SelectedItem.ToString())
-        {
-          case "CheckingAccount":
-            tempAccount = new CheckingAccount();
-            break;
-          case "CreditCard":
-            tempAccount = new CreditCard();
-            break;
-        }
-
-        _account = tempAccount;
-      }
+      _type = typeCb.SelectedItem.ToString();
+    }
+    private void startingDateDtp_ValueChanged(object sender, EventArgs e)
+    {
+      _startingDate = startingDateDtp.Value;
     }
     private void SaveBtn_Click(object sender, EventArgs e)
     {
-      _account.Name = _name;
-      _account.BalanceHistory = new List<BalanceEntry>() { new BalanceEntry() { Date = DateTime.Today, Amount = _startingAmount } };
+      switch (_type)
+      {
+        case "CheckingAccount":
+          _account = new CheckingAccount(_name, _startingAmount, _startingDate);
+          break;
+        case "CreditCard":
+          _account = new CreditCard(_name, _startingAmount, _startingDate);
+          break;
+
+      }
       NewAccountAddedEventArgs args = new NewAccountAddedEventArgs();
       args.NewAccount = _account;
       OnNewAccountAdded(args);
@@ -79,9 +82,10 @@ namespace BudgetToolGui
 
     private void RefreshForm()
     {
-      nameTb.Text = _account.Name;
+      nameTb.Text = _name;
       balanceTb.Text = _startingAmount.ToString();
-      typeCb.SelectedItem = _account.GetType().Name;
+      typeCb.SelectedItem = _type;
+      startingDateDtp.Value = _startingDate;
     }
   }
 

@@ -36,12 +36,14 @@
       this.saveBtn = new System.Windows.Forms.Button();
       this.cancelBtn = new System.Windows.Forms.Button();
       this.typeCb = new System.Windows.Forms.ComboBox();
+      this.startingDateDtp = new System.Windows.Forms.DateTimePicker();
+      this.label5 = new System.Windows.Forms.Label();
       this.SuspendLayout();
       // 
       // label1
       // 
       this.label1.AutoSize = true;
-      this.label1.Location = new System.Drawing.Point(12, 45);
+      this.label1.Location = new System.Drawing.Point(57, 50);
       this.label1.Name = "label1";
       this.label1.Size = new System.Drawing.Size(46, 13);
       this.label1.TabIndex = 0;
@@ -50,7 +52,7 @@
       // label2
       // 
       this.label2.AutoSize = true;
-      this.label2.Location = new System.Drawing.Point(12, 20);
+      this.label2.Location = new System.Drawing.Point(68, 24);
       this.label2.Name = "label2";
       this.label2.Size = new System.Drawing.Size(35, 13);
       this.label2.TabIndex = 1;
@@ -59,7 +61,7 @@
       // label3
       // 
       this.label3.AutoSize = true;
-      this.label3.Location = new System.Drawing.Point(12, 70);
+      this.label3.Location = new System.Drawing.Point(72, 77);
       this.label3.Name = "label3";
       this.label3.Size = new System.Drawing.Size(31, 13);
       this.label3.TabIndex = 2;
@@ -67,7 +69,7 @@
       // 
       // nameTb
       // 
-      this.nameTb.Location = new System.Drawing.Point(98, 12);
+      this.nameTb.Location = new System.Drawing.Point(119, 17);
       this.nameTb.Name = "nameTb";
       this.nameTb.Size = new System.Drawing.Size(100, 20);
       this.nameTb.TabIndex = 3;
@@ -75,7 +77,7 @@
       // 
       // balanceTb
       // 
-      this.balanceTb.Location = new System.Drawing.Point(98, 38);
+      this.balanceTb.Location = new System.Drawing.Point(119, 43);
       this.balanceTb.Name = "balanceTb";
       this.balanceTb.Size = new System.Drawing.Size(100, 20);
       this.balanceTb.TabIndex = 4;
@@ -83,7 +85,7 @@
       // 
       // saveBtn
       // 
-      this.saveBtn.Location = new System.Drawing.Point(15, 99);
+      this.saveBtn.Location = new System.Drawing.Point(71, 146);
       this.saveBtn.Name = "saveBtn";
       this.saveBtn.Size = new System.Drawing.Size(75, 23);
       this.saveBtn.TabIndex = 6;
@@ -93,7 +95,7 @@
       // 
       // cancelBtn
       // 
-      this.cancelBtn.Location = new System.Drawing.Point(123, 99);
+      this.cancelBtn.Location = new System.Drawing.Point(192, 146);
       this.cancelBtn.Name = "cancelBtn";
       this.cancelBtn.Size = new System.Drawing.Size(75, 23);
       this.cancelBtn.TabIndex = 7;
@@ -104,17 +106,36 @@
       // typeCb
       // 
       this.typeCb.FormattingEnabled = true;
-      this.typeCb.Location = new System.Drawing.Point(98, 67);
+      this.typeCb.Location = new System.Drawing.Point(119, 69);
       this.typeCb.Name = "typeCb";
       this.typeCb.Size = new System.Drawing.Size(121, 21);
       this.typeCb.TabIndex = 8;
       this.typeCb.SelectedIndexChanged += new System.EventHandler(this.TypeCb_SelectedIndexChanged);
       // 
+      // startingDateDtp
+      // 
+      this.startingDateDtp.Location = new System.Drawing.Point(119, 96);
+      this.startingDateDtp.Name = "startingDateDtp";
+      this.startingDateDtp.Size = new System.Drawing.Size(200, 20);
+      this.startingDateDtp.TabIndex = 13;
+      this.startingDateDtp.ValueChanged += new System.EventHandler(this.startingDateDtp_ValueChanged);
+      // 
+      // label5
+      // 
+      this.label5.AutoSize = true;
+      this.label5.Location = new System.Drawing.Point(34, 102);
+      this.label5.Name = "label5";
+      this.label5.Size = new System.Drawing.Size(69, 13);
+      this.label5.TabIndex = 12;
+      this.label5.Text = "Starting Date";
+      // 
       // EditAccountForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(251, 163);
+      this.ClientSize = new System.Drawing.Size(351, 183);
+      this.Controls.Add(this.startingDateDtp);
+      this.Controls.Add(this.label5);
       this.Controls.Add(this.typeCb);
       this.Controls.Add(this.cancelBtn);
       this.Controls.Add(this.saveBtn);
@@ -140,5 +161,7 @@
         private System.Windows.Forms.Button saveBtn;
         private System.Windows.Forms.Button cancelBtn;
         private System.Windows.Forms.ComboBox typeCb;
+        private System.Windows.Forms.DateTimePicker startingDateDtp;
+        private System.Windows.Forms.Label label5;
     }
 }

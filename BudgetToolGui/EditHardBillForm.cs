@@ -39,6 +39,8 @@ namespace BudgetToolGui
         _year = year;
       }
 
+      frequencyCb.Items.AddRange(Enum.GetNames(typeof(HardBillFrequencyEnum)));
+
       foreach (var account in _year.Accounts)
       {
         accountCb.Items.Add(account.Value.Name);
@@ -51,28 +53,32 @@ namespace BudgetToolGui
     {
       nameTb.Text = _hardBill.Name;
       amountTb.Text = _hardBill.Amount.ToString();
+      firstBillDueDtp.Value = _hardBill.FirstBillDue;
+      frequencyCb.SelectedItem = _hardBill.Frequency.ToString();
       accountCb.SelectedItem = _hardBill.PaymentAccount != null ? _hardBill.PaymentAccount.Name : string.Empty;
-      dayPaidTb.Text = _hardBill.DayOfMonthPaid.ToString();
     }
 
     private void nameTb_TextChanged(object sender, EventArgs e)
     {
       _hardBill.Name = nameTb.Text;
     }
-
     private void amountTb_TextChanged(object sender, EventArgs e)
     {
       _hardBill.Amount = Decimal.Parse(amountTb.Text);
     }
-
-    private void dayPaidTb_TextChanged(object sender, EventArgs e)
-    {
-      _hardBill.DayOfMonthPaid = Int32.Parse(dayPaidTb.Text);
-    }
-
     private void accountCb_SelectedIndexChanged(object sender, EventArgs e)
     {
       _hardBill.PaymentAccount = _year.Accounts[accountCb.Text];
+    }
+    private void firstBillDueDtp_ValueChanged(object sender, EventArgs e)
+    {
+      _hardBill.FirstBillDue = firstBillDueDtp.Value;
+    }
+    private void frequencyCb_SelectedIndexChanged(object sender, EventArgs e)
+    {
+      HardBillFrequencyEnum enumParse;
+      Enum.TryParse(frequencyCb.SelectedItem.ToString(), out enumParse);
+      _hardBill.Frequency = enumParse;
     }
 
     private void saveBtn_Click(object sender, EventArgs e)
@@ -83,7 +89,6 @@ namespace BudgetToolGui
 
       this.Close();
     }
-
     private void cancelBtn_Click(object sender, EventArgs e)
     {
       this.Close();
