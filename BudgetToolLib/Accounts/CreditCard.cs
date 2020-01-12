@@ -10,21 +10,32 @@ namespace BudgetToolLib
   {
     public CreditCard()
     {
-      NewCreditTransaction = subtractTransactionAmount;
-      NewDebitTransaction  = addTransactionAmount;
     }
 
     public CreditCard(string name, decimal startingAmount, DateTime? startingDate) : base(name, startingAmount, startingDate)
     {
-      NewCreditTransaction = subtractTransactionAmount;
-      NewDebitTransaction  = addTransactionAmount;
     }
 
     public CreditCard(CreditCard cc) :  base(cc)
     {
-      NewCreditTransaction = subtractTransactionAmount;
-      NewDebitTransaction  = addTransactionAmount;
+    }
+    public override void NewDebitTransaction(Transaction transaction)
+    {
+      if (transaction.Amount < 0)
+      {
+        throw new ArgumentException("Transaction amount should be positive. Use Debit vs Credit");
+      }
+      ProcessNewTransaction(transaction);
     }
 
+    public override void NewCreditTransaction(Transaction transaction)
+    {
+      if (transaction.Amount < 0)
+      {
+        throw new ArgumentException("Transaction amount should be positive. Use Debit vs Credit");
+      }
+      transaction.Amount = -1 * transaction.Amount;
+      ProcessNewTransaction(transaction);
+    }
   }
 }

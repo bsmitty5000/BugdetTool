@@ -10,21 +10,33 @@ namespace BudgetToolLib
   {
     public SoftBill()
     {
-      NewDebitTransaction =  addTransactionAmount;
-      NewCreditTransaction = subtractTransactionAmount;
     }
 
     public SoftBill(string name, decimal startingAmount, DateTime? startingDate = null) : base(name, startingAmount, startingDate)
     {
-      NewDebitTransaction = addTransactionAmount;
-      NewCreditTransaction = subtractTransactionAmount;
     }
 
     public SoftBill(SoftBill sb) : base(sb)
     {
-      NewDebitTransaction = addTransactionAmount;
-      NewCreditTransaction = subtractTransactionAmount;
     }
 
+    public override void NewDebitTransaction(Transaction transaction)
+    {
+      if (transaction.Amount < 0)
+      {
+        throw new ArgumentException("Transaction amount should be positive. Use Debit vs Credit");
+      }
+      transaction.Amount = -1 * transaction.Amount;
+      ProcessNewTransaction(transaction);
+    }
+
+    public override void NewCreditTransaction(Transaction transaction)
+    {
+      if (transaction.Amount < 0)
+      {
+        throw new ArgumentException("Transaction amount should be positive. Use Debit vs Credit");
+      }
+      ProcessNewTransaction(transaction);
+    }
   }
 }

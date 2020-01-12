@@ -62,12 +62,6 @@ namespace BudgetToolLib
       }
     }
 
-    public delegate void NewTransaction(Transaction transaction);
-
-    /* Set by derived classes */
-    public NewTransaction NewDebitTransaction;
-    public NewTransaction NewCreditTransaction;
-
     public AccountBase()
     {
     }
@@ -90,17 +84,26 @@ namespace BudgetToolLib
       Name = name;
     }
 
-    protected void addTransactionAmount(Transaction transaction)
+    public abstract void NewDebitTransaction(Transaction transaction);
+    public abstract void NewCreditTransaction(Transaction transaction);
+
+    protected void ProcessNewTransaction(Transaction transaction)
     {
       //insert the transaction. Transactions is ordered by date
       int insertIndex = Transactions.BinarySearchForMatch<Transaction>((x) => x.Date.CompareTo(transaction.Date));
       if (insertIndex < 0) insertIndex = ~insertIndex;
       Transactions.Insert(insertIndex, transaction);
 
+      if(transaction.Date < BalanceHistory[0].Date)
+      {
+        // going to assume this means logging old transactions that are already reflected in the BalanceHistory
+        return;
+      }
+
       insertIndex = BalanceHistory.BinarySearchForMatch<BalanceEntry>((x) => x.Date.CompareTo(transaction.Date));
       if (insertIndex > 0)
       {
-        unravelUsingAddition(insertIndex, transaction.Amount);
+        unravelAndAdjust(insertIndex, transaction.Amount);
       }
       else
       {
@@ -109,49 +112,17 @@ namespace BudgetToolLib
         BalanceHistory.Insert(insertIndex, new BalanceEntry() { Date = transaction.Date, Amount = (BalanceHistory[insertIndex-1].Amount + transaction.Amount) });
 
         // after the new entry update all remaining entries
-        unravelUsingAddition(insertIndex + 1, transaction.Amount);
+        unravelAndAdjust(insertIndex + 1, transaction.Amount);
       }
 
       return;
     }
 
-    private void unravelUsingAddition(int index, decimal amount)
+    private void unravelAndAdjust(int index, decimal amount)
     {
       for (int j = index; j < BalanceHistory.Count; j++)
       {
         BalanceHistory[j].Amount += amount;
-      }
-    }
-
-    virtual public void subtractTransactionAmount(Transaction transaction)
-    {
-      //insert the transaction. Transactions is ordered by date
-      int insertIndex = Transactions.BinarySearchForMatch<Transaction>((x) => x.Date.CompareTo(transaction.Date)); 
-      if (insertIndex < 0) insertIndex = ~insertIndex;
-      Transactions.Insert(insertIndex, transaction);
-
-      insertIndex = BalanceHistory.BinarySearchForMatch<BalanceEntry>((x) => x.Date.CompareTo(transaction.Date));
-      if (insertIndex > 0)
-      {
-        unravelUsingSubtraction(insertIndex, transaction.Amount);
-      }
-      else
-      {
-        insertIndex = ~insertIndex;
-        // Create a new BalanceEtnry that carries over the total from the previous day with the new amount added in
-        BalanceHistory.Insert(insertIndex, new BalanceEntry() { Date = transaction.Date, Amount = (BalanceHistory[insertIndex - 1].Amount - transaction.Amount) });
-
-        // after the new entry update all remaining entries
-        unravelUsingSubtraction(insertIndex + 1, transaction.Amount);
-      }
-
-      return;
-    }
-    private void unravelUsingSubtraction(int index, decimal amount)
-    {
-      for (int j = index; j < BalanceHistory.Count; j++)
-      {
-        BalanceHistory[j].Amount -= amount;
       }
     }
   }
