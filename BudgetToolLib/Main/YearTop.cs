@@ -23,6 +23,45 @@ namespace BudgetToolLib
     public List<SoftBillGroup> MonthlySoftBills { get; set; }
     public Dictionary<string, HardBill> HardBills { get; set; }
     public List<Purchase> Purchases { get; set; }
+    public decimal AnnualHardBillAmount
+    {
+      get
+      {
+        decimal totalHb = 0;
+        foreach (var hb in HardBills)
+        {
+          totalHb += hb.Value.AnnualAmount;
+        }
+        return totalHb;
+      }
+    }
+    public decimal AnnualIncome
+    {
+      get
+      {
+        decimal totalSalary = 0;
+        foreach (var income in IncomeSources)
+        {
+          totalSalary += income.Value.AnnualAmount;
+        }
+        return totalSalary;
+      }
+    }
+    public decimal AnnualSoftBillAmount
+    {
+      get
+      {
+        decimal annualSb = 0;
+        foreach (var group in MonthlySoftBills)
+        {
+          foreach (var sb in group.SoftBills)
+          {
+            annualSb += sb.Value.BalanceHistory.First().Amount;
+          }
+        }
+        return annualSb;
+      }
+    }
 
     public YearTop()
     {

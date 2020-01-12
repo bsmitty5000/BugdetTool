@@ -23,6 +23,23 @@ namespace BudgetToolLib
     public AccountBase PaymentAccount { get; set; }
     public DateTime NextBillDue { get; private set; }
 
+    public decimal AnnualAmount
+    {
+      get
+      {
+        switch(Frequency)
+        {
+          case HardBillFrequencyEnum.Annualy:
+            return Amount;
+          case HardBillFrequencyEnum.Monthly:
+            return Amount * 12;
+          case HardBillFrequencyEnum.Weekly:
+            return Amount * 52;
+          default:
+            return 0;
+        }
+      }
+    }
     public HardBill()
     { }
 

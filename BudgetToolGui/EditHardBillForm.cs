@@ -27,7 +27,12 @@ namespace BudgetToolGui
       }
       else
       {
-        _hardBill = new HardBill();
+        _hardBill = new HardBill(
+          string.Empty,
+          0,
+          DateTimePicker.MinimumDateTime,
+          HardBillFrequencyEnum.Monthly,
+          null);
       }
 
       if (year == null)

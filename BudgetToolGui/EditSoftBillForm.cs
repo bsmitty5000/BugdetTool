@@ -13,7 +13,6 @@ namespace BudgetToolGui
 {
   public partial class EditSoftBillForm : Form
   {
-    private YearTop _year;
     private string _name;
     private decimal _startingAmount;
     public event EventHandler<NewSoftBillAddedEventArgs> NewSoftBillAdded;

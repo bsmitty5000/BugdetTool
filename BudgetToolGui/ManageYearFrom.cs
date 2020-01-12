@@ -33,7 +33,6 @@ namespace BudgetToolGui
       incomeLv.MouseUp += new MouseEventHandler(incomeLv_MouseUp);
       annualHbLv.MouseUp += new MouseEventHandler(annualHbLv_MouseUp);
       annualSbLv.MouseUp += new MouseEventHandler(annualSbLv_MouseUp);
-      monthlyHbLv.MouseUp += new MouseEventHandler(monthlyHbLv_MouseUp);
       monthlySbLv.MouseUp += new MouseEventHandler(monthlySbLv_MouseUp);
     }
 
@@ -64,11 +63,11 @@ namespace BudgetToolGui
       }
 
       annualHbLv.Items.Clear();
-      foreach (var hardBill in _year.MonthlySoftBills[0].HardBills)
+      foreach (var hardBill in _year.HardBills)
       {
         ListViewItem lvi = new ListViewItem(hardBill.Key);
         lvi.SubItems.Add(hardBill.Value.Amount.ToString());
-        lvi.SubItems.Add(hardBill.Value.DayOfMonthPaid.ToString());
+        lvi.SubItems.Add(hardBill.Value.Frequency.ToString());
         lvi.SubItems.Add(hardBill.Value.PaymentAccount.Name);
         lvi.Tag = hardBill.Value;
         annualHbLv.Items.Add(lvi);
@@ -84,22 +83,6 @@ namespace BudgetToolGui
         annualSbLv.Items.Add(lvi);
       }
 
-      monthlyHbLv.Items.Clear();
-      /* for now just use first month group since forcing all months
-       * to be the same
-       * todo: if in the future months can have different bills this
-       * logic needs to be udpated
-       */
-      foreach (var hardBill in _year.MonthlySoftBills[1].HardBills)
-      {
-        ListViewItem lvi = new ListViewItem(hardBill.Key);
-        lvi.SubItems.Add(hardBill.Value.Amount.ToString());
-        lvi.SubItems.Add(hardBill.Value.DayOfMonthPaid.ToString());
-        lvi.SubItems.Add(hardBill.Value.PaymentAccount.Name);
-        lvi.Tag = hardBill.Value;
-        monthlyHbLv.Items.Add(lvi);
-      }
-
       monthlySbLv.Items.Clear();
       foreach (var softBill in _year.MonthlySoftBills[1].SoftBills)
       {
@@ -109,6 +92,19 @@ namespace BudgetToolGui
         lvi.Tag = softBill.Value;
         monthlySbLv.Items.Add(lvi);
       }
+
+      decimal totalSalary = _year.AnnualIncome;
+      decimal totalHb = _year.AnnualHardBillAmount;
+      decimal totalSb = _year.AnnualSoftBillAmount;
+      decimal totalBills = totalHb + totalSb;
+      decimal totalDiff = totalSalary - totalBills;
+
+      totSalaryTb.Text = totalSalary.ToString();
+      totHardBillsTb.Text = totalHb.ToString();
+      totSoftBillsTb.Text = totalSb.ToString();
+      totBillsTb.Text = totalBills.ToString();
+      totDiffTb.Text = totalDiff.ToString();
+
     }
 
     #endregion
@@ -289,7 +285,7 @@ namespace BudgetToolGui
     private void annualHbDelete_Click(object sender, EventArgs e)
     {
       HardBill hardBill = annualHbLv.SelectedItems[0].Tag as HardBill;
-      _year.RemoveHardBill(hardBill.Name, true);
+      _year.HardBills.Remove(hardBill.Name);
       RefreshPage();
     }
     private void annualHbEdit_Click(object sender, EventArgs e)
@@ -305,7 +301,7 @@ namespace BudgetToolGui
     {
       if (e.NewHardBill != null)
       {
-        _year.AddHardBill(e.NewHardBill, true);
+        _year.HardBills.Add(e.NewHardBill.Name, e.NewHardBill);
       }
       RefreshPage();
     }
@@ -357,7 +353,7 @@ namespace BudgetToolGui
     private void annualSbDelete_Click_1(object sender, EventArgs e)
     {
       SoftBill softBill = annualSbLv.SelectedItems[0].Tag as SoftBill;
-      _year.RemoveSoftBill(softBill.Name, true);
+      _year.RemoveSoftBill(softBill.Name);
       RefreshPage();
     }
     private void annualSbEdit_Click_1(object sender, EventArgs e)
@@ -377,76 +373,6 @@ namespace BudgetToolGui
     #endregion
 
     #region Monthly Stuff
-    private void monthlyHbLv_MouseUp(object sender, MouseEventArgs e)
-    {
-      int index = -1;
-
-      if (e.Button == MouseButtons.Right)
-      {
-        if (monthlyHbLv.Items.Count > 0)
-        {
-          ListViewItem selectedItem = monthlyHbLv.GetItemAt(e.X, e.Y);
-          if (selectedItem != null)
-          {
-            index = selectedItem.Index;
-          }
-        }
-
-        if (_year.Accounts.Count > 0)
-        {
-          monthlyHbAdd.Enabled = true;
-        }
-        else
-        {
-          monthlyHbAdd.Enabled = false;
-        }
-
-        if (index > -1)
-        {
-          monthlyHbDelete.Enabled = true;
-          monthlyHbEdit.Enabled = true;
-        }
-        else
-        {
-          monthlyHbDelete.Enabled = false;
-          monthlyHbEdit.Enabled = false;
-        }
-        monthlyHbCms.Show(this, new Point(e.X + ((Control)sender).Left + 20, e.Y + ((Control)sender).Top + 20));
-        //accountCms.Show(this, new Point(e.X, e.Y));
-      }
-    }
-    private void monthlyHbAdd_Click(object sender, EventArgs e)
-    {
-      HardBill hardBill = new HardBill();
-
-      var editHardBill = new EditHardBillForm(hardBill, _year);
-      editHardBill.NewHardBillAdded += NewMonthlyHardBill_Added;
-      editHardBill.Show();
-    }
-    private void monthlyHbDelete_Click(object sender, EventArgs e)
-    {
-      HardBill hardBill = monthlyHbLv.SelectedItems[0].Tag as HardBill;
-      _year.RemoveHardBill(hardBill.Name, true);
-      RefreshPage();
-    }
-    private void monthlyHbEdit_Click(object sender, EventArgs e)
-    {
-      HardBill hardBill = monthlyHbLv.SelectedItems[0].Tag as HardBill;
-
-      var editHardBill = new EditHardBillForm(hardBill, _year);
-      //editHardBill.NewHardBillAdded += NewMonthlyHardBill_Added;
-      editHardBill.ShowDialog();
-      RefreshPage();
-    }
-    private void NewMonthlyHardBill_Added(object sender, NewHardBillAddedEventArgs e)
-    {
-      if (e.NewHardBill != null)
-      {
-        _year.AddHardBill(e.NewHardBill, false);
-      }
-      RefreshPage();
-    }
-
     private void monthlySbLv_MouseUp(object sender, MouseEventArgs e)
     {
       int index = -1;
@@ -494,7 +420,7 @@ namespace BudgetToolGui
     private void monthlySbDelete_Click(object sender, EventArgs e)
     {
       SoftBill softBill = monthlySbLv.SelectedItems[0].Tag as SoftBill;
-      _year.RemoveSoftBill(softBill.Name, true);
+      _year.RemoveSoftBill(softBill.Name);
       RefreshPage();
     }
     private void monthlySbEdit_Click(object sender, EventArgs e)

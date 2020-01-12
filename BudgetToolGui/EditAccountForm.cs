@@ -30,7 +30,7 @@ namespace BudgetToolGui
       _name = string.Empty;
       _startingAmount = 0;
       _type = AccountTypes[0];
-      _startingDate = DateTime.MinValue;
+      _startingDate = DateTimePicker.MinimumDateTime;
 
       RefreshForm();
     }

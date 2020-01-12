@@ -66,7 +66,7 @@ namespace BudgetToolGui
       }
 
       purchasesLv.Items.Clear();
-      foreach (var purchase in _year.MonthlySoftBills[_currentMonth].Purchases)
+      foreach (var purchase in _year.Purchases.Where(p => (p.DateOfPurchase.Month == _currentMonth)))
       {
         ListViewItem lvi = new ListViewItem(purchase.Vendor);
         lvi.SubItems.Add(purchase.Amount.ToString());
@@ -128,7 +128,7 @@ namespace BudgetToolGui
     {
       Purchase purchase = purchasesLv.SelectedItems[0].Tag as Purchase;
       int month = purchase.DateOfPurchase.Month;
-      _year.MonthlySoftBills[month].RemovePurchase(purchase);
+      _year.RemovePurchase(purchase);
       RefreshPage();
     }
     private void purchasesEdit_Click(object sender, EventArgs e)
@@ -144,7 +144,7 @@ namespace BudgetToolGui
     {
       if (e.NewPurchase != null)
       {
-        _year.MonthlySoftBills[_currentMonth].AddPurchase(e.NewPurchase);
+        _year.AddPurchase(e.NewPurchase);
       }
       RefreshPage();
     }
