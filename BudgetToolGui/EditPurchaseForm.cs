@@ -59,7 +59,15 @@ namespace BudgetToolGui
       {
         accountCb.Items.Add(account.Value.Name);
       }
+
       accountCb.SelectedItem = accountCb.Items[0];
+      foreach (var item in accountCb.Items)
+      {
+        if(item.ToString().ToLower().Contains("credit"))
+        {
+          accountCb.SelectedItem = item;
+        }
+      }
 
       if (_purchase.SoftBillSplit.Count == 0)
       {

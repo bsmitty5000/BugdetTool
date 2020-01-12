@@ -38,6 +38,7 @@
       this.purchasesLv = new System.Windows.Forms.ListView();
       this.PurchasesMerchant = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
       this.PurchasesAmount = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+      this.PurchaseDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
       this.purchasesCms = new System.Windows.Forms.ContextMenuStrip(this.components);
       this.purchasesAdd = new System.Windows.Forms.ToolStripMenuItem();
       this.purchasesDelete = new System.Windows.Forms.ToolStripMenuItem();
@@ -50,6 +51,12 @@
       this.label1 = new System.Windows.Forms.Label();
       this.label3 = new System.Windows.Forms.Label();
       this.todayDtp = new System.Windows.Forms.DateTimePicker();
+      this.annualSbLv = new System.Windows.Forms.ListView();
+      this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+      this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+      this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+      this.label4 = new System.Windows.Forms.Label();
+      this.showAllPurchasesCb = new System.Windows.Forms.CheckBox();
       this.purchasesCms.SuspendLayout();
       this.SuspendLayout();
       // 
@@ -62,7 +69,7 @@
       this.monthlySbLv.HideSelection = false;
       this.monthlySbLv.Location = new System.Drawing.Point(15, 84);
       this.monthlySbLv.Name = "monthlySbLv";
-      this.monthlySbLv.Size = new System.Drawing.Size(279, 240);
+      this.monthlySbLv.Size = new System.Drawing.Size(279, 304);
       this.monthlySbLv.TabIndex = 19;
       this.monthlySbLv.UseCompatibleStateImageBehavior = false;
       this.monthlySbLv.View = System.Windows.Forms.View.Details;
@@ -87,14 +94,14 @@
       this.label6.AutoSize = true;
       this.label6.Location = new System.Drawing.Point(9, 67);
       this.label6.Name = "label6";
-      this.label6.Size = new System.Drawing.Size(47, 13);
+      this.label6.Size = new System.Drawing.Size(87, 13);
       this.label6.TabIndex = 18;
-      this.label6.Text = "Soft Bills";
+      this.label6.Text = "Monthly Soft Bills";
       // 
       // label2
       // 
       this.label2.AutoSize = true;
-      this.label2.Location = new System.Drawing.Point(319, 67);
+      this.label2.Location = new System.Drawing.Point(598, 67);
       this.label2.Name = "label2";
       this.label2.Size = new System.Drawing.Size(57, 13);
       this.label2.TabIndex = 21;
@@ -104,11 +111,12 @@
       // 
       this.purchasesLv.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.PurchasesMerchant,
-            this.PurchasesAmount});
+            this.PurchasesAmount,
+            this.PurchaseDate});
       this.purchasesLv.HideSelection = false;
-      this.purchasesLv.Location = new System.Drawing.Point(322, 84);
+      this.purchasesLv.Location = new System.Drawing.Point(601, 84);
       this.purchasesLv.Name = "purchasesLv";
-      this.purchasesLv.Size = new System.Drawing.Size(319, 240);
+      this.purchasesLv.Size = new System.Drawing.Size(319, 304);
       this.purchasesLv.TabIndex = 22;
       this.purchasesLv.UseCompatibleStateImageBehavior = false;
       this.purchasesLv.View = System.Windows.Forms.View.Details;
@@ -116,12 +124,17 @@
       // PurchasesMerchant
       // 
       this.PurchasesMerchant.Text = "Merchant";
-      this.PurchasesMerchant.Width = 190;
+      this.PurchasesMerchant.Width = 120;
       // 
       // PurchasesAmount
       // 
       this.PurchasesAmount.Text = "Amount";
-      this.PurchasesAmount.Width = 144;
+      this.PurchasesAmount.Width = 92;
+      // 
+      // PurchaseDate
+      // 
+      this.PurchaseDate.Text = "Date";
+      this.PurchaseDate.Width = 85;
       // 
       // purchasesCms
       // 
@@ -171,9 +184,9 @@
             this.AccountType,
             this.AccountBalance});
       this.accountsLv.HideSelection = false;
-      this.accountsLv.Location = new System.Drawing.Point(12, 351);
+      this.accountsLv.Location = new System.Drawing.Point(12, 472);
       this.accountsLv.Name = "accountsLv";
-      this.accountsLv.Size = new System.Drawing.Size(294, 90);
+      this.accountsLv.Size = new System.Drawing.Size(282, 90);
       this.accountsLv.TabIndex = 27;
       this.accountsLv.UseCompatibleStateImageBehavior = false;
       this.accountsLv.View = System.Windows.Forms.View.Details;
@@ -181,7 +194,7 @@
       // AccountsName
       // 
       this.AccountsName.Text = "Name";
-      this.AccountsName.Width = 137;
+      this.AccountsName.Width = 82;
       // 
       // AccountType
       // 
@@ -191,11 +204,12 @@
       // AccountBalance
       // 
       this.AccountBalance.Text = "Balance";
+      this.AccountBalance.Width = 95;
       // 
       // label1
       // 
       this.label1.AutoSize = true;
-      this.label1.Location = new System.Drawing.Point(9, 334);
+      this.label1.Location = new System.Drawing.Point(9, 455);
       this.label1.Name = "label1";
       this.label1.Size = new System.Drawing.Size(95, 13);
       this.label1.TabIndex = 26;
@@ -218,11 +232,63 @@
       this.todayDtp.TabIndex = 29;
       this.todayDtp.ValueChanged += new System.EventHandler(this.todayDtp_ValueChanged);
       // 
+      // annualSbLv
+      // 
+      this.annualSbLv.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2,
+            this.columnHeader3});
+      this.annualSbLv.HideSelection = false;
+      this.annualSbLv.Location = new System.Drawing.Point(300, 84);
+      this.annualSbLv.Name = "annualSbLv";
+      this.annualSbLv.Size = new System.Drawing.Size(279, 304);
+      this.annualSbLv.TabIndex = 31;
+      this.annualSbLv.UseCompatibleStateImageBehavior = false;
+      this.annualSbLv.View = System.Windows.Forms.View.Details;
+      // 
+      // columnHeader1
+      // 
+      this.columnHeader1.Text = "Name";
+      this.columnHeader1.Width = 146;
+      // 
+      // columnHeader2
+      // 
+      this.columnHeader2.Text = "Starting";
+      this.columnHeader2.Width = 82;
+      // 
+      // columnHeader3
+      // 
+      this.columnHeader3.Text = "Current";
+      this.columnHeader3.Width = 93;
+      // 
+      // label4
+      // 
+      this.label4.AutoSize = true;
+      this.label4.Location = new System.Drawing.Point(294, 67);
+      this.label4.Name = "label4";
+      this.label4.Size = new System.Drawing.Size(83, 13);
+      this.label4.TabIndex = 30;
+      this.label4.Text = "Annual Soft Bills";
+      // 
+      // showAllPurchasesCb
+      // 
+      this.showAllPurchasesCb.AutoSize = true;
+      this.showAllPurchasesCb.Location = new System.Drawing.Point(661, 61);
+      this.showAllPurchasesCb.Name = "showAllPurchasesCb";
+      this.showAllPurchasesCb.Size = new System.Drawing.Size(67, 17);
+      this.showAllPurchasesCb.TabIndex = 32;
+      this.showAllPurchasesCb.Text = "Show All";
+      this.showAllPurchasesCb.UseVisualStyleBackColor = true;
+      this.showAllPurchasesCb.CheckedChanged += new System.EventHandler(this.showAllPurchasesCb_CheckedChanged);
+      // 
       // ManageMonthsForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(1163, 620);
+      this.Controls.Add(this.showAllPurchasesCb);
+      this.Controls.Add(this.annualSbLv);
+      this.Controls.Add(this.label4);
       this.Controls.Add(this.todayDtp);
       this.Controls.Add(this.label3);
       this.Controls.Add(this.accountsLv);
@@ -263,5 +329,12 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.DateTimePicker todayDtp;
+        private System.Windows.Forms.ListView annualSbLv;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
+        private System.Windows.Forms.ColumnHeader columnHeader2;
+        private System.Windows.Forms.ColumnHeader columnHeader3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.CheckBox showAllPurchasesCb;
+        private System.Windows.Forms.ColumnHeader PurchaseDate;
     }
 }

@@ -15,6 +15,7 @@ namespace BudgetToolGui
   {
     private YearTop _year;
     private DateTime _currentDate;
+    private bool _showAllPurchases;
     private List<string> months = new List<string>
     {
       "Annual",
@@ -79,11 +80,33 @@ namespace BudgetToolGui
         monthlySbLv.Items.Add(lvi);
       }
 
+      annualSbLv.Items.Clear();
+      foreach (var softBill in _year.MonthlySoftBills[0].SoftBills)
+      {
+        BalanceEntry firstEntry = softBill.Value.BalanceHistory[0];
+        BalanceEntry lastEntry = softBill.Value.BalanceHistory.Last();
+        ListViewItem lvi = new ListViewItem(softBill.Key);
+        lvi.SubItems.Add(firstEntry.Amount.ToString());
+        lvi.SubItems.Add(lastEntry.Amount.ToString());
+        lvi.Tag = softBill.Value;
+        annualSbLv.Items.Add(lvi);
+      }
+
       purchasesLv.Items.Clear();
-      foreach (var purchase in _year.Purchases.Where(p => (p.DateOfPurchase.Month == _currentDate.Month)))
+      List<Purchase> displayPurchases;
+      if(_showAllPurchases)
+      {
+        displayPurchases = _year.Purchases;
+      }
+      else
+      {
+        displayPurchases = _year.Purchases.Where(p => (p.DateOfPurchase.Month == _currentDate.Month)).ToList();
+      }
+      foreach (var purchase in displayPurchases)
       {
         ListViewItem lvi = new ListViewItem(purchase.Vendor);
         lvi.SubItems.Add(purchase.Amount.ToString());
+        lvi.SubItems.Add(purchase.DateOfPurchase.ToShortDateString());
         lvi.Tag = purchase;
         purchasesLv.Items.Add(lvi);
       }
@@ -167,6 +190,11 @@ namespace BudgetToolGui
       _currentDate = todayDtp.Value;
       RefreshPage();
     }
+    private void showAllPurchasesCb_CheckedChanged(object sender, EventArgs e)
+    {
+      _showAllPurchases = showAllPurchasesCb.Checked;
+      RefreshPage();
+    }
 
     #endregion
 
@@ -174,5 +202,6 @@ namespace BudgetToolGui
     {
       this.Close();
     }
+
   }
 }
