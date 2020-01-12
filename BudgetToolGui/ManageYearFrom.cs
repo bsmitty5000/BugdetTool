@@ -276,9 +276,7 @@ namespace BudgetToolGui
     }
     private void annualHbAdd_Click(object sender, EventArgs e)
     {
-      HardBill hardBill = new HardBill();
-
-      var editHardBill = new EditHardBillForm(hardBill, _year);
+      var editHardBill = new EditHardBillForm(null, _year);
       editHardBill.NewHardBillAdded += NewAnnualHardBill_Added;
       editHardBill.Show();
     }

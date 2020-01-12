@@ -69,7 +69,14 @@ namespace BudgetToolGui
     }
     private void amountTb_TextChanged(object sender, EventArgs e)
     {
-      _hardBill.Amount = Decimal.Parse(amountTb.Text);
+      if(amountTb.Text.Equals(string.Empty))
+      {
+        _hardBill.Amount = 0;
+      }
+      else
+      {
+        _hardBill.Amount = Decimal.Parse(amountTb.Text);
+      }
     }
     private void accountCb_SelectedIndexChanged(object sender, EventArgs e)
     {
