@@ -16,12 +16,24 @@ namespace BudgetToolLib
 
   public class Income
   {
+    private DateTime _firstDeposit;
     public string Name { get; set; }
     public decimal PaydayAmount { get; set; }
     public IncomeFrequencyEnum PaydayFrequency { get; set; }
     public AccountBase DepositAccount { get; set; }
-    public DateTime FirstDeposit { get; set; }
-    public DateTime NextDeposit { get; private set; }
+    public DateTime FirstDeposit
+    {
+      get
+      {
+        return _firstDeposit;
+      }
+      set
+      {
+        _firstDeposit = value;
+        NextDeposit = value;
+      }
+    }
+    public DateTime NextDeposit { get; set; }
     public int NumPaydaysPaidThisYear { get; private set; }
     public decimal AnnualAmount
     {

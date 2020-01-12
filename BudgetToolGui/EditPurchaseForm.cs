@@ -151,7 +151,14 @@ namespace BudgetToolGui
 
     private void amountTb_TextChanged(object sender, EventArgs e)
     {
-      _purchase.Amount = Decimal.Parse(amountTb.Text);
+      if (amountTb.Text.Equals(string.Empty))
+      {
+        _purchase.Amount = 0;
+      }
+      else
+      {
+        _purchase.Amount = Decimal.Parse(amountTb.Text);
+      }
     }
 
     private void accountCb_SelectedIndexChanged(object sender, EventArgs e)

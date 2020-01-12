@@ -57,7 +57,11 @@
       this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
       this.label4 = new System.Windows.Forms.Label();
       this.showAllPurchasesCb = new System.Windows.Forms.CheckBox();
+      this.accountCms = new System.Windows.Forms.ContextMenuStrip(this.components);
+      this.manualCredit = new System.Windows.Forms.ToolStripMenuItem();
+      this.manualDebit = new System.Windows.Forms.ToolStripMenuItem();
       this.purchasesCms.SuspendLayout();
+      this.accountCms.SuspendLayout();
       this.SuspendLayout();
       // 
       // monthlySbLv
@@ -281,6 +285,29 @@
       this.showAllPurchasesCb.UseVisualStyleBackColor = true;
       this.showAllPurchasesCb.CheckedChanged += new System.EventHandler(this.showAllPurchasesCb_CheckedChanged);
       // 
+      // accountCms
+      // 
+      this.accountCms.ImageScalingSize = new System.Drawing.Size(24, 24);
+      this.accountCms.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.manualCredit,
+            this.manualDebit});
+      this.accountCms.Name = "annualHbCms";
+      this.accountCms.Size = new System.Drawing.Size(181, 70);
+      // 
+      // manualCredit
+      // 
+      this.manualCredit.Name = "manualCredit";
+      this.manualCredit.Size = new System.Drawing.Size(180, 22);
+      this.manualCredit.Text = "Manual Credit";
+      this.manualCredit.Click += new System.EventHandler(this.manualCredit_Click);
+      // 
+      // manualDebit
+      // 
+      this.manualDebit.Name = "manualDebit";
+      this.manualDebit.Size = new System.Drawing.Size(180, 22);
+      this.manualDebit.Text = "Manual Debit";
+      this.manualDebit.Click += new System.EventHandler(this.manualDebit_Click);
+      // 
       // ManageMonthsForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -301,6 +328,7 @@
       this.Name = "ManageMonthsForm";
       this.Text = "ManageMonthsForm";
       this.purchasesCms.ResumeLayout(false);
+      this.accountCms.ResumeLayout(false);
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -336,5 +364,8 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckBox showAllPurchasesCb;
         private System.Windows.Forms.ColumnHeader PurchaseDate;
+        private System.Windows.Forms.ContextMenuStrip accountCms;
+        private System.Windows.Forms.ToolStripMenuItem manualCredit;
+        private System.Windows.Forms.ToolStripMenuItem manualDebit;
     }
 }

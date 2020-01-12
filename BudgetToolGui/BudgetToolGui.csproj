@@ -76,6 +76,12 @@
     <Compile Include="EditSoftBillForm.Designer.cs">
       <DependentUpon>EditSoftBillForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="EditTransactionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditTransactionForm.Designer.cs">
+      <DependentUpon>EditTransactionForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ManageMonthsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -104,6 +110,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="EditSoftBillForm.resx">
       <DependentUpon>EditSoftBillForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditTransactionForm.resx">
+      <DependentUpon>EditTransactionForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ManageMonthsForm.resx">
       <DependentUpon>ManageMonthsForm.cs</DependentUpon>

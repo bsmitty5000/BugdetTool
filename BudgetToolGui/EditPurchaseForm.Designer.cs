@@ -44,10 +44,9 @@
       // 
       // cancelBtn
       // 
-      this.cancelBtn.Location = new System.Drawing.Point(195, 323);
-      this.cancelBtn.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+      this.cancelBtn.Location = new System.Drawing.Point(133, 155);
       this.cancelBtn.Name = "cancelBtn";
-      this.cancelBtn.Size = new System.Drawing.Size(112, 35);
+      this.cancelBtn.Size = new System.Drawing.Size(75, 23);
       this.cancelBtn.TabIndex = 27;
       this.cancelBtn.Text = "Cancel";
       this.cancelBtn.UseVisualStyleBackColor = true;
@@ -55,10 +54,9 @@
       // 
       // saveBtn
       // 
-      this.saveBtn.Location = new System.Drawing.Point(22, 323);
-      this.saveBtn.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+      this.saveBtn.Location = new System.Drawing.Point(18, 155);
       this.saveBtn.Name = "saveBtn";
-      this.saveBtn.Size = new System.Drawing.Size(112, 35);
+      this.saveBtn.Size = new System.Drawing.Size(75, 23);
       this.saveBtn.TabIndex = 26;
       this.saveBtn.Text = "Save";
       this.saveBtn.UseVisualStyleBackColor = true;
@@ -67,77 +65,69 @@
       // accountCb
       // 
       this.accountCb.FormattingEnabled = true;
-      this.accountCb.Location = new System.Drawing.Point(180, 102);
-      this.accountCb.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+      this.accountCb.Location = new System.Drawing.Point(120, 66);
       this.accountCb.Name = "accountCb";
-      this.accountCb.Size = new System.Drawing.Size(180, 28);
+      this.accountCb.Size = new System.Drawing.Size(121, 21);
       this.accountCb.TabIndex = 25;
       this.accountCb.SelectedIndexChanged += new System.EventHandler(this.accountCb_SelectedIndexChanged);
       // 
       // amountTb
       // 
-      this.amountTb.Location = new System.Drawing.Point(180, 54);
-      this.amountTb.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+      this.amountTb.Location = new System.Drawing.Point(120, 35);
       this.amountTb.Name = "amountTb";
-      this.amountTb.Size = new System.Drawing.Size(148, 26);
+      this.amountTb.Size = new System.Drawing.Size(100, 20);
       this.amountTb.TabIndex = 24;
       this.amountTb.TextChanged += new System.EventHandler(this.amountTb_TextChanged);
       // 
       // vendorTb
       // 
-      this.vendorTb.Location = new System.Drawing.Point(180, 14);
-      this.vendorTb.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+      this.vendorTb.Location = new System.Drawing.Point(120, 9);
       this.vendorTb.Name = "vendorTb";
-      this.vendorTb.Size = new System.Drawing.Size(148, 26);
+      this.vendorTb.Size = new System.Drawing.Size(100, 20);
       this.vendorTb.TabIndex = 23;
       this.vendorTb.TextChanged += new System.EventHandler(this.vendorTb_TextChanged);
       // 
       // label4
       // 
       this.label4.AutoSize = true;
-      this.label4.Location = new System.Drawing.Point(18, 114);
-      this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+      this.label4.Location = new System.Drawing.Point(12, 74);
       this.label4.Name = "label4";
-      this.label4.Size = new System.Drawing.Size(134, 20);
+      this.label4.Size = new System.Drawing.Size(91, 13);
       this.label4.TabIndex = 22;
       this.label4.Text = "Payment Account";
       // 
       // label2
       // 
       this.label2.AutoSize = true;
-      this.label2.Location = new System.Drawing.Point(18, 65);
-      this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+      this.label2.Location = new System.Drawing.Point(12, 42);
       this.label2.Name = "label2";
-      this.label2.Size = new System.Drawing.Size(65, 20);
+      this.label2.Size = new System.Drawing.Size(43, 13);
       this.label2.TabIndex = 21;
       this.label2.Text = "Amount";
       // 
       // label1
       // 
       this.label1.AutoSize = true;
-      this.label1.Location = new System.Drawing.Point(18, 25);
-      this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+      this.label1.Location = new System.Drawing.Point(12, 16);
       this.label1.Name = "label1";
-      this.label1.Size = new System.Drawing.Size(61, 20);
+      this.label1.Size = new System.Drawing.Size(41, 13);
       this.label1.TabIndex = 20;
       this.label1.Text = "Vendor";
       // 
       // dateDtp
       // 
-      this.dateDtp.Location = new System.Drawing.Point(180, 157);
-      this.dateDtp.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+      this.dateDtp.Location = new System.Drawing.Point(120, 102);
       this.dateDtp.Name = "dateDtp";
-      this.dateDtp.Size = new System.Drawing.Size(298, 26);
+      this.dateDtp.Size = new System.Drawing.Size(200, 20);
       this.dateDtp.TabIndex = 29;
       this.dateDtp.ValueChanged += new System.EventHandler(this.dateDtp_ValueChanged);
       // 
       // label5
       // 
       this.label5.AutoSize = true;
-      this.label5.Location = new System.Drawing.Point(18, 168);
-      this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+      this.label5.Location = new System.Drawing.Point(12, 109);
       this.label5.Name = "label5";
-      this.label5.Size = new System.Drawing.Size(131, 20);
+      this.label5.Size = new System.Drawing.Size(89, 13);
       this.label5.TabIndex = 28;
       this.label5.Text = "Transaction Date";
       // 
@@ -147,31 +137,29 @@
       this.softBillSplitTpl.ColumnCount = 3;
       this.softBillSplitTpl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 51.33333F));
       this.softBillSplitTpl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 48.66667F));
-      this.softBillSplitTpl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 247F));
-      this.softBillSplitTpl.Location = new System.Drawing.Point(498, 54);
-      this.softBillSplitTpl.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+      this.softBillSplitTpl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 165F));
+      this.softBillSplitTpl.Location = new System.Drawing.Point(332, 35);
       this.softBillSplitTpl.Name = "softBillSplitTpl";
       this.softBillSplitTpl.RowCount = 2;
       this.softBillSplitTpl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
       this.softBillSplitTpl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-      this.softBillSplitTpl.Size = new System.Drawing.Size(666, 76);
+      this.softBillSplitTpl.Size = new System.Drawing.Size(444, 49);
       this.softBillSplitTpl.TabIndex = 30;
       // 
       // label3
       // 
       this.label3.AutoSize = true;
-      this.label3.Location = new System.Drawing.Point(494, 25);
-      this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+      this.label3.Location = new System.Drawing.Point(329, 16);
       this.label3.Name = "label3";
-      this.label3.Size = new System.Drawing.Size(98, 20);
+      this.label3.Size = new System.Drawing.Size(65, 13);
       this.label3.TabIndex = 31;
       this.label3.Text = "Soft Bill Split";
       // 
       // EditPurchaseForm
       // 
-      this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+      this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(1200, 692);
+      this.ClientSize = new System.Drawing.Size(800, 324);
       this.Controls.Add(this.label3);
       this.Controls.Add(this.softBillSplitTpl);
       this.Controls.Add(this.dateDtp);
@@ -184,7 +172,6 @@
       this.Controls.Add(this.label4);
       this.Controls.Add(this.label2);
       this.Controls.Add(this.label1);
-      this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
       this.Name = "EditPurchaseForm";
       this.Text = "EditPurchaseForm";
       this.ResumeLayout(false);

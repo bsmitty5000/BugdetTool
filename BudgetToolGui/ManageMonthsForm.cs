@@ -16,6 +16,7 @@ namespace BudgetToolGui
     private YearTop _year;
     private DateTime _currentDate;
     private bool _showAllPurchases;
+    private AccountBase _accountSelected;
     private List<string> months = new List<string>
     {
       "Annual",
@@ -46,6 +47,7 @@ namespace BudgetToolGui
       }
 
       purchasesLv.MouseUp += new MouseEventHandler(purchasesLv_MouseUp);
+      accountsLv.MouseUp += new MouseEventHandler(accountsLv_MouseUp);
 
       _currentDate = DateTime.Today;
       todayDtp.Value = _currentDate;
@@ -184,6 +186,73 @@ namespace BudgetToolGui
     }
     #endregion
 
+    #region Account Stuff
+    private void accountsLv_MouseUp(object sender, MouseEventArgs e)
+    {
+      int index = -1;
+
+      if (e.Button == MouseButtons.Right)
+      {
+        if (accountsLv.Items.Count > 0)
+        {
+          ListViewItem selectedItem = accountsLv.GetItemAt(e.X, e.Y);
+          if (selectedItem != null)
+          {
+            index = selectedItem.Index;
+          }
+
+          if (index > -1)
+          {
+            manualCredit.Enabled = true;
+            manualDebit.Enabled = true;
+          }
+          else
+          {
+            manualCredit.Enabled = false;
+            manualDebit.Enabled = false;
+          }
+        }
+
+        accountCms.Show(this, new Point(e.X + ((Control)sender).Left + 20, e.Y + ((Control)sender).Top + 20));
+        //accountCms.Show(this, new Point(e.X, e.Y));
+      }
+    }
+    private void manualCredit_Click(object sender, EventArgs e)
+    {
+      _accountSelected = accountsLv.SelectedItems[0].Tag as AccountBase;
+
+      var createNewTransaction = new EditTransactionForm(_accountSelected, _currentDate);
+      createNewTransaction.NewTransactionAdded += NewCreditTransaction;
+      createNewTransaction.Show();
+      RefreshPage();
+    }
+
+    private void NewCreditTransaction(object sender, NewTransactionAddedEventArgs e)
+    {
+      e.NewTransaction.Description = "Manual Credit";
+      _accountSelected.NewCreditTransaction(e.NewTransaction);
+      RefreshPage();
+    }
+
+    private void manualDebit_Click(object sender, EventArgs e)
+    {
+      _accountSelected = accountsLv.SelectedItems[0].Tag as AccountBase;
+
+      var createNewTransaction = new EditTransactionForm(_accountSelected, _currentDate);
+      createNewTransaction.NewTransactionAdded += NewDebitTransaction;
+      createNewTransaction.Show();
+      RefreshPage();
+    }
+
+    private void NewDebitTransaction(object sender, NewTransactionAddedEventArgs e)
+    {
+      e.NewTransaction.Description = "Manual Debit";
+      _accountSelected.NewDebitTransaction(e.NewTransaction);
+      RefreshPage();
+    }
+
+    #endregion
+
     #region Assorted
     private void todayDtp_ValueChanged(object sender, EventArgs e)
     {
@@ -202,6 +271,5 @@ namespace BudgetToolGui
     {
       this.Close();
     }
-
   }
 }
