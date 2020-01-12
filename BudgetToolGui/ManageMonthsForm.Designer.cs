@@ -60,6 +60,7 @@
       this.accountCms = new System.Windows.Forms.ContextMenuStrip(this.components);
       this.manualCredit = new System.Windows.Forms.ToolStripMenuItem();
       this.manualDebit = new System.Windows.Forms.ToolStripMenuItem();
+      this.addAnnual = new System.Windows.Forms.ToolStripMenuItem();
       this.purchasesCms.SuspendLayout();
       this.accountCms.SuspendLayout();
       this.SuspendLayout();
@@ -145,29 +146,30 @@
       this.purchasesCms.ImageScalingSize = new System.Drawing.Size(24, 24);
       this.purchasesCms.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.purchasesAdd,
+            this.addAnnual,
             this.purchasesDelete,
             this.purchasesEdit});
       this.purchasesCms.Name = "annualHbCms";
-      this.purchasesCms.Size = new System.Drawing.Size(108, 70);
+      this.purchasesCms.Size = new System.Drawing.Size(181, 114);
       // 
       // purchasesAdd
       // 
       this.purchasesAdd.Name = "purchasesAdd";
-      this.purchasesAdd.Size = new System.Drawing.Size(107, 22);
-      this.purchasesAdd.Text = "Add";
+      this.purchasesAdd.Size = new System.Drawing.Size(180, 22);
+      this.purchasesAdd.Text = "Add Monthly";
       this.purchasesAdd.Click += new System.EventHandler(this.purchasesAdd_Click);
       // 
       // purchasesDelete
       // 
       this.purchasesDelete.Name = "purchasesDelete";
-      this.purchasesDelete.Size = new System.Drawing.Size(107, 22);
+      this.purchasesDelete.Size = new System.Drawing.Size(180, 22);
       this.purchasesDelete.Text = "Delete";
       this.purchasesDelete.Click += new System.EventHandler(this.purchasesDelete_Click);
       // 
       // purchasesEdit
       // 
       this.purchasesEdit.Name = "purchasesEdit";
-      this.purchasesEdit.Size = new System.Drawing.Size(107, 22);
+      this.purchasesEdit.Size = new System.Drawing.Size(180, 22);
       this.purchasesEdit.Text = "Edit";
       this.purchasesEdit.Click += new System.EventHandler(this.purchasesEdit_Click);
       // 
@@ -292,21 +294,28 @@
             this.manualCredit,
             this.manualDebit});
       this.accountCms.Name = "annualHbCms";
-      this.accountCms.Size = new System.Drawing.Size(181, 70);
+      this.accountCms.Size = new System.Drawing.Size(150, 48);
       // 
       // manualCredit
       // 
       this.manualCredit.Name = "manualCredit";
-      this.manualCredit.Size = new System.Drawing.Size(180, 22);
+      this.manualCredit.Size = new System.Drawing.Size(149, 22);
       this.manualCredit.Text = "Manual Credit";
       this.manualCredit.Click += new System.EventHandler(this.manualCredit_Click);
       // 
       // manualDebit
       // 
       this.manualDebit.Name = "manualDebit";
-      this.manualDebit.Size = new System.Drawing.Size(180, 22);
+      this.manualDebit.Size = new System.Drawing.Size(149, 22);
       this.manualDebit.Text = "Manual Debit";
       this.manualDebit.Click += new System.EventHandler(this.manualDebit_Click);
+      // 
+      // addAnnual
+      // 
+      this.addAnnual.Name = "addAnnual";
+      this.addAnnual.Size = new System.Drawing.Size(180, 22);
+      this.addAnnual.Text = "Add Annual";
+      this.addAnnual.Click += new System.EventHandler(this.addAnnual_Click);
       // 
       // ManageMonthsForm
       // 
@@ -367,5 +376,6 @@
         private System.Windows.Forms.ContextMenuStrip accountCms;
         private System.Windows.Forms.ToolStripMenuItem manualCredit;
         private System.Windows.Forms.ToolStripMenuItem manualDebit;
+        private System.Windows.Forms.ToolStripMenuItem addAnnual;
     }
 }

@@ -38,7 +38,14 @@ namespace BudgetToolGui
 
     private void amountTb_TextChanged(object sender, EventArgs e)
     {
-      _startingAmount = Decimal.Parse(amountTb.Text);
+      if (amountTb.Text.Equals(string.Empty))
+      {
+        _startingAmount = 0;
+      }
+      else
+      {
+        _startingAmount = Decimal.Parse(amountTb.Text);
+      }
     }
 
     private void saveBtn_Click(object sender, EventArgs e)

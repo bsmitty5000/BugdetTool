@@ -160,6 +160,12 @@ namespace BudgetToolGui
       editPurchaseForm.NewPurchaseAdded += NewPurchase_Added;
       editPurchaseForm.Show();
     }
+    private void addAnnual_Click(object sender, EventArgs e)
+    {
+      var editPurchaseForm = new EditPurchaseForm(null, _year, 0);
+      editPurchaseForm.NewPurchaseAdded += NewPurchase_Added;
+      editPurchaseForm.Show();
+    }
     private void purchasesDelete_Click(object sender, EventArgs e)
     {
       Purchase purchase = purchasesLv.SelectedItems[0].Tag as Purchase;
@@ -271,5 +277,6 @@ namespace BudgetToolGui
     {
       this.Close();
     }
-  }
+
+    }
 }
