@@ -10,8 +10,8 @@ namespace BudgetToolLib
   public enum IncomeFrequencyEnum
   {
     BiWeekly = 2,
-    BiAnnualy = 13,
-    Annualy = 25
+    BiAnnualy = 26,
+    Annualy = 52
   }
 
   public class Income
