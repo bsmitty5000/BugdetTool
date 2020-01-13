@@ -112,6 +112,31 @@ namespace BudgetToolGui
         lvi.Tag = purchase;
         purchasesLv.Items.Add(lvi);
       }
+
+      decimal currentAnnualSbTotal = 0;
+      foreach (var sbGroup in _year.MonthlySoftBills[0].SoftBills)
+      {
+        currentAnnualSbTotal += sbGroup.Value.BalanceHistory.Last().Amount;
+      }
+      annualSbRemainingTb.Text = currentAnnualSbTotal.ToString();
+
+      decimal currentMonthSbTotal = 0;
+      foreach (var sbGroup in _year.MonthlySoftBills[_currentDate.Month].SoftBills)
+      {
+        currentMonthSbTotal += sbGroup.Value.BalanceHistory.Last().Amount;
+      }
+      monthlySbRemainingTb.Text = currentMonthSbTotal.ToString();
+
+      /* not sure what to do here yet */
+      decimal totalSbSnapshot = 0;
+      for(int i = 1; i < _currentDate.Month; i++)
+      {
+        foreach (var sbGroup in _year.MonthlySoftBills[i].SoftBills)
+        {
+          totalSbSnapshot += sbGroup.Value.BalanceHistory.Last().Amount;
+        }
+      }
+      totalSbSnapshotTb.Text = totalSbSnapshot.ToString();
     }
     #endregion
 

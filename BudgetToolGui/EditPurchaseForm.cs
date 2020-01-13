@@ -58,14 +58,9 @@ namespace BudgetToolGui
       foreach (var account in _year.Accounts)
       {
         accountCb.Items.Add(account.Value.Name);
-      }
-
-      accountCb.SelectedItem = accountCb.Items[0];
-      foreach (var item in accountCb.Items)
-      {
-        if(item.ToString().ToLower().Contains("credit"))
+        if(account.Value.GetType().Name.Contains("CreditCard"))
         {
-          accountCb.SelectedItem = item;
+          accountCb.SelectedItem = account.Value.Name;
         }
       }
 
@@ -173,6 +168,16 @@ namespace BudgetToolGui
 
     private void saveBtn_Click(object sender, EventArgs e)
     {
+      decimal currentTotal = 0;
+      foreach (var sub in _purchase.SoftBillSplit.Values)
+      {
+        currentTotal += sub;
+      }
+      if(currentTotal != _purchase.Amount)
+      {
+        MessageBox.Show("The split doesn't match the total!");
+        return;
+      }
       NewPurchaseAddedEventArgs args = new NewPurchaseAddedEventArgs();
       foreach (var item in _purchase.SoftBillSplit.Where(kvp => kvp.Value == 0).ToList())
       {

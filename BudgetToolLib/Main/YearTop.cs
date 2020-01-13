@@ -137,7 +137,15 @@ namespace BudgetToolLib
         {
           decimal difference = MonthlySoftBills[0].SoftBills[name].BalanceHistory[0].Amount - startingAmount;
           Transaction transaction = new Transaction() { Description = name, Date = MonthlySoftBills[0].SoftBills[name].BalanceHistory[0].Date, Amount = difference };
-          MonthlySoftBills[0].SoftBills[name].NewDebitTransaction(transaction);
+          if(transaction.Amount < 0)
+          {
+            transaction.Amount = -1 * transaction.Amount;
+            MonthlySoftBills[0].SoftBills[name].NewCreditTransaction(transaction);
+          }
+          else
+          {
+            MonthlySoftBills[0].SoftBills[name].NewDebitTransaction(transaction);
+          }
         }
         else
         {
@@ -158,7 +166,15 @@ namespace BudgetToolLib
           {
             decimal difference = MonthlySoftBills[i].SoftBills[name].BalanceHistory[0].Amount - startingAmount;
             Transaction transaction = new Transaction() { Description = name, Date = MonthlySoftBills[0].SoftBills[name].BalanceHistory[0].Date, Amount = difference };
-            MonthlySoftBills[i].SoftBills[name].NewDebitTransaction(transaction);
+            if (transaction.Amount < 0)
+            {
+              transaction.Amount = -1 * transaction.Amount;
+              MonthlySoftBills[i].SoftBills[name].NewCreditTransaction(transaction);
+            }
+            else
+            {
+              MonthlySoftBills[i].SoftBills[name].NewDebitTransaction(transaction);
+            }
           }
           else
           {

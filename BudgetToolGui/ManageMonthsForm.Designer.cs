@@ -61,6 +61,12 @@
       this.manualCredit = new System.Windows.Forms.ToolStripMenuItem();
       this.manualDebit = new System.Windows.Forms.ToolStripMenuItem();
       this.addAnnual = new System.Windows.Forms.ToolStripMenuItem();
+      this.label5 = new System.Windows.Forms.Label();
+      this.monthlySbRemainingTb = new System.Windows.Forms.TextBox();
+      this.annualSbRemainingTb = new System.Windows.Forms.TextBox();
+      this.label7 = new System.Windows.Forms.Label();
+      this.totalSbSnapshotTb = new System.Windows.Forms.TextBox();
+      this.label8 = new System.Windows.Forms.Label();
       this.purchasesCms.SuspendLayout();
       this.accountCms.SuspendLayout();
       this.SuspendLayout();
@@ -150,26 +156,26 @@
             this.purchasesDelete,
             this.purchasesEdit});
       this.purchasesCms.Name = "annualHbCms";
-      this.purchasesCms.Size = new System.Drawing.Size(181, 114);
+      this.purchasesCms.Size = new System.Drawing.Size(145, 92);
       // 
       // purchasesAdd
       // 
       this.purchasesAdd.Name = "purchasesAdd";
-      this.purchasesAdd.Size = new System.Drawing.Size(180, 22);
+      this.purchasesAdd.Size = new System.Drawing.Size(144, 22);
       this.purchasesAdd.Text = "Add Monthly";
       this.purchasesAdd.Click += new System.EventHandler(this.purchasesAdd_Click);
       // 
       // purchasesDelete
       // 
       this.purchasesDelete.Name = "purchasesDelete";
-      this.purchasesDelete.Size = new System.Drawing.Size(180, 22);
+      this.purchasesDelete.Size = new System.Drawing.Size(144, 22);
       this.purchasesDelete.Text = "Delete";
       this.purchasesDelete.Click += new System.EventHandler(this.purchasesDelete_Click);
       // 
       // purchasesEdit
       // 
       this.purchasesEdit.Name = "purchasesEdit";
-      this.purchasesEdit.Size = new System.Drawing.Size(180, 22);
+      this.purchasesEdit.Size = new System.Drawing.Size(144, 22);
       this.purchasesEdit.Text = "Edit";
       this.purchasesEdit.Click += new System.EventHandler(this.purchasesEdit_Click);
       // 
@@ -313,15 +319,69 @@
       // addAnnual
       // 
       this.addAnnual.Name = "addAnnual";
-      this.addAnnual.Size = new System.Drawing.Size(180, 22);
+      this.addAnnual.Size = new System.Drawing.Size(144, 22);
       this.addAnnual.Text = "Add Annual";
       this.addAnnual.Click += new System.EventHandler(this.addAnnual_Click);
+      // 
+      // label5
+      // 
+      this.label5.AutoSize = true;
+      this.label5.Location = new System.Drawing.Point(90, 400);
+      this.label5.Name = "label5";
+      this.label5.Size = new System.Drawing.Size(98, 13);
+      this.label5.TabIndex = 33;
+      this.label5.Text = "Soft Bill Remaining:";
+      // 
+      // monthlySbRemainingTb
+      // 
+      this.monthlySbRemainingTb.Location = new System.Drawing.Point(194, 393);
+      this.monthlySbRemainingTb.Name = "monthlySbRemainingTb";
+      this.monthlySbRemainingTb.Size = new System.Drawing.Size(100, 20);
+      this.monthlySbRemainingTb.TabIndex = 34;
+      // 
+      // annualSbRemainingTb
+      // 
+      this.annualSbRemainingTb.Location = new System.Drawing.Point(479, 393);
+      this.annualSbRemainingTb.Name = "annualSbRemainingTb";
+      this.annualSbRemainingTb.Size = new System.Drawing.Size(100, 20);
+      this.annualSbRemainingTb.TabIndex = 36;
+      // 
+      // label7
+      // 
+      this.label7.AutoSize = true;
+      this.label7.Location = new System.Drawing.Point(375, 400);
+      this.label7.Name = "label7";
+      this.label7.Size = new System.Drawing.Size(98, 13);
+      this.label7.TabIndex = 35;
+      this.label7.Text = "Soft Bill Remaining:";
+      // 
+      // totalSbSnapshotTb
+      // 
+      this.totalSbSnapshotTb.Location = new System.Drawing.Point(479, 465);
+      this.totalSbSnapshotTb.Name = "totalSbSnapshotTb";
+      this.totalSbSnapshotTb.Size = new System.Drawing.Size(100, 20);
+      this.totalSbSnapshotTb.TabIndex = 38;
+      // 
+      // label8
+      // 
+      this.label8.AutoSize = true;
+      this.label8.Location = new System.Drawing.Point(375, 472);
+      this.label8.Name = "label8";
+      this.label8.Size = new System.Drawing.Size(93, 13);
+      this.label8.TabIndex = 37;
+      this.label8.Text = "Soft Bill Snapshot:";
       // 
       // ManageMonthsForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(1163, 620);
+      this.Controls.Add(this.totalSbSnapshotTb);
+      this.Controls.Add(this.label8);
+      this.Controls.Add(this.annualSbRemainingTb);
+      this.Controls.Add(this.label7);
+      this.Controls.Add(this.monthlySbRemainingTb);
+      this.Controls.Add(this.label5);
       this.Controls.Add(this.showAllPurchasesCb);
       this.Controls.Add(this.annualSbLv);
       this.Controls.Add(this.label4);
@@ -377,5 +437,11 @@
         private System.Windows.Forms.ToolStripMenuItem manualCredit;
         private System.Windows.Forms.ToolStripMenuItem manualDebit;
         private System.Windows.Forms.ToolStripMenuItem addAnnual;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox monthlySbRemainingTb;
+        private System.Windows.Forms.TextBox annualSbRemainingTb;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox totalSbSnapshotTb;
+        private System.Windows.Forms.Label label8;
     }
 }
