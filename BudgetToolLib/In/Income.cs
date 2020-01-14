@@ -33,7 +33,7 @@ namespace BudgetToolLib
         NextDeposit = value;
       }
     }
-    public DateTime NextDeposit { get; set; }
+    public DateTime NextDeposit { get; private set; }
     public int NumPaydaysPaidThisYear { get; private set; }
     public decimal AnnualAmount
     {
@@ -77,6 +77,15 @@ namespace BudgetToolLib
       FirstDeposit = firstDeposit;
       NextDeposit = FirstDeposit;
       NumPaydaysPaidThisYear = 0;
+    }
+
+    public Income(Income i)
+    {
+      Name = string.Copy(i.Name);
+      PaydayAmount = i.PaydayAmount;
+      PaydayFrequency = i.PaydayFrequency;
+      DepositAccount = AccountBaseFactory.CopyAccountBase(i.DepositAccount);
+      FirstDeposit = i.FirstDeposit;
     }
 
     public void MakeDeposits(DateTime date)

@@ -36,10 +36,35 @@ namespace BudgetToolLib
     }
   }
 
+  public static class AccountBaseFactory
+  {
+    public static AccountBase CopyAccountBase(AccountBase ab)
+    {
+      switch (ab.GetType().Name)
+      {
+        case "SoftBill":
+          return new SoftBill(ab as SoftBill);
+        case "CheckingAccount":
+          return new CheckingAccount(ab as CheckingAccount);
+        case "CreditCard":
+          return new CreditCard(ab as CreditCard);
+        default:
+          throw new ArgumentException("Unknown AccountBase type");
+      }
+    }
+  }
+
   public class BalanceEntry
   {
     public DateTime Date { get; set; }
     public decimal Amount { get; set; }
+
+    public BalanceEntry() { }
+    public BalanceEntry(BalanceEntry be)
+    {
+      Date = be.Date;
+      Amount = be.Amount;
+    }
   }
 
   public class Transaction
@@ -47,6 +72,14 @@ namespace BudgetToolLib
     public string Description { get; set; }
     public decimal Amount { get; set; }
     public DateTime Date { get; set; }
+
+    public Transaction() { }
+    public Transaction(Transaction t)
+    {
+      Description = string.Copy(t.Description);
+      Amount = t.Amount;
+      Date = t.Date;
+    }
   }
 
   public abstract class AccountBase
@@ -61,15 +94,22 @@ namespace BudgetToolLib
         return BalanceHistory.Last().Amount;
       }
     }
-
+    
     public AccountBase()
-    {
-    }
+    { }
 
     public AccountBase(AccountBase account)
     {
-      BalanceHistory = new List<BalanceEntry>(account.BalanceHistory);
-      Transactions = new List<Transaction>(account.Transactions);
+      BalanceHistory = new List<BalanceEntry>();
+      foreach (var be in account.BalanceHistory)
+      {
+        BalanceHistory.Add(new BalanceEntry(be));
+      }
+      Transactions = new List<Transaction>();
+      foreach (var t in account.Transactions)
+      {
+        Transactions.Add(new Transaction(t));
+      }
       Name = account.Name;
     }
 
@@ -138,5 +178,6 @@ namespace BudgetToolLib
         BalanceHistory[j].Amount += amount;
       }
     }
+
   }
 }

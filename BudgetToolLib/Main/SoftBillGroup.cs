@@ -15,6 +15,15 @@ namespace BudgetToolLib
       SoftBills = new Dictionary<string, SoftBill>();
     }
 
+    public SoftBillGroup(SoftBillGroup s)
+    {
+      SoftBills = new Dictionary<string, SoftBill>();
+      foreach (var sb in s.SoftBills)
+      {
+        SoftBills.Add(sb.Key, new SoftBill(sb.Value));
+      }
+    }
+
     public Purchase CreatePurchase()
     {
       Purchase purchase = new Purchase();

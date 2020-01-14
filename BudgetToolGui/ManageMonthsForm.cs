@@ -14,6 +14,7 @@ namespace BudgetToolGui
   public partial class ManageMonthsForm : Form
   {
     private YearTop _year;
+    private YearTop _yearcopy;
     private DateTime _currentDate;
     private bool _showAllPurchases;
     private AccountBase _accountSelected;
@@ -51,7 +52,7 @@ namespace BudgetToolGui
 
       _currentDate = DateTime.Today;
       todayDtp.Value = _currentDate;
-
+      _yearcopy = new YearTop(_year);
       _year.FastForward(new DateTime(DateTime.Today.Year, 12, 31));
 
       RefreshPage();

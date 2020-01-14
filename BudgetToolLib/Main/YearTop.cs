@@ -66,6 +66,39 @@ namespace BudgetToolLib
     public YearTop()
     {
     }
+
+    public YearTop(YearTop y)
+    {
+      Accounts = new Dictionary<string, AccountBase>();
+      foreach (var a in y.Accounts)
+      {
+        Accounts.Add(a.Key, AccountBaseFactory.CopyAccountBase(a.Value));
+      }
+
+      IncomeSources = new Dictionary<string, Income>();
+      foreach (var i in y.IncomeSources)
+      {
+        IncomeSources.Add(i.Key, new Income(i.Value));
+      }
+
+      MonthlySoftBills = new List<SoftBillGroup>();
+      foreach (var m in y.MonthlySoftBills)
+      {
+        MonthlySoftBills.Add(new SoftBillGroup(m));
+      }
+
+      HardBills = new Dictionary<string, HardBill>();
+      foreach (var hb in y.HardBills)
+      {
+        HardBills.Add(hb.Key, new HardBill(hb.Value));
+      }
+
+      Purchases = new List<Purchase>();
+      foreach (var p in y.Purchases)
+      {
+        Purchases.Add(new Purchase(p));
+      }
+    }
     
     public void InitializeYear()
     {

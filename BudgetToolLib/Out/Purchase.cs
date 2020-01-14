@@ -28,18 +28,17 @@ namespace BudgetToolLib
       SoftBillSplit = softBillSplit;
     }
 
-    public override string ToString()
+    public Purchase(Purchase p)
     {
-      var sb = new StringBuilder();
-      sb.Append(PaymentAccount.Name + ",");
-      sb.Append(DateOfPurchase + ",");
-      sb.Append(Amount + ",");
-      foreach (var bill in SoftBillSplit)
+      Vendor = string.Copy(p.Vendor);
+      PaymentAccount = AccountBaseFactory.CopyAccountBase(p.PaymentAccount);
+      DateOfPurchase = p.DateOfPurchase;
+      Amount = p.Amount;
+      SoftBillSplit = new Dictionary<string, decimal>();
+      foreach (var sv in p.SoftBillSplit)
       {
-        sb.Append(bill.Key + ":" + bill.Value + ",");
+        SoftBillSplit.Add(sv.Key, sv.Value);
       }
-
-      return sb.ToString();
     }
   }
 }

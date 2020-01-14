@@ -34,7 +34,7 @@ namespace BudgetToolLib
     }
     public HardBillFrequencyEnum Frequency { get; set; }
     public AccountBase PaymentAccount { get; set; }
-    public DateTime NextBillDue { get; set; }
+    public DateTime NextBillDue { get; private set; }
 
     public decimal AnnualAmount
     {
@@ -63,17 +63,15 @@ namespace BudgetToolLib
       FirstBillDue = firstBillDue;
       Frequency = frequency;
       PaymentAccount = paymentSource;
-      NextBillDue = firstBillDue;
     }
 
     public HardBill(HardBill hb)
     {
-      this.Name = hb.Name;
+      this.Name = string.Copy(hb.Name);
       this.Amount = hb.Amount;
       this.FirstBillDue = hb.FirstBillDue;
       this.Frequency = hb.Frequency;
-      this.PaymentAccount = hb.PaymentAccount;
-      this.NextBillDue = hb.NextBillDue;
+      this.PaymentAccount = AccountBaseFactory.CopyAccountBase(hb.PaymentAccount);
     }
 
     public void PayBill(DateTime date)
