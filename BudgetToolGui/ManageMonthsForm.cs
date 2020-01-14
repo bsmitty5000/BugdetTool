@@ -52,8 +52,8 @@ namespace BudgetToolGui
 
       _currentDate = DateTime.Today;
       todayDtp.Value = _currentDate;
-      _yearcopy = new YearTop(_year);
-      _year.FastForward(new DateTime(DateTime.Today.Year, 12, 31));
+
+      _year.FastForward(_currentDate);
 
       RefreshPage();
     }
@@ -61,8 +61,18 @@ namespace BudgetToolGui
     #region Private Helpers
     private void RefreshPage()
     {
+      YearTop localYt;
+      if(_yearcopy == null)
+      {
+        localYt = _year;
+      }
+      else
+      {
+        localYt = _yearcopy;
+      }
+
       accountsLv.Items.Clear();
-      foreach (var account in _year.Accounts)
+      foreach (var account in localYt.Accounts)
       {
         ListViewItem lvi = new ListViewItem(account.Key);
         lvi.SubItems.Add(account.Value.GetType().Name);
@@ -72,7 +82,7 @@ namespace BudgetToolGui
       }
 
       monthlySbLv.Items.Clear();
-      foreach (var softBill in _year.MonthlySoftBills[_currentDate.Month].SoftBills)
+      foreach (var softBill in localYt.MonthlySoftBills[_currentDate.Month].SoftBills)
       {
         BalanceEntry firstEntry = softBill.Value.BalanceHistory[0];
         BalanceEntry lastEntry = softBill.Value.BalanceHistory.Last();
@@ -84,7 +94,7 @@ namespace BudgetToolGui
       }
 
       annualSbLv.Items.Clear();
-      foreach (var softBill in _year.MonthlySoftBills[0].SoftBills)
+      foreach (var softBill in localYt.MonthlySoftBills[0].SoftBills)
       {
         BalanceEntry firstEntry = softBill.Value.BalanceHistory[0];
         BalanceEntry lastEntry = softBill.Value.BalanceHistory.Last();
@@ -99,11 +109,11 @@ namespace BudgetToolGui
       List<Purchase> displayPurchases;
       if(_showAllPurchases)
       {
-        displayPurchases = _year.Purchases;
+        displayPurchases = localYt.Purchases;
       }
       else
       {
-        displayPurchases = _year.Purchases.Where(p => (p.DateOfPurchase.Month == _currentDate.Month)).ToList();
+        displayPurchases = localYt.Purchases.Where(p => (p.DateOfPurchase.Month == _currentDate.Month)).ToList();
       }
       foreach (var purchase in displayPurchases)
       {
@@ -115,14 +125,14 @@ namespace BudgetToolGui
       }
 
       decimal currentAnnualSbTotal = 0;
-      foreach (var sbGroup in _year.MonthlySoftBills[0].SoftBills)
+      foreach (var sbGroup in localYt.MonthlySoftBills[0].SoftBills)
       {
         currentAnnualSbTotal += sbGroup.Value.BalanceHistory.Last().Amount;
       }
       annualSbRemainingTb.Text = currentAnnualSbTotal.ToString();
 
       decimal currentMonthSbTotal = 0;
-      foreach (var sbGroup in _year.MonthlySoftBills[_currentDate.Month].SoftBills)
+      foreach (var sbGroup in localYt.MonthlySoftBills[_currentDate.Month].SoftBills)
       {
         currentMonthSbTotal += sbGroup.Value.BalanceHistory.Last().Amount;
       }
@@ -132,7 +142,7 @@ namespace BudgetToolGui
       decimal totalSbSnapshot = 0;
       for(int i = 1; i < _currentDate.Month; i++)
       {
-        foreach (var sbGroup in _year.MonthlySoftBills[i].SoftBills)
+        foreach (var sbGroup in localYt.MonthlySoftBills[i].SoftBills)
         {
           totalSbSnapshot += sbGroup.Value.BalanceHistory.Last().Amount;
         }
@@ -289,6 +299,16 @@ namespace BudgetToolGui
     private void todayDtp_ValueChanged(object sender, EventArgs e)
     {
       _currentDate = todayDtp.Value;
+
+      if(_currentDate > DateTime.Today)
+      {
+        _yearcopy = new YearTop(_year);
+        _yearcopy.FastForward(_currentDate);
+      }
+      else
+      {
+        _yearcopy = null;
+      }
       RefreshPage();
     }
     private void showAllPurchasesCb_CheckedChanged(object sender, EventArgs e)

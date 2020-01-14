@@ -30,7 +30,7 @@ namespace BudgetToolGui
         _hardBill = new HardBill(
           string.Empty,
           0,
-          DateTimePicker.MinimumDateTime,
+          DateTime.Today,
           HardBillFrequencyEnum.Monthly,
           null);
       }
