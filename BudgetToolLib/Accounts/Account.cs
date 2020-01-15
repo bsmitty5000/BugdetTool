@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -54,22 +55,10 @@ namespace BudgetToolLib
     }
   }
 
-  public class BalanceEntry
-  {
-    public DateTime Date { get; set; }
-    public decimal Amount { get; set; }
-
-    public BalanceEntry() { }
-    public BalanceEntry(BalanceEntry be)
-    {
-      Date = be.Date;
-      Amount = be.Amount;
-    }
-  }
-
   public class Transaction
   {
     public string Description { get; set; }
+    public Dictionary<string, decimal> SoftGroupSplit { get; set; }
     public decimal Amount { get; set; }
     public DateTime Date { get; set; }
 
@@ -79,19 +68,24 @@ namespace BudgetToolLib
       Description = string.Copy(t.Description);
       Amount = t.Amount;
       Date = t.Date;
+      SoftGroupSplit = new Dictionary<string, decimal>();
+      foreach (var kvp in t.SoftGroupSplit)
+      {
+        SoftGroupSplit.Add(kvp.Key, kvp.Value);
+      }
     }
   }
 
   public abstract class AccountBase
   {
-    public List<BalanceEntry> BalanceHistory { get; set; }
-    public List<Transaction> Transactions { get; set; }
+    public SortedList<DateTime, decimal> BalanceHistory { get; set; }
+    public SortedList<DateTime, Transaction> Transactions { get; set; }
     public string Name { get; set; }
     public decimal CurrentBalance
     {
       get
       {
-        return BalanceHistory.Last().Amount;
+        return BalanceHistory.Last().Value;
       }
     }
     
@@ -100,15 +94,15 @@ namespace BudgetToolLib
 
     public AccountBase(AccountBase account)
     {
-      BalanceHistory = new List<BalanceEntry>();
+      BalanceHistory = new SortedList<DateTime, decimal>();
       foreach (var be in account.BalanceHistory)
       {
-        BalanceHistory.Add(new BalanceEntry(be));
+        BalanceHistory.Add(be.Key, be.Value);
       }
-      Transactions = new List<Transaction>();
+      Transactions = new SortedList<DateTime, Transaction>();
       foreach (var t in account.Transactions)
       {
-        Transactions.Add(new Transaction(t));
+        Transactions.Add(t.Key, new Transaction(t.Value));
       }
       Name = account.Name;
     }
@@ -117,10 +111,8 @@ namespace BudgetToolLib
     {
       DateTime _startingDate = startingDate ?? DateTime.MinValue;
 
-      //Make sure starting entry is the very first
-      BalanceEntry startingEntry = new BalanceEntry() { Date = _startingDate, Amount = startingAmount };
-      BalanceHistory = new List<BalanceEntry>() { startingEntry };
-      Transactions = new List<Transaction>();
+      BalanceHistory = new SortedList<DateTime, decimal>() { { _startingDate, startingAmount } };
+      Transactions = new SortedList<DateTime, Transaction>();
       Name = name;
     }
 
@@ -129,44 +121,41 @@ namespace BudgetToolLib
 
     public decimal GetCurrentBalance(DateTime date)
     {
-      BalanceEntry latestEntry = BalanceHistory[0];
+      decimal latestEntry = BalanceHistory.First().Value;
       foreach (var entry in BalanceHistory)
       {
-        if (entry.Date > date)
+        if (entry.Key > date)
           break;
-        latestEntry = entry;
+        latestEntry = entry.Value;
       }
 
-      return latestEntry.Amount;
+      return latestEntry;
     }
 
     protected void ProcessNewTransaction(Transaction transaction)
     {
       //insert the transaction. Transactions is ordered by date
-      int insertIndex = Transactions.BinarySearchForMatch<Transaction>((x) => x.Date.CompareTo(transaction.Date));
-      if (insertIndex < 0) insertIndex = ~insertIndex;
-      Transactions.Insert(insertIndex, transaction);
+      Transactions.Add(transaction.Date, transaction);
 
-      if(transaction.Date < BalanceHistory[0].Date)
+      if(transaction.Date < BalanceHistory.First().Key)
       {
         // going to assume this means logging old transactions that are already reflected in the BalanceHistory
         return;
       }
 
-      insertIndex = BalanceHistory.BinarySearchForMatch<BalanceEntry>((x) => x.Date.CompareTo(transaction.Date));
-      if (insertIndex < 0)
+      int index;
+      if (BalanceHistory.ContainsKey(transaction.Date))
       {
-        insertIndex = ~insertIndex;
-        // Create a new BalanceEtnry that carries over the total from the previous day with the new amount added in
-        BalanceHistory.Insert(insertIndex, new BalanceEntry() { Date = transaction.Date, Amount = (BalanceHistory[insertIndex - 1].Amount + transaction.Amount) });
-
-        // after the new entry update all remaining entries
-        unravelAndAdjust(insertIndex + 1, transaction.Amount);
+        BalanceHistory[transaction.Date] += transaction.Amount;
+        index = BalanceHistory.IndexOfKey(transaction.Date);
       }
       else
       {
-        unravelAndAdjust(insertIndex, transaction.Amount);
+        BalanceHistory.Add(transaction.Date, transaction.Amount);
+        index = BalanceHistory.IndexOfKey(transaction.Date);
+        BalanceHistory.Values[index] += BalanceHistory.Values[index - 1];
       }
+      unravelAndAdjust(index + 1, transaction.Amount);
 
       return;
     }
@@ -175,7 +164,7 @@ namespace BudgetToolLib
     {
       for (int j = index; j < BalanceHistory.Count; j++)
       {
-        BalanceHistory[j].Amount += amount;
+        BalanceHistory.Values[j] += amount;
       }
     }
 
