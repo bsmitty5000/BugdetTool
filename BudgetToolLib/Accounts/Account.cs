@@ -58,7 +58,6 @@ namespace BudgetToolLib
   public class Transaction
   {
     public string Description { get; set; }
-    public Dictionary<string, decimal> SoftGroupSplit { get; set; }
     public decimal Amount { get; set; }
     public DateTime Date { get; set; }
 
@@ -68,6 +67,18 @@ namespace BudgetToolLib
       Description = string.Copy(t.Description);
       Amount = t.Amount;
       Date = t.Date;
+    }
+  }
+
+  public class SoftBillTransaction : Transaction
+  {
+    public Dictionary<string, decimal> SoftGroupSplit { get; set; }
+
+    public SoftBillTransaction() : base()
+    { }
+
+    public SoftBillTransaction(SoftBillTransaction sb) : base(sb)
+    {
       SoftGroupSplit = new Dictionary<string, decimal>();
       foreach (var kvp in t.SoftGroupSplit)
       {
@@ -78,6 +89,7 @@ namespace BudgetToolLib
 
   public abstract class AccountBase
   {
+    public DateTime StartingDate { get; set; }
     public SortedList<DateTime, decimal> BalanceHistory { get; set; }
     public SortedList<DateTime, Transaction> Transactions { get; set; }
     public string Name { get; set; }
@@ -94,6 +106,7 @@ namespace BudgetToolLib
 
     public AccountBase(AccountBase account)
     {
+      StartingDate = account.StartingDate;
       BalanceHistory = new SortedList<DateTime, decimal>();
       foreach (var be in account.BalanceHistory)
       {
@@ -109,9 +122,8 @@ namespace BudgetToolLib
 
     public AccountBase(string name, decimal startingAmount, DateTime? startingDate = null)
     {
-      DateTime _startingDate = startingDate ?? DateTime.MinValue;
-
-      BalanceHistory = new SortedList<DateTime, decimal>() { { _startingDate, startingAmount } };
+      StartingDate = startingDate ?? DateTime.MinValue;
+      BalanceHistory = new SortedList<DateTime, decimal>() { { StartingDate, startingAmount } };
       Transactions = new SortedList<DateTime, Transaction>();
       Name = name;
     }
@@ -137,7 +149,7 @@ namespace BudgetToolLib
       //insert the transaction. Transactions is ordered by date
       Transactions.Add(transaction.Date, transaction);
 
-      if(transaction.Date < BalanceHistory.First().Key)
+      if(transaction.Date < StartingDate)
       {
         // going to assume this means logging old transactions that are already reflected in the BalanceHistory
         return;
@@ -153,19 +165,17 @@ namespace BudgetToolLib
       {
         BalanceHistory.Add(transaction.Date, transaction.Amount);
         index = BalanceHistory.IndexOfKey(transaction.Date);
+        //carry over previous date's balance
         BalanceHistory.Values[index] += BalanceHistory.Values[index - 1];
       }
-      unravelAndAdjust(index + 1, transaction.Amount);
 
-      return;
-    }
-
-    private void unravelAndAdjust(int index, decimal amount)
-    {
+      //update remaining entries with new purchase
       for (int j = index; j < BalanceHistory.Count; j++)
       {
-        BalanceHistory.Values[j] += amount;
+        BalanceHistory.Values[j] += transaction.Amount;
       }
+
+      return;
     }
 
   }
