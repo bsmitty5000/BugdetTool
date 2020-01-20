@@ -4,29 +4,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BudgetToolLib
+namespace BudgetToolCore
 {
-  public class CheckingAccount : AccountBase
+  public class CreditCard : AccountBase
   {
-    public CheckingAccount()
+    public CreditCard()
     {
     }
 
-    public CheckingAccount(string name, decimal startingAmount, DateTime? startingDate) : base(name, startingAmount, startingDate)
+    public CreditCard(string name, decimal startingAmount, DateTime? startingDate) : base(name, startingAmount, startingDate)
     {
     }
 
-    public CheckingAccount(CheckingAccount ca) : base(ca)
+    public CreditCard(CreditCard cc) :  base(cc)
     {
     }
-
     public override void NewDebitTransaction(Transaction transaction)
     {
-      if(transaction.Amount < 0)
+      if (transaction.Amount < 0)
       {
         throw new ArgumentException("Transaction amount should be positive. Use Debit vs Credit");
       }
-      transaction.Amount = -1 * transaction.Amount;
       ProcessNewTransaction(transaction);
     }
 
@@ -36,6 +34,7 @@ namespace BudgetToolLib
       {
         throw new ArgumentException("Transaction amount should be positive. Use Debit vs Credit");
       }
+      transaction.Amount = -1 * transaction.Amount;
       ProcessNewTransaction(transaction);
     }
 

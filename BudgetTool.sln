@@ -1,17 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetTool", "BudgetTool\BudgetTool.csproj", "{E75B01CB-34EC-4FF9-954B-2AFD5A14BE21}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetToolLib", "BudgetToolLib\BudgetToolLib.csproj", "{FB5F5134-A4EA-4387-A00A-B3BAA1CBF938}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetToolUnitTest", "BudgetToolUnitTest\BudgetToolUnitTest.csproj", "{C240E4B8-1510-49A6-AE2E-50C8A6F12CB7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetToolGui", "BudgetToolGui\BudgetToolGui.csproj", "{CA77AB58-0A2F-45FA-A7B4-235D41691606}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetToolsUnitTestF", "BudgetToolsUnitTestF\BudgetToolsUnitTestF.csproj", "{C60A6B48-E393-4BA5-90B3-E05C48FF9F59}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetToolApp", "BudgetToolApp\BudgetToolApp.csproj", "{DEE3FDEC-FE11-49CA-8966-15BAB0E7E389}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetToolCore", "BudgetToolCore\BudgetToolCore.csproj", "{FFD7395A-A00B-44AE-AA95-49FE85E91263}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,18 +19,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E75B01CB-34EC-4FF9-954B-2AFD5A14BE21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E75B01CB-34EC-4FF9-954B-2AFD5A14BE21}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E75B01CB-34EC-4FF9-954B-2AFD5A14BE21}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E75B01CB-34EC-4FF9-954B-2AFD5A14BE21}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FB5F5134-A4EA-4387-A00A-B3BAA1CBF938}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FB5F5134-A4EA-4387-A00A-B3BAA1CBF938}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB5F5134-A4EA-4387-A00A-B3BAA1CBF938}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB5F5134-A4EA-4387-A00A-B3BAA1CBF938}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C240E4B8-1510-49A6-AE2E-50C8A6F12CB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C240E4B8-1510-49A6-AE2E-50C8A6F12CB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C240E4B8-1510-49A6-AE2E-50C8A6F12CB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C240E4B8-1510-49A6-AE2E-50C8A6F12CB7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CA77AB58-0A2F-45FA-A7B4-235D41691606}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CA77AB58-0A2F-45FA-A7B4-235D41691606}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA77AB58-0A2F-45FA-A7B4-235D41691606}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,6 +31,14 @@ Global
 		{C60A6B48-E393-4BA5-90B3-E05C48FF9F59}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C60A6B48-E393-4BA5-90B3-E05C48FF9F59}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C60A6B48-E393-4BA5-90B3-E05C48FF9F59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEE3FDEC-FE11-49CA-8966-15BAB0E7E389}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEE3FDEC-FE11-49CA-8966-15BAB0E7E389}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEE3FDEC-FE11-49CA-8966-15BAB0E7E389}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEE3FDEC-FE11-49CA-8966-15BAB0E7E389}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFD7395A-A00B-44AE-AA95-49FE85E91263}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFD7395A-A00B-44AE-AA95-49FE85E91263}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFD7395A-A00B-44AE-AA95-49FE85E91263}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFD7395A-A00B-44AE-AA95-49FE85E91263}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

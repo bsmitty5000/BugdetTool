@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Globalization;
 
-namespace BudgetToolLib
+namespace BudgetToolCore
 {
   public enum IncomeFrequencyEnum
   {
@@ -33,8 +33,8 @@ namespace BudgetToolLib
         NextDeposit = value;
       }
     }
-    public DateTime NextDeposit { get; set; }
-    public int NumPaydaysPaidThisYear { get; set; }
+    public DateTime NextDeposit { get; private set; }
+    public int NumPaydaysPaidThisYear { get; private set; }
     public decimal AnnualAmount
     {
       get
@@ -81,13 +81,11 @@ namespace BudgetToolLib
 
     public Income(Income i)
     {
-      Name = string.Copy(i.Name);
+      Name = i.Name;
       PaydayAmount = i.PaydayAmount;
       PaydayFrequency = i.PaydayFrequency;
       DepositAccount = AccountBaseFactory.CopyAccountBase(i.DepositAccount);
       FirstDeposit = i.FirstDeposit;
-      NextDeposit = i.NextDeposit;
-      NumPaydaysPaidThisYear = i.NumPaydaysPaidThisYear;
     }
 
     public void MakeDeposits(DateTime date)
@@ -101,7 +99,7 @@ namespace BudgetToolLib
 
       while(NextDeposit <= date)
       {
-        DepositAccount.NewCreditTransaction(new Transaction() { Description = Name, Date = NextDeposit, Amount = PaydayAmount, AccountUsed = DepositAccount });
+        DepositAccount.NewCreditTransaction(new Transaction() { Description = Name, Date = NextDeposit, Amount = PaydayAmount });
         NextDeposit = NextDeposit.AddDays((double)PaydayFrequency * 7);
         NumPaydaysPaidThisYear++;
 

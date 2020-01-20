@@ -37,5 +37,10 @@ namespace BudgetToolLib
       transaction.Amount = -1 * transaction.Amount;
       ProcessNewTransaction(transaction);
     }
+
+    public override void UpdateInitialBalance(decimal amount)
+    {
+      throw new NotImplementedException();
+    }
   }
 }

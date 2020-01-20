@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Globalization;
 
-namespace BudgetToolLib
+namespace BudgetToolCore
 {
   public enum HardBillFrequencyEnum
   {
@@ -34,7 +34,7 @@ namespace BudgetToolLib
     }
     public HardBillFrequencyEnum Frequency { get; set; }
     public AccountBase PaymentAccount { get; set; }
-    public DateTime NextBillDue { get; set; }
+    public DateTime NextBillDue { get; private set; }
 
     public decimal AnnualAmount
     {
@@ -67,19 +67,18 @@ namespace BudgetToolLib
 
     public HardBill(HardBill hb)
     {
-      this.Name = string.Copy(hb.Name);
+      this.Name = hb.Name;
       this.Amount = hb.Amount;
       this.FirstBillDue = hb.FirstBillDue;
       this.Frequency = hb.Frequency;
       this.PaymentAccount = AccountBaseFactory.CopyAccountBase(hb.PaymentAccount);
-      this.NextBillDue = hb.NextBillDue;
     }
 
     public void PayBill(DateTime date)
     {
       while(NextBillDue <= date)
       {
-        PaymentAccount.NewDebitTransaction(new Transaction() { Description = Name, Date = NextBillDue, Amount = this.Amount, AccountUsed = PaymentAccount });
+        PaymentAccount.NewDebitTransaction(new Transaction() { Description = Name, Date = NextBillDue, Amount = this.Amount });
         switch (Frequency)
         {
           case HardBillFrequencyEnum.Monthly:

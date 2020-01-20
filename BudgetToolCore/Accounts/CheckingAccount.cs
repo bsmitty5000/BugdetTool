@@ -4,25 +4,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BudgetToolLib
+namespace BudgetToolCore
 {
-  public class SoftBill : AccountBase
+  public class CheckingAccount : AccountBase
   {
-    public SoftBill()
+    public CheckingAccount()
     {
     }
 
-    public SoftBill(string name, decimal startingAmount, DateTime? startingDate = null) : base(name, startingAmount, startingDate)
+    public CheckingAccount(string name, decimal startingAmount, DateTime? startingDate) : base(name, startingAmount, startingDate)
     {
     }
 
-    public SoftBill(SoftBill sb) : base(sb)
+    public CheckingAccount(CheckingAccount ca) : base(ca)
     {
     }
 
     public override void NewDebitTransaction(Transaction transaction)
     {
-      if (transaction.Amount < 0)
+      if(transaction.Amount < 0)
       {
         throw new ArgumentException("Transaction amount should be positive. Use Debit vs Credit");
       }
@@ -37,6 +37,11 @@ namespace BudgetToolLib
         throw new ArgumentException("Transaction amount should be positive. Use Debit vs Credit");
       }
       ProcessNewTransaction(transaction);
+    }
+
+    public override void UpdateInitialBalance(decimal amount)
+    {
+      throw new NotImplementedException();
     }
   }
 }

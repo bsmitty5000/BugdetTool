@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.IO;
 
-namespace BudgetToolLib
+namespace BudgetToolCore
 {
   public class YearTop
   {
@@ -71,8 +71,6 @@ namespace BudgetToolLib
       foreach (var i in y.IncomeSources)
       {
         IncomeSources.Add(i.Key, new Income(i.Value));
-        //this is ugly. probably should find a better way
-        IncomeSources[i.Key].DepositAccount = Accounts[i.Value.DepositAccount.Name];
       }
 
       MonthlySoftBills = new List<SoftBillGroup>();
@@ -85,8 +83,6 @@ namespace BudgetToolLib
       foreach (var hb in y.HardBills)
       {
         HardBills.Add(hb.Key, new HardBill(hb.Value));
-        //this is ugly. probably should find a better way
-        HardBills[hb.Key].PaymentAccount = Accounts[hb.Value.PaymentAccount.Name];
       }
     }
     
@@ -104,11 +100,11 @@ namespace BudgetToolLib
       Accounts = new Dictionary<string, AccountBase>();
       HardBills = new Dictionary<string, HardBill>();
     }
-    static public YearTop LoadFromFile(string filepath)
+    static public YearTop LoadFromFile(Stream s)
     {
       YearTop jsonYear = null;
 
-      using (StreamReader sr = new StreamReader(filepath))
+      using (StreamReader sr = new StreamReader(s))
       {
         string line;
         line = sr.ReadToEnd();
@@ -184,27 +180,17 @@ namespace BudgetToolLib
         }
       }
     }
-    public void EditMonthlySoftBills(string softBillName, decimal newAmountBudgeted)
-    {
-      if(MonthlySoftBills[1].SoftBills.ContainsKey(softBillName))
-      {
-        foreach (var group in MonthlySoftBills)
-        {
-          group.EditSoftBill(softBillName, newAmountBudgeted);
-        }
-      }
-    }
 
-    public SoftBillTransaction GetSoftBillTransaction(string description, decimal amount, int month)
+    public SoftBillTransaction GetSoftBillTransaction(string description, decimal amount, DateTime date)
     {
-      SoftBillTransaction sbt = MonthlySoftBills[month].CreateSoftBillTransaction();
-      sbt.Date = new DateTime(DateTime.Today.Year, month, DateTime.Today.Day);
+      SoftBillTransaction sbt = MonthlySoftBills[date.Month].CreateSoftBillTransaction();
+      sbt.Date = date;
       sbt.Description = description;
       sbt.Amount = amount;
       return sbt;
     }
 
-    public void LogPurchase(SoftBillTransaction sbt, AccountBase account)
+    public void MakePurchase(SoftBillTransaction sbt, AccountBase account)
     {
       account.NewDebitTransaction(sbt); 
       

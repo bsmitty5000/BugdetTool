@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BudgetToolLib
+namespace BudgetToolCore
 {
   public class SoftBillGroup
   {
@@ -46,13 +46,6 @@ namespace BudgetToolLib
       foreach (var sb in s.SoftBills)
       {
         SoftBills.Add(sb.Key, new SoftBill(sb.Value));
-      }
-    }
-    public void EditSoftBill(string softBillName, decimal newAmountBudgeted)
-    {
-      if(SoftBills.ContainsKey(softBillName))
-      {
-        SoftBills[softBillName].AmountBudgeted = newAmountBudgeted;
       }
     }
 

@@ -17,6 +17,7 @@ namespace BudgetToolGui
     private YearTop _yearcopy;
     private DateTime _currentDate;
     private bool _showAllPurchases;
+    private Transaction _transactionToReplace;
     private AccountBase _accountSelected;
     private List<string> months = new List<string>
     {
@@ -48,7 +49,6 @@ namespace BudgetToolGui
       }
 
       purchasesLv.MouseUp += new MouseEventHandler(purchasesLv_MouseUp);
-      accountsLv.MouseUp += new MouseEventHandler(accountsLv_MouseUp);
 
       _currentDate = DateTime.Today;
       todayDtp.Value = _currentDate;
@@ -76,7 +76,7 @@ namespace BudgetToolGui
       {
         ListViewItem lvi = new ListViewItem(account.Key);
         lvi.SubItems.Add(account.Value.GetType().Name);
-        lvi.SubItems.Add(account.Value.GetCurrentBalance(_currentDate).ToString());
+        lvi.SubItems.Add(account.Value.GetBalance(_currentDate).ToString());
         lvi.Tag = account.Value;
         accountsLv.Items.Add(lvi);
       }
@@ -84,11 +84,9 @@ namespace BudgetToolGui
       monthlySbLv.Items.Clear();
       foreach (var softBill in localYt.MonthlySoftBills[_currentDate.Month].SoftBills)
       {
-        BalanceEntry firstEntry = softBill.Value.BalanceHistory[0];
-        BalanceEntry lastEntry = softBill.Value.BalanceHistory.Last();
         ListViewItem lvi = new ListViewItem(softBill.Key);
-        lvi.SubItems.Add(firstEntry.Amount.ToString());
-        lvi.SubItems.Add(lastEntry.Amount.ToString());
+        lvi.SubItems.Add(softBill.Value.AmountBudgeted.ToString());
+        lvi.SubItems.Add((softBill.Value.AmountBudgeted - softBill.Value.AmountUsed).ToString());
         lvi.Tag = softBill.Value;
         monthlySbLv.Items.Add(lvi);
       }
@@ -96,30 +94,31 @@ namespace BudgetToolGui
       annualSbLv.Items.Clear();
       foreach (var softBill in localYt.MonthlySoftBills[0].SoftBills)
       {
-        BalanceEntry firstEntry = softBill.Value.BalanceHistory[0];
-        BalanceEntry lastEntry = softBill.Value.BalanceHistory.Last();
         ListViewItem lvi = new ListViewItem(softBill.Key);
-        lvi.SubItems.Add(firstEntry.Amount.ToString());
-        lvi.SubItems.Add(lastEntry.Amount.ToString());
+        lvi.SubItems.Add(softBill.Value.AmountBudgeted.ToString());
+        lvi.SubItems.Add((softBill.Value.AmountBudgeted - softBill.Value.AmountUsed).ToString());
         lvi.Tag = softBill.Value;
         annualSbLv.Items.Add(lvi);
       }
 
       purchasesLv.Items.Clear();
-      List<Purchase> displayPurchases;
+      List<Transaction> displayPurchases = new List<Transaction>();
       if(_showAllPurchases)
       {
-        displayPurchases = localYt.Purchases;
+        foreach (var account in localYt.Accounts)
+        {
+          displayPurchases.AddRange(account.Value.Transactions.Where(p => (p.Date.Month == _currentDate.Month)).ToList());
+        }
       }
       else
       {
-        displayPurchases = localYt.Purchases.Where(p => (p.DateOfPurchase.Month == _currentDate.Month)).ToList();
+        displayPurchases = localYt.Accounts[_accountSelected.Name].Transactions.Where(p => (p.Date.Month == _currentDate.Month)).ToList();
       }
       foreach (var purchase in displayPurchases)
       {
-        ListViewItem lvi = new ListViewItem(purchase.Vendor);
+        ListViewItem lvi = new ListViewItem(purchase.Description);
         lvi.SubItems.Add(purchase.Amount.ToString());
-        lvi.SubItems.Add(purchase.DateOfPurchase.ToShortDateString());
+        lvi.SubItems.Add(purchase.Date.ToShortDateString());
         lvi.Tag = purchase;
         purchasesLv.Items.Add(lvi);
       }
@@ -127,14 +126,14 @@ namespace BudgetToolGui
       decimal currentAnnualSbTotal = 0;
       foreach (var sbGroup in localYt.MonthlySoftBills[0].SoftBills)
       {
-        currentAnnualSbTotal += sbGroup.Value.BalanceHistory.Last().Amount;
+        currentAnnualSbTotal += sbGroup.Value.AmountUsed;
       }
       annualSbRemainingTb.Text = currentAnnualSbTotal.ToString();
 
       decimal currentMonthSbTotal = 0;
       foreach (var sbGroup in localYt.MonthlySoftBills[_currentDate.Month].SoftBills)
       {
-        currentMonthSbTotal += sbGroup.Value.BalanceHistory.Last().Amount;
+        currentMonthSbTotal += sbGroup.Value.AmountUsed;
       }
       monthlySbRemainingTb.Text = currentMonthSbTotal.ToString();
 
@@ -144,7 +143,7 @@ namespace BudgetToolGui
       {
         foreach (var sbGroup in localYt.MonthlySoftBills[i].SoftBills)
         {
-          totalSbSnapshot += sbGroup.Value.BalanceHistory.Last().Amount;
+          totalSbSnapshot += sbGroup.Value.AmountUsed;
         }
       }
       totalSbSnapshotTb.Text = totalSbSnapshot.ToString();
@@ -190,107 +189,81 @@ namespace BudgetToolGui
         //accountCms.Show(this, new Point(e.X, e.Y));
       }
     }
-    private void purchasesAdd_Click(object sender, EventArgs e)
+    private void addMonthly_Click(object sender, EventArgs e)
     {
-      var editPurchaseForm = new EditPurchaseForm(null, _year, _currentDate.Month);
-      editPurchaseForm.NewPurchaseAdded += NewPurchase_Added;
-      editPurchaseForm.Show();
+      var editTransactionForm = new EditTransactionForm(_year.GetSoftBillTransaction(string.Empty, 0, _currentDate), _accountSelected, _year, _currentDate.Month);
+      editTransactionForm.NewTransactionAdded += NewPurchase_Added;
+      editTransactionForm.Show();
     }
     private void addAnnual_Click(object sender, EventArgs e)
     {
-      var editPurchaseForm = new EditPurchaseForm(null, _year, 0);
-      editPurchaseForm.NewPurchaseAdded += NewPurchase_Added;
-      editPurchaseForm.Show();
+      var editTransactionForm = new EditTransactionForm(_year.GetSoftBillTransaction(string.Empty, 0, _currentDate), _accountSelected, _year, 0);
+      editTransactionForm.NewTransactionAdded += NewPurchase_Added;
+      editTransactionForm.Show();
     }
     private void purchasesDelete_Click(object sender, EventArgs e)
     {
-      Purchase purchase = purchasesLv.SelectedItems[0].Tag as Purchase;
-      int month = purchase.DateOfPurchase.Month;
-      _year.RemovePurchase(purchase);
+      Transaction t = purchasesLv.SelectedItems[0].Tag as Transaction;
+      _accountSelected.RemoveTransaction(t);
       RefreshPage();
     }
     private void purchasesEdit_Click(object sender, EventArgs e)
     {
-      Purchase purchase = purchasesLv.SelectedItems[0].Tag as Purchase;
+      _transactionToReplace = purchasesLv.SelectedItems[0].Tag as Transaction;
 
-      var editPurchaseForm = new EditPurchaseForm(purchase, _year, 0);
-      //editSoftBill.NewSoftBillAdded += NewMonthlySoftBill_Added;
+      var editPurchaseForm = new deleteMe(_transactionToReplace, _accountSelected, _year, 0);
+      editPurchaseForm.NewTransactionAdded += EditSoftBill_Added;
       editPurchaseForm.ShowDialog();
       RefreshPage();
     }
-    private void NewPurchase_Added(object sender, NewPurchaseAddedEventArgs e)
+    private void NewPurchase_Added(object sender, NewTransactionEventArgs e)
     {
-      if (e.NewPurchase != null)
+      if (e.NewTransaction != null)
       {
-        _year.AddPurchase(e.NewPurchase);
+        if(e.NewTransaction.GetType().Name.Contains("SoftBill"))
+        {
+          _year.LogPurchase(e.NewTransaction as SoftBillTransaction, _accountSelected);
+        }
+        else
+        {
+          _accountSelected.
+        }
       }
       RefreshPage();
+    }
+
+    private void EditSoftBill_Added(object sender, NewTransactionEventArgs e)
+    {
+      _accountSelected.ReplaceTransaction(_transactionToReplace, e.NewTransaction);
     }
     #endregion
 
     #region Account Stuff
-    private void accountsLv_MouseUp(object sender, MouseEventArgs e)
+    private void accountsLv_SelectedIndexChanged(object sender, EventArgs e)
     {
-      int index = -1;
-
-      if (e.Button == MouseButtons.Right)
+      if(selectAllAccountCb.Checked == false)
       {
-        if (accountsLv.Items.Count > 0)
-        {
-          ListViewItem selectedItem = accountsLv.GetItemAt(e.X, e.Y);
-          if (selectedItem != null)
-          {
-            index = selectedItem.Index;
-          }
-
-          if (index > -1)
-          {
-            manualCredit.Enabled = true;
-            manualDebit.Enabled = true;
-          }
-          else
-          {
-            manualCredit.Enabled = false;
-            manualDebit.Enabled = false;
-          }
-        }
-
-        accountCms.Show(this, new Point(e.X + ((Control)sender).Left + 20, e.Y + ((Control)sender).Top + 20));
-        //accountCms.Show(this, new Point(e.X, e.Y));
+        _accountSelected = accountsLv.SelectedItems[0].Tag as AccountBase;
+        RefreshPage();
       }
     }
-    private void manualCredit_Click(object sender, EventArgs e)
+    private void selectAllAccountCb_CheckedChanged(object sender, EventArgs e)
     {
-      _accountSelected = accountsLv.SelectedItems[0].Tag as AccountBase;
-
-      var createNewTransaction = new EditTransactionForm(_accountSelected, _currentDate);
-      createNewTransaction.NewTransactionAdded += NewCreditTransaction;
-      createNewTransaction.Show();
-      RefreshPage();
-    }
-
-    private void NewCreditTransaction(object sender, NewTransactionAddedEventArgs e)
-    {
-      e.NewTransaction.Description = "Manual Credit";
-      _accountSelected.NewCreditTransaction(e.NewTransaction);
-      RefreshPage();
-    }
-
-    private void manualDebit_Click(object sender, EventArgs e)
-    {
-      _accountSelected = accountsLv.SelectedItems[0].Tag as AccountBase;
-
-      var createNewTransaction = new EditTransactionForm(_accountSelected, _currentDate);
-      createNewTransaction.NewTransactionAdded += NewDebitTransaction;
-      createNewTransaction.Show();
-      RefreshPage();
-    }
-
-    private void NewDebitTransaction(object sender, NewTransactionAddedEventArgs e)
-    {
-      e.NewTransaction.Description = "Manual Debit";
-      _accountSelected.NewDebitTransaction(e.NewTransaction);
-      RefreshPage();
+      if(selectAllAccountCb.Checked)
+      {
+        foreach (ListViewItem lv in accountsLv.Items)
+        {
+          lv.Selected = true;
+        }
+        _showAllPurchases = true;
+      }
+      else
+      {
+        foreach (ListViewItem lv in accountsLv.Items)
+        {
+          lv.Selected = false;
+        }
+      }
     }
 
     #endregion
@@ -311,11 +284,6 @@ namespace BudgetToolGui
       }
       RefreshPage();
     }
-    private void showAllPurchasesCb_CheckedChanged(object sender, EventArgs e)
-    {
-      _showAllPurchases = showAllPurchasesCb.Checked;
-      RefreshPage();
-    }
 
     #endregion
 
@@ -324,5 +292,10 @@ namespace BudgetToolGui
       this.Close();
     }
 
+    private void label2_Click(object sender, EventArgs e)
+    {
+
     }
+
+  }
 }

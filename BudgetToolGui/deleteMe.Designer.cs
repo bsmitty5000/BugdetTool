@@ -1,6 +1,6 @@
 ﻿namespace BudgetToolGui
 {
-  partial class EditPurchaseForm
+  partial class deleteMe
   {
     /// <summary>
     /// Required designer variable.
@@ -110,9 +110,9 @@
       this.label1.AutoSize = true;
       this.label1.Location = new System.Drawing.Point(12, 16);
       this.label1.Name = "label1";
-      this.label1.Size = new System.Drawing.Size(41, 13);
+      this.label1.Size = new System.Drawing.Size(60, 13);
       this.label1.TabIndex = 20;
-      this.label1.Text = "Vendor";
+      this.label1.Text = "Description";
       // 
       // dateDtp
       // 
@@ -137,7 +137,7 @@
       this.softBillSplitTpl.ColumnCount = 3;
       this.softBillSplitTpl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 51.33333F));
       this.softBillSplitTpl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 48.66667F));
-      this.softBillSplitTpl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 165F));
+      this.softBillSplitTpl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 167F));
       this.softBillSplitTpl.Location = new System.Drawing.Point(332, 35);
       this.softBillSplitTpl.Name = "softBillSplitTpl";
       this.softBillSplitTpl.RowCount = 2;
@@ -173,7 +173,7 @@
       this.Controls.Add(this.label2);
       this.Controls.Add(this.label1);
       this.Name = "EditPurchaseForm";
-      this.Text = "EditPurchaseForm";
+      this.Text = "Transaction Form";
       this.ResumeLayout(false);
       this.PerformLayout();
 

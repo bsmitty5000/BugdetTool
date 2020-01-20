@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CA77AB58-0A2F-45FA-A7B4-235D41691606}</ProjectGuid>
+    <ProjectGuid>{DEE3FDEC-FE11-49CA-8966-15BAB0E7E389}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>BudgetToolGui</RootNamespace>
-    <AssemblyName>BudgetToolGui</AssemblyName>
+    <RootNamespace>BudgetToolApp</RootNamespace>
+    <AssemblyName>BudgetToolApp</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -52,6 +52,12 @@
     <Compile Include="EditAccountForm.Designer.cs">
       <DependentUpon>EditAccountForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="EditBudgetTop.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditBudgetTop.Designer.cs">
+      <DependentUpon>EditBudgetTop.cs</DependentUpon>
+    </Compile>
     <Compile Include="EditHardBillForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -63,12 +69,6 @@
     </Compile>
     <Compile Include="EditIncomeForm.Designer.cs">
       <DependentUpon>EditIncomeForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="deleteMe.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="deleteMe.Designer.cs">
-      <DependentUpon>deleteMe.cs</DependentUpon>
     </Compile>
     <Compile Include="EditSoftBillForm.cs">
       <SubType>Form</SubType>
@@ -82,22 +82,25 @@
     <Compile Include="EditTransactionForm.Designer.cs">
       <DependentUpon>EditTransactionForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ManageMonthsForm.cs">
+    <Compile Include="MainLaunch.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ManageMonthsForm.Designer.cs">
-      <DependentUpon>ManageMonthsForm.cs</DependentUpon>
+    <Compile Include="MainLaunch.Designer.cs">
+      <DependentUpon>MainLaunch.cs</DependentUpon>
     </Compile>
-    <Compile Include="ManageYearFrom.cs">
+    <Compile Include="ManageBudget.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ManageYearFrom.Designer.cs">
-      <DependentUpon>ManageYearFrom.cs</DependentUpon>
+    <Compile Include="ManageBudget.Designer.cs">
+      <DependentUpon>ManageBudget.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="EditAccountForm.resx">
       <DependentUpon>EditAccountForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditBudgetTop.resx">
+      <DependentUpon>EditBudgetTop.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="EditHardBillForm.resx">
       <DependentUpon>EditHardBillForm.cs</DependentUpon>
@@ -105,20 +108,17 @@
     <EmbeddedResource Include="EditIncomeForm.resx">
       <DependentUpon>EditIncomeForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="deleteMe.resx">
-      <DependentUpon>deleteMe.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="EditSoftBillForm.resx">
       <DependentUpon>EditSoftBillForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="EditTransactionForm.resx">
       <DependentUpon>EditTransactionForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ManageMonthsForm.resx">
-      <DependentUpon>ManageMonthsForm.cs</DependentUpon>
+    <EmbeddedResource Include="MainLaunch.resx">
+      <DependentUpon>MainLaunch.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ManageYearFrom.resx">
-      <DependentUpon>ManageYearFrom.cs</DependentUpon>
+    <EmbeddedResource Include="ManageBudget.resx">
+      <DependentUpon>ManageBudget.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
