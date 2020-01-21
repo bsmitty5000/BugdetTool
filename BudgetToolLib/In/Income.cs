@@ -81,7 +81,7 @@ namespace BudgetToolLib
 
     public Income(Income i)
     {
-      Name = string.Copy(i.Name);
+      Name = i.Name;
       PaydayAmount = i.PaydayAmount;
       PaydayFrequency = i.PaydayFrequency;
       DepositAccount = AccountBaseFactory.CopyAccountBase(i.DepositAccount);
