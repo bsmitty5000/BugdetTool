@@ -56,7 +56,6 @@ namespace BudgetToolLib
   public abstract class AccountBase
   {
     public DateTime StartingDate { get; set; }
-    public SortedList<DateTime, decimal> BalanceHistory { get; set; }
     public List<Transaction> Transactions { get; set; }
     public string Name { get; set; }
     public decimal CurrentBalance
@@ -73,7 +72,6 @@ namespace BudgetToolLib
     public AccountBase(AccountBase account)
     {
       StartingDate = account.StartingDate;
-      BalanceHistory = new SortedList<DateTime, decimal>();
       foreach (var be in account.BalanceHistory)
       {
         BalanceHistory.Add(be.Key, be.Value);
@@ -89,9 +87,28 @@ namespace BudgetToolLib
     public AccountBase(string name, decimal startingAmount, DateTime? startingDate = null)
     {
       StartingDate = startingDate ?? DateTime.MinValue;
-      BalanceHistory = new SortedList<DateTime, decimal>() { { StartingDate, startingAmount } };
       Transactions = new List<Transaction>();
       Name = name;
+    }
+    public Dictionary<DateTime, decimal> BalanceHistory
+    {
+      get
+      {
+        Dictionary<DateTime, decimal> balanceHistory = new Dictionary<DateTime, decimal>();
+        foreach (var t in Transactions.OrderBy(p => p.Date).ToList())
+        {
+          if(balanceHistory.ContainsKey(t.Date))
+          {
+            balanceHistory[t.Date] += t.Amount;
+          }
+          else
+          {
+            balanceHistory.Add(t.Date, t.Amount);
+          }
+        }
+
+        return balanceHistory;
+      }
     }
 
     public abstract void NewDebitTransaction(Transaction transaction);
@@ -100,8 +117,9 @@ namespace BudgetToolLib
 
     public decimal GetBalance(DateTime date)
     {
-      decimal latestEntry = BalanceHistory.First().Value;
-      foreach (var entry in BalanceHistory)
+      var balanceHistory = BalanceHistory;
+      decimal latestEntry = balanceHistory.First().Value;
+      foreach (var entry in balanceHistory)
       {
         if (entry.Key > date)
           break;
@@ -109,78 +127,6 @@ namespace BudgetToolLib
       }
 
       return latestEntry;
-    }
-
-    protected void ProcessNewTransaction(Transaction transaction)
-    {
-      //insert the transaction. Transactions is ordered by date
-      Transactions.Add(transaction);
-
-      updateBalanceHistory(transaction.Amount, transaction.Date);
-    }
-
-    //Use to 'edit' transactions
-    public void ReplaceTransaction(Transaction tToReplace, Transaction tToReplaceWith)
-    {
-      if(tToReplace.Date != tToReplaceWith.Date)
-      {
-        throw new ArgumentException("This function only works if Dates are the same.");
-      }
-
-      decimal balanceDiff = tToReplaceWith.Amount - tToReplace.Amount;
-      DateTime date = tToReplaceWith.Date;
-
-      Transactions.Remove(tToReplace);
-      Transactions.Add(tToReplaceWith);
-
-      updateBalanceHistory(balanceDiff, date);
-    }
-
-    public bool RemoveTransaction(Transaction tToRemove)
-    {
-
-      if(Transactions.Remove(tToRemove))
-      {
-        updateBalanceHistory(-1 * tToRemove.Amount, tToRemove.Date);
-        return true;
-      }
-      else
-      {
-        return false;
-      }
-    }
-
-    private void updateBalanceHistory(decimal amount, DateTime date)
-    {
-
-      if (date <= StartingDate)
-      {
-        // going to assume this means logging old transactions that are already reflected in the BalanceHistory
-        // including transactions that happened on the startingdate
-        return;
-      }
-
-      if (BalanceHistory.ContainsKey(date))
-      {
-        BalanceHistory[date] += amount;
-      }
-      else
-      {
-        BalanceHistory.Add(date, amount);
-        //carry over previous date's balance
-        BalanceHistory[date] += BalanceHistory.Values[BalanceHistory.IndexOfKey(date) - 1];
-      }
-
-      var dates = BalanceHistory.Keys.Where(d => d > date).ToList();
-
-      //this seems like it's not the accepted way of doing things since i was forced to
-      //add ToList above, otherwise if this foreach loop ever does anything, ie if there's
-      //an old transaction added, an exception is thrown because the iterator was modified after
-      //creation
-      foreach (var key in dates)
-      {
-        BalanceHistory[key] += amount;
-      }
     }
   }
 }
