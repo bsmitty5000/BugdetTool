@@ -92,14 +92,14 @@ namespace BudgetToolApp
     private void purchasesDelete_Click(object sender, EventArgs e)
     {
       Transaction t = transactionsLv.SelectedItems[0].Tag as Transaction;
-      foreach (var a in _year.Accounts)
+      foreach (var kvp in _year.Accounts)
       {
-        if(a.Value.RemoveTransaction(t))
-        {
-          RefreshPage();
-          return;
-        }
-      }
+      //  if(kvp.Value.tr)
+      //  {
+      //    RefreshPage();
+      //    return;
+      //  }
+      //}
       throw new ArgumentException("This transaction isn't found in any account!");
     }
 
@@ -133,7 +133,7 @@ namespace BudgetToolApp
       {
         if (e.NewTransaction.GetType().Name.Contains("SoftBill"))
         {
-          _year.LogPurchase(e.NewTransaction as SoftBillTransaction);
+          _year.AddPurchase(e.NewTransaction as SoftBillTransaction);
         }
         else
         {

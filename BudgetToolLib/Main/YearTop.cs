@@ -194,7 +194,6 @@ namespace BudgetToolLib
         }
       }
     }
-
     public SoftBillTransaction GetSoftBillTransaction(string description, decimal amount, int month)
     {
       SoftBillTransaction sbt = MonthlySoftBills[month].CreateSoftBillTransaction();
@@ -203,13 +202,11 @@ namespace BudgetToolLib
       sbt.Amount = amount;
       return sbt;
     }
-
     public List<string> GetSoftBillKeys(int month)
     {
       return MonthlySoftBills[month].GetSoftBillKeys();
     }
-
-    public void LogPurchase(SoftBillTransaction sbt)
+    public void AddPurchase(SoftBillTransaction sbt)
     {
       sbt.AccountUsed.NewDebitTransaction(sbt); 
       
@@ -230,12 +227,11 @@ namespace BudgetToolLib
         }
       }
     }
-
-    public void RefundPurchase(SoftBillTransaction sbt, AccountBase account)
+    public void RemovePurchase(SoftBillTransaction sbt)
     {
       decimal amount = 0;
 
-      account.NewCreditTransaction(sbt);
+      sbt.AccountUsed.Transactions.Remove(sbt);
 
       foreach (var softBill in sbt.SoftGroupSplit)
       {

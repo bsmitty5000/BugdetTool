@@ -39,7 +39,6 @@ namespace BudgetToolLib
     {
       SoftBills = new Dictionary<string, SoftBill>();
     }
-
     public SoftBillGroup(SoftBillGroup s)
     {
       SoftBills = new Dictionary<string, SoftBill>();
@@ -55,7 +54,6 @@ namespace BudgetToolLib
         SoftBills[softBillName].AmountBudgeted = newAmountBudgeted;
       }
     }
-
     public SoftBillTransaction CreateSoftBillTransaction()
     {
       SoftBillTransaction sbt = new SoftBillTransaction();
@@ -65,7 +63,6 @@ namespace BudgetToolLib
       }
       return sbt;
     }
-
     public List<string> GetSoftBillKeys()
     {
       return SoftBills.Keys.ToList();
