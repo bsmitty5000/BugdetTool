@@ -136,12 +136,18 @@ namespace BudgetToolLib
       updateBalanceHistory(balanceDiff, date);
     }
 
-    public void RemoveTransaction(Transaction tToRemove)
+    public bool RemoveTransaction(Transaction tToRemove)
     {
 
-      Transactions.Remove(tToRemove);
-
-      updateBalanceHistory(-1 * tToRemove.Amount, tToRemove.Date);
+      if(Transactions.Remove(tToRemove))
+      {
+        updateBalanceHistory(-1 * tToRemove.Amount, tToRemove.Date);
+        return true;
+      }
+      else
+      {
+        return false;
+      }
     }
 
     private void updateBalanceHistory(decimal amount, DateTime date)

@@ -66,5 +66,10 @@ namespace BudgetToolLib
       return sbt;
     }
 
+    public List<string> GetSoftBillKeys()
+    {
+      return SoftBills.Keys.ToList();
+    }
+
   }
 }

@@ -28,6 +28,7 @@
     /// </summary>
     private void InitializeComponent()
     {
+      this.components = new System.ComponentModel.Container();
       this.accountsLv = new System.Windows.Forms.ListView();
       this.AccountName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
       this.dateDtp = new System.Windows.Forms.DateTimePicker();
@@ -52,6 +53,10 @@
       this.showAnnualCb = new System.Windows.Forms.CheckBox();
       this.accountInfoLv = new System.Windows.Forms.ListView();
       this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+      this.purchasesCms = new System.Windows.Forms.ContextMenuStrip(this.components);
+      this.purchasesDelete = new System.Windows.Forms.ToolStripMenuItem();
+      this.purchasesEdit = new System.Windows.Forms.ToolStripMenuItem();
+      this.purchasesCms.SuspendLayout();
       this.SuspendLayout();
       // 
       // accountsLv
@@ -208,6 +213,7 @@
       this.logPurchaseBtn.TabIndex = 12;
       this.logPurchaseBtn.Text = "Log Purchase";
       this.logPurchaseBtn.UseVisualStyleBackColor = true;
+      this.logPurchaseBtn.Click += new System.EventHandler(this.logPurchaseBtn_Click);
       // 
       // logDepositBtn
       // 
@@ -273,6 +279,30 @@
       this.columnHeader9.Text = "Amount";
       this.columnHeader9.Width = 138;
       // 
+      // purchasesCms
+      // 
+      this.purchasesCms.ImageScalingSize = new System.Drawing.Size(24, 24);
+      this.purchasesCms.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.purchasesDelete,
+            this.purchasesEdit});
+      this.purchasesCms.Name = "annualHbCms";
+      this.purchasesCms.Size = new System.Drawing.Size(108, 48);
+      // 
+      // purchasesDelete
+      // 
+      this.purchasesDelete.Name = "purchasesDelete";
+      this.purchasesDelete.Size = new System.Drawing.Size(180, 22);
+      this.purchasesDelete.Text = "Delete";
+      this.purchasesDelete.Click += new System.EventHandler(this.purchasesDelete_Click);
+      // 
+      // purchasesEdit
+      // 
+      this.purchasesEdit.Enabled = false;
+      this.purchasesEdit.Name = "purchasesEdit";
+      this.purchasesEdit.Size = new System.Drawing.Size(180, 22);
+      this.purchasesEdit.Text = "Edit";
+      this.purchasesEdit.Click += new System.EventHandler(this.purchasesEdit_Click);
+      // 
       // ManageBudget
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -295,6 +325,7 @@
       this.Controls.Add(this.accountsLv);
       this.Name = "ManageBudget";
       this.Text = "ManageBudget";
+      this.purchasesCms.ResumeLayout(false);
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -326,5 +357,8 @@
         private System.Windows.Forms.CheckBox showAnnualCb;
     private System.Windows.Forms.ListView accountInfoLv;
     private System.Windows.Forms.ColumnHeader columnHeader9;
+    private System.Windows.Forms.ContextMenuStrip purchasesCms;
+    private System.Windows.Forms.ToolStripMenuItem purchasesDelete;
+    private System.Windows.Forms.ToolStripMenuItem purchasesEdit;
   }
 }

@@ -61,13 +61,14 @@
       this.softBillSplitTpl.ColumnCount = 3;
       this.softBillSplitTpl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 51.33333F));
       this.softBillSplitTpl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 48.66667F));
-      this.softBillSplitTpl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 173F));
+      this.softBillSplitTpl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 176F));
+      this.softBillSplitTpl.Font = new System.Drawing.Font("Franklin Gothic Medium", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.softBillSplitTpl.Location = new System.Drawing.Point(336, 72);
       this.softBillSplitTpl.Name = "softBillSplitTpl";
       this.softBillSplitTpl.RowCount = 2;
-      this.softBillSplitTpl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-      this.softBillSplitTpl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-      this.softBillSplitTpl.Size = new System.Drawing.Size(444, 57);
+      this.softBillSplitTpl.RowStyles.Add(new System.Windows.Forms.RowStyle());
+      this.softBillSplitTpl.RowStyles.Add(new System.Windows.Forms.RowStyle());
+      this.softBillSplitTpl.Size = new System.Drawing.Size(444, 55);
       this.softBillSplitTpl.TabIndex = 54;
       // 
       // dateDtp
@@ -77,6 +78,7 @@
       this.dateDtp.Name = "dateDtp";
       this.dateDtp.Size = new System.Drawing.Size(200, 20);
       this.dateDtp.TabIndex = 53;
+      this.dateDtp.ValueChanged += new System.EventHandler(this.dateDtp_ValueChanged);
       // 
       // label5
       // 
@@ -97,6 +99,7 @@
       this.cancelAndCloseBtn.TabIndex = 51;
       this.cancelAndCloseBtn.Text = "Cancel and Close";
       this.cancelAndCloseBtn.UseVisualStyleBackColor = true;
+      this.cancelAndCloseBtn.Click += new System.EventHandler(this.cancelAndCloseBtn_Click);
       // 
       // saveAndCloseBtn
       // 
@@ -107,6 +110,7 @@
       this.saveAndCloseBtn.TabIndex = 50;
       this.saveAndCloseBtn.Text = "Save and Close";
       this.saveAndCloseBtn.UseVisualStyleBackColor = true;
+      this.saveAndCloseBtn.Click += new System.EventHandler(this.saveAndCloseBtn_Click);
       // 
       // amountTb
       // 
@@ -114,6 +118,7 @@
       this.amountTb.Name = "amountTb";
       this.amountTb.Size = new System.Drawing.Size(100, 20);
       this.amountTb.TabIndex = 49;
+      this.amountTb.TextChanged += new System.EventHandler(this.amountTb_TextChanged);
       // 
       // descriptionTb
       // 
@@ -170,16 +175,18 @@
       this.annualPurchaseCb.TabIndex = 58;
       this.annualPurchaseCb.Text = "Annual Purchase";
       this.annualPurchaseCb.UseVisualStyleBackColor = true;
+      this.annualPurchaseCb.CheckedChanged += new System.EventHandler(this.annualPurchaseCb_CheckedChanged);
       // 
       // resetBtn
       // 
       this.resetBtn.Font = new System.Drawing.Font("Franklin Gothic Medium", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.resetBtn.Location = new System.Drawing.Point(15, 234);
       this.resetBtn.Name = "resetBtn";
-      this.resetBtn.Size = new System.Drawing.Size(110, 28);
+      this.resetBtn.Size = new System.Drawing.Size(110, 27);
       this.resetBtn.TabIndex = 59;
       this.resetBtn.Text = "Reset";
       this.resetBtn.UseVisualStyleBackColor = true;
+      this.resetBtn.Click += new System.EventHandler(this.resetBtn_Click);
       // 
       // logAndNewBtn
       // 
@@ -190,6 +197,7 @@
       this.logAndNewBtn.TabIndex = 60;
       this.logAndNewBtn.Text = "Log and New";
       this.logAndNewBtn.UseVisualStyleBackColor = true;
+      this.logAndNewBtn.Click += new System.EventHandler(this.logAndNewBtn_Click);
       // 
       // EditTransactionForm
       // 

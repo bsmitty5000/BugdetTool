@@ -198,15 +198,20 @@ namespace BudgetToolLib
     public SoftBillTransaction GetSoftBillTransaction(string description, decimal amount, int month)
     {
       SoftBillTransaction sbt = MonthlySoftBills[month].CreateSoftBillTransaction();
-      sbt.Date = new DateTime(DateTime.Today.Year, month, DateTime.Today.Day);
+      //sbt.Date = new DateTime(DateTime.Today.Year, month, DateTime.Today.Day);
       sbt.Description = description;
       sbt.Amount = amount;
       return sbt;
     }
 
-    public void LogPurchase(SoftBillTransaction sbt, AccountBase account)
+    public List<string> GetSoftBillKeys(int month)
     {
-      account.NewDebitTransaction(sbt); 
+      return MonthlySoftBills[month].GetSoftBillKeys();
+    }
+
+    public void LogPurchase(SoftBillTransaction sbt)
+    {
+      sbt.AccountUsed.NewDebitTransaction(sbt); 
       
       foreach (var softBill in sbt.SoftGroupSplit)
       {
