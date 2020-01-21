@@ -99,6 +99,7 @@ namespace BudgetToolLib
         return;
       }
 
+      //todo: maybe make the deposit only happen if it's during the week
       while(NextDeposit <= date)
       {
         DepositAccount.NewCreditTransaction(new Transaction() { Description = Name, Date = NextDeposit, Amount = PaydayAmount, AccountUsed = DepositAccount });

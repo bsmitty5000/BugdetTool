@@ -23,7 +23,7 @@ namespace BudgetToolLib
     }
     public Transaction(Transaction t)
     {
-      Description = string.Copy(t.Description);
+      Description = t.Description;
       Amount = t.Amount;
       Date = t.Date;
       AccountUsed = t.AccountUsed;
