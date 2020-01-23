@@ -99,7 +99,8 @@ namespace BudgetToolApp
       //    RefreshPage();
       //    return;
       //  }
-      //}
+      //
+      }
       throw new ArgumentException("This transaction isn't found in any account!");
     }
 

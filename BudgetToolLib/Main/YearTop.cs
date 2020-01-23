@@ -145,7 +145,6 @@ namespace BudgetToolLib
         group.SoftBills.Remove(name);
       }
     }
-
     public void AddSoftBill(string name, decimal startingAmount, Boolean annualGroup)
     {
       if (MonthlySoftBills[0].SoftBills.ContainsKey(name) || MonthlySoftBills[1].SoftBills.ContainsKey(name))
@@ -206,6 +205,35 @@ namespace BudgetToolLib
     {
       return MonthlySoftBills[month].GetSoftBillKeys();
     }
+    public Dictionary<string, decimal> GetSoftBillUsed(int month)
+    {
+      Dictionary<string, decimal> softBillTotals = new Dictionary<string, decimal>();
+      List<string> softBillNames = GetSoftBillKeys(month);
+      foreach (var name in softBillNames)
+      {
+        softBillTotals.Add(name, 0);
+      }
+
+      foreach (var kvpAcc in Accounts)
+      {
+        foreach (var trans in kvpAcc.Value.Transactions)
+        {
+          if((trans.Date.Month == month) && (trans.GetType().Name.Contains("SoftBill")))
+          {
+            SoftBillTransaction sbTrans = trans as SoftBillTransaction;
+            foreach (var kvpSb in sbTrans.SoftGroupSplit)
+            {
+              if(softBillTotals.ContainsKey(kvpSb.Key))
+              {
+                softBillTotals[kvpSb.Key] += kvpSb.Value;
+              }
+            }
+          }
+        }
+      }
+
+      return softBillTotals;
+    }
     public void AddPurchase(SoftBillTransaction sbt)
     {
       sbt.AccountUsed.NewDebitTransaction(sbt); 
@@ -257,7 +285,6 @@ namespace BudgetToolLib
         throw new ArgumentException("SoftBill split doesn't add to total purchase.");
       }
     }
-
     public void FastForward(DateTime date)
     {
       foreach (var income in IncomeSources)

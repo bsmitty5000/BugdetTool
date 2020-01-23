@@ -9,7 +9,7 @@ namespace BudgetToolLib
   public class Transaction
   {
     public string Description { get; set; }
-    public decimal Amount { get; set; }
+    public virtual decimal Amount { get; set; }
     public DateTime Date { get; set; }
     public AccountBase AccountUsed { get; set; }
 

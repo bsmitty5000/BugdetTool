@@ -56,9 +56,9 @@
     <Compile Include="Out\SoftBill.cs" />
     <Compile Include="Accounts\Transaction.cs" />
     <Compile Include="In\Income.cs" />
-    <Compile Include="Main\SoftBillGroup.cs" />
     <Compile Include="Main\YearTop.cs" />
     <Compile Include="Out\HardBill.cs" />
+    <Compile Include="Out\SoftBillGroup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

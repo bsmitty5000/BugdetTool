@@ -8,12 +8,20 @@ namespace BudgetToolLib
 {
   public class SoftBillTransaction : Transaction
   {
+    public event EventHandler<SoftBillTransactionArgs> NewSoftBillEdit;
     public Dictionary<string, decimal> SoftGroupSplit { get; set; }
-
+    public override decimal Amount 
+    { 
+      get => base.Amount;
+      set
+      {
+        base.Amount = value;
+        NewSoftBillEdit?.Invoke(this, new SoftBillTransactionArgs());
+      }
+    }
     public SoftBillTransaction() : base()
     {
       SoftGroupSplit = new Dictionary<string, decimal>();
-
     }
 
     public SoftBillTransaction(SoftBillTransaction sb) : base(sb)
@@ -24,6 +32,9 @@ namespace BudgetToolLib
         SoftGroupSplit.Add(kvp.Key, kvp.Value);
       }
     }
+  }
+  public class SoftBillTransactionArgs
+  {
   }
 
   public class SoftBill
@@ -39,7 +50,7 @@ namespace BudgetToolLib
     {
       Name = name;
       AmountBudgeted = amountBudgeted;
-      AmountUsed = 0;
+      //AmountUsed = 0;
     }
 
     public SoftBill(SoftBill sb)

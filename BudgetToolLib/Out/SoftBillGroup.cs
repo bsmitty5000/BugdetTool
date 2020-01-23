@@ -21,20 +21,18 @@ namespace BudgetToolLib
         return total;
       }
     }
-
-    public decimal TotalSoftBillAmountUsed
-    {
-      get
-      {
-        decimal total = 0;
-        foreach (var sb in SoftBills)
-        {
-          total += sb.Value.AmountUsed;
-        }
-        return total;
-      }
-    }
-
+    //public decimal TotalSoftBillAmountUsed
+    //{
+    //  get
+    //  {
+    //    decimal total = 0;
+    //    foreach (var sb in SoftBills)
+    //    {
+    //      total += sb.Value.AmountUsed;
+    //    }
+    //    return total;
+    //  }
+    //}
     public SoftBillGroup()
     {
       SoftBills = new Dictionary<string, SoftBill>();
