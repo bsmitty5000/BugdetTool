@@ -147,49 +147,16 @@ namespace BudgetToolLib
     }
     public void AddSoftBill(string name, decimal startingAmount, Boolean annualGroup)
     {
-      if (MonthlySoftBills[0].SoftBills.ContainsKey(name) || MonthlySoftBills[1].SoftBills.ContainsKey(name))
-      {
-        throw new ArgumentException("This softbill already exists.");
-      }
       if (annualGroup)
       {
-        MonthlySoftBills[0].SoftBills.Add(name, new SoftBill(name, startingAmount));
+        MonthlySoftBills[0].SoftBills[name] = startingAmount;
       }
       else
       {
         /* important to start at 1 here */
         for (int i = 1; i < MonthlySoftBills.Count; i++)
         {
-          MonthlySoftBills[i].SoftBills.Add(name, new SoftBill(name, startingAmount));
-        }
-      }
-    }
-    public void AddSoftBill(SoftBill softBill, Boolean annualGroup)
-    {
-      if (MonthlySoftBills[0].SoftBills.ContainsKey(softBill.Name) || MonthlySoftBills[1].SoftBills.ContainsKey(softBill.Name))
-      {
-        throw new ArgumentException("This softbill already exists.");
-      }
-      if (annualGroup)
-      {
-        MonthlySoftBills[0].SoftBills.Add(softBill.Name, new SoftBill(softBill));
-      }
-      else
-      {
-        /* important to start at 1 here */
-        for (int i = 1; i < MonthlySoftBills.Count; i++)
-        {
-          MonthlySoftBills[i].SoftBills.Add(softBill.Name, new SoftBill(softBill));
-        }
-      }
-    }
-    public void EditMonthlySoftBills(string softBillName, decimal newAmountBudgeted)
-    {
-      if(MonthlySoftBills[1].SoftBills.ContainsKey(softBillName))
-      {
-        foreach (var group in MonthlySoftBills)
-        {
-          group.EditSoftBill(softBillName, newAmountBudgeted);
+          MonthlySoftBills[i].SoftBills[name] = startingAmount;
         }
       }
     }
@@ -233,57 +200,6 @@ namespace BudgetToolLib
       }
 
       return softBillTotals;
-    }
-    public void AddPurchase(SoftBillTransaction sbt)
-    {
-      sbt.AccountUsed.NewDebitTransaction(sbt); 
-      
-      foreach (var softBill in sbt.SoftGroupSplit)
-      {
-        /* first check if any of the split exists in the annual group */
-        if (MonthlySoftBills[0].SoftBills.ContainsKey(softBill.Key))
-        {
-          MonthlySoftBills[0].SoftBills[softBill.Key].AmountUsed += softBill.Value;
-        }
-        else if (MonthlySoftBills[sbt.Date.Month].SoftBills.ContainsKey(softBill.Key))
-        {
-          MonthlySoftBills[sbt.Date.Month].SoftBills[softBill.Key].AmountUsed += softBill.Value;
-        }
-        else
-        {
-          throw new ArgumentException("This softbill name does not exist anywhere: " + softBill.Key);
-        }
-      }
-    }
-    public void RemovePurchase(SoftBillTransaction sbt)
-    {
-      decimal amount = 0;
-
-      sbt.AccountUsed.Transactions.Remove(sbt);
-
-      foreach (var softBill in sbt.SoftGroupSplit)
-      {
-        /* first check if any of the split exists in the annual group */
-        if (MonthlySoftBills[0].SoftBills.ContainsKey(softBill.Key))
-        {
-          MonthlySoftBills[0].SoftBills[softBill.Key].AmountUsed -= softBill.Value;
-          amount += softBill.Value;
-        }
-        else if (MonthlySoftBills[sbt.Date.Month].SoftBills.ContainsKey(softBill.Key))
-        {
-          MonthlySoftBills[sbt.Date.Month].SoftBills[softBill.Key].AmountUsed -= softBill.Value;
-          amount += softBill.Value;
-        }
-        else
-        {
-          throw new ArgumentException("This softbill name does not exist anywhere: " + softBill.Key);
-        }
-      }
-
-      if (amount != sbt.Amount)
-      {
-        throw new ArgumentException("SoftBill split doesn't add to total purchase.");
-      }
     }
     public void FastForward(DateTime date)
     {

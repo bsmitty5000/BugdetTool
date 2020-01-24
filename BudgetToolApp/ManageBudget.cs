@@ -58,6 +58,7 @@ namespace BudgetToolApp
       }
       accountsLv.Items[0].Checked = true;
 
+      RefreshPage();
     }
 
     private void purchasesLv_MouseUp(object sender, MouseEventArgs e)
@@ -92,16 +93,10 @@ namespace BudgetToolApp
     private void purchasesDelete_Click(object sender, EventArgs e)
     {
       Transaction t = transactionsLv.SelectedItems[0].Tag as Transaction;
-      foreach (var kvp in _year.Accounts)
+      if(!t.AccountUsed.Transactions.Remove(t))
       {
-      //  if(kvp.Value.tr)
-      //  {
-      //    RefreshPage();
-      //    return;
-      //  }
-      //
+        throw new ArgumentException("Could not find transaction!");
       }
-      throw new ArgumentException("This transaction isn't found in any account!");
     }
 
     private void purchasesEdit_Click(object sender, EventArgs e)
@@ -115,31 +110,16 @@ namespace BudgetToolApp
     }
     private void logPurchaseBtn_Click(object sender, EventArgs e)
     {
-      if(_selectedAccounts.Count > 0)
-      {
-        _selectedAccount = _year.Accounts[_selectedAccounts[0]];
-      }
-      else
-      {
-        _selectedAccount = _year.Accounts.First().Value;
-      }
-      var editTransactionForm = new EditTransactionForm(null, _selectedAccount, _year);
-      editTransactionForm.NewTransactionAdded += NewPurchase_Added;
-      editTransactionForm.Show();
+      var editSbTransactionForm = new EditSbTransactionForm(_year);
+      editSbTransactionForm.NewTransactionAdded += NewSbTransaction_Added;
+      editSbTransactionForm.Show();
     }
 
-    private void NewPurchase_Added(object sender, NewTransactionEventArgs e)
+    private void NewSbTransaction_Added(object sender, NewSbTransactionEventArgs e)
     {
       if (e.NewTransaction != null)
       {
-        if (e.NewTransaction.GetType().Name.Contains("SoftBill"))
-        {
-          _year.AddPurchase(e.NewTransaction as SoftBillTransaction);
-        }
-        else
-        {
-          e.NewTransaction.AccountUsed.NewDebitTransaction(e.NewTransaction);
-        }
+        e.NewTransaction.AccountUsed.NewDebitTransaction(e.NewTransaction);
       }
       RefreshPage();
     }
@@ -190,8 +170,8 @@ namespace BudgetToolApp
       foreach (var softBill in localYt.MonthlySoftBills[monthSelected].SoftBills)
       {
         ListViewItem lvi = new ListViewItem(softBill.Key);
-        lvi.SubItems.Add(softBill.Value.AmountBudgeted.ToString());
-        lvi.SubItems.Add((softBill.Value.AmountBudgeted - softBill.Value.AmountUsed).ToString());
+        lvi.SubItems.Add(softBill.Value.ToString());
+        lvi.SubItems.Add((softBill.Value/* - softBill.Value.AmountUsed*/).ToString());
         lvi.Tag = softBill.Value;
         softBillsLv.Items.Add(lvi);
       }

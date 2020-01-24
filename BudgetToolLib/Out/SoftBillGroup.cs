@@ -8,7 +8,7 @@ namespace BudgetToolLib
 {
   public class SoftBillGroup
   {
-    public Dictionary<string, SoftBill> SoftBills { get; set; }
+    public Dictionary<string, decimal> SoftBills { get; set; }
     public decimal TotalSoftBillAmountBudgeted
     {
       get
@@ -16,40 +16,21 @@ namespace BudgetToolLib
         decimal total = 0;
         foreach (var sb in SoftBills)
         {
-          total += sb.Value.AmountBudgeted;
+          total += sb.Value;
         }
         return total;
       }
     }
-    //public decimal TotalSoftBillAmountUsed
-    //{
-    //  get
-    //  {
-    //    decimal total = 0;
-    //    foreach (var sb in SoftBills)
-    //    {
-    //      total += sb.Value.AmountUsed;
-    //    }
-    //    return total;
-    //  }
-    //}
     public SoftBillGroup()
     {
-      SoftBills = new Dictionary<string, SoftBill>();
+      SoftBills = new Dictionary<string, decimal>();
     }
     public SoftBillGroup(SoftBillGroup s)
     {
-      SoftBills = new Dictionary<string, SoftBill>();
+      SoftBills = new Dictionary<string, decimal>();
       foreach (var sb in s.SoftBills)
       {
-        SoftBills.Add(sb.Key, new SoftBill(sb.Value));
-      }
-    }
-    public void EditSoftBill(string softBillName, decimal newAmountBudgeted)
-    {
-      if(SoftBills.ContainsKey(softBillName))
-      {
-        SoftBills[softBillName].AmountBudgeted = newAmountBudgeted;
+        SoftBills.Add(sb.Key, sb.Value);
       }
     }
     public SoftBillTransaction CreateSoftBillTransaction()

@@ -74,6 +74,7 @@ namespace BudgetToolApp
       _hardBill.Frequency = enumParse;
 
       _hardBill.FirstBillDue = firstBillDueDtp.Value;
+      _hardBill.NextBillDue = firstBillDueDtp.Value;
 
       _hardBill.PaymentAccount = _year.Accounts[accountCb.Text];
 

@@ -55,6 +55,7 @@ namespace BudgetToolLib
 
   public abstract class AccountBase
   {
+    public decimal StartingAmount { get; set; }
     public DateTime StartingDate { get; set; }
     public List<Transaction> Transactions { get; set; }
     public string Name { get; set; }
@@ -71,11 +72,8 @@ namespace BudgetToolLib
 
     public AccountBase(AccountBase account)
     {
+      StartingAmount = account.StartingAmount;
       StartingDate = account.StartingDate;
-      foreach (var be in account.BalanceHistory)
-      {
-        BalanceHistory.Add(be.Key, be.Value);
-      }
       Transactions = new List<Transaction>();
       foreach (var t in account.Transactions)
       {
@@ -89,22 +87,22 @@ namespace BudgetToolLib
       StartingDate = startingDate ?? DateTime.MinValue;
       Transactions = new List<Transaction>();
       Name = name;
+      StartingAmount = startingAmount;
     }
     public Dictionary<DateTime, decimal> BalanceHistory
     {
       get
       {
         Dictionary<DateTime, decimal> balanceHistory = new Dictionary<DateTime, decimal>();
-        foreach (var t in Transactions.OrderBy(p => p.Date).ToList())
+        decimal lastVal = 0;
+
+        balanceHistory.Add(StartingDate, StartingAmount);
+        lastVal = StartingAmount;
+        //greater than starting date so transactions on starting date do not affect startingBalance
+        foreach (var t in Transactions.Where(p => p.Date > StartingDate).OrderBy(p => p.Date).ToList())
         {
-          if(balanceHistory.ContainsKey(t.Date))
-          {
-            balanceHistory[t.Date] += t.Amount;
-          }
-          else
-          {
-            balanceHistory.Add(t.Date, t.Amount);
-          }
+          lastVal += t.Amount;
+          balanceHistory[t.Date] = lastVal;
         }
 
         return balanceHistory;

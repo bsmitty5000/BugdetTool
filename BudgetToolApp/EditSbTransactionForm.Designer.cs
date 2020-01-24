@@ -1,6 +1,6 @@
 ﻿namespace BudgetToolApp
 {
-  partial class EditTransactionForm
+  partial class EditSbTransactionForm
   {
     /// <summary>
     /// Required designer variable.

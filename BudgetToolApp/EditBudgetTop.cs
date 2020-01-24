@@ -78,7 +78,7 @@ namespace BudgetToolApp
       foreach (var softBill in _year.MonthlySoftBills[0].SoftBills)
       {
         ListViewItem lvi = new ListViewItem(softBill.Key);
-        lvi.SubItems.Add(softBill.Value.AmountBudgeted.ToString());
+        lvi.SubItems.Add(softBill.Value.ToString());
         lvi.Tag = softBill.Value;
         annualSbLv.Items.Add(lvi);
       }
@@ -87,8 +87,7 @@ namespace BudgetToolApp
       foreach (var softBill in _year.MonthlySoftBills[1].SoftBills)
       {
         ListViewItem lvi = new ListViewItem(softBill.Key);
-        lvi.SubItems.Add(softBill.Value.AmountBudgeted.ToString());
-        lvi.Tag = softBill.Value;
+        lvi.SubItems.Add(softBill.Value.ToString());
         monthlySbLv.Items.Add(lvi);
       }
 
@@ -343,28 +342,29 @@ namespace BudgetToolApp
     }
     private void annualSbAdd_Click(object sender, EventArgs e)
     {
-      var editSoftBill = new EditSoftBillForm(null);
+      var editSoftBill = new EditSoftBillForm(string.Empty, 0);
       editSoftBill.NewSoftBillAdded += NewAnnualSoftBill_Added;
       editSoftBill.Show();
     }
     private void annualSbDelete_Click(object sender, EventArgs e)
     {
-      SoftBill softBill = annualSbLv.SelectedItems[0].Tag as SoftBill;
-      _year.RemoveSoftBill(softBill.Name);
+      string name = annualSbLv.SelectedItems[0].SubItems[0].Text;
+      _year.RemoveSoftBill(name);
       RefreshPage();
     }
     private void annualSbEdit_Click(object sender, EventArgs e)
     {
-      SoftBill softBill = annualSbLv.SelectedItems[0].Tag as SoftBill;
+      string name = annualSbLv.SelectedItems[0].SubItems[0].Text;
+      decimal amount = decimal.Parse(annualSbLv.SelectedItems[0].SubItems[1].Text);
 
-      var editSoftBill = new EditSoftBillForm(softBill);
-      editSoftBill.NewSoftBillAdded += RefreshPage_Handler;
+      var editSoftBill = new EditSoftBillForm(name, amount);
+      editSoftBill.NewSoftBillAdded += NewAnnualSoftBill_Added;
       editSoftBill.ShowDialog();
       RefreshPage();
     }
     private void NewAnnualSoftBill_Added(object sender, NewSoftBillAddedEventArgs e)
     {
-      _year.AddSoftBill(e.NewSoftBill, true);
+      _year.AddSoftBill(e.Name, e.Amount, true);
       RefreshPage();
     }
     #endregion
@@ -410,36 +410,31 @@ namespace BudgetToolApp
     }
     private void monthlySbAdd_Click_1(object sender, EventArgs e)
     {
-      var editSoftBill = new EditSoftBillForm(null);
+      var editSoftBill = new EditSoftBillForm(string.Empty, 0);
       editSoftBill.NewSoftBillAdded += NewMonthlySoftBill_Added;
       editSoftBill.Show();
     }
 
     private void monthlySbDelete_Click_1(object sender, EventArgs e)
     {
-      SoftBill softBill = monthlySbLv.SelectedItems[0].Tag as SoftBill;
-      _year.RemoveSoftBill(softBill.Name);
+      string name = annualSbLv.SelectedItems[0].SubItems[0].Text;
+      _year.RemoveSoftBill(name);
       RefreshPage();
     }
 
     private void monthlySbEdit_Click_1(object sender, EventArgs e)
     {
-      SoftBill softBill = monthlySbLv.SelectedItems[0].Tag as SoftBill;
+      string name = annualSbLv.SelectedItems[0].SubItems[0].Text;
+      decimal amount = decimal.Parse(annualSbLv.SelectedItems[0].SubItems[1].Text);
 
-      var editSoftBill = new EditSoftBillForm(softBill);
-      editSoftBill.NewSoftBillAdded += NewMonthlySoftBill_Edited;
+      var editSoftBill = new EditSoftBillForm(name, amount);
+      editSoftBill.NewSoftBillAdded += NewMonthlySoftBill_Added;
       editSoftBill.Show();
-    }
-
-    private void NewMonthlySoftBill_Edited(object sender, NewSoftBillAddedEventArgs e)
-    {
-      _year.EditMonthlySoftBills(e.NewSoftBill.Name, e.NewSoftBill.AmountBudgeted);
-      RefreshPage();
     }
 
     private void NewMonthlySoftBill_Added(object sender, NewSoftBillAddedEventArgs e)
     {
-      _year.AddSoftBill(e.NewSoftBill, false);
+      _year.AddSoftBill(e.Name, e.Amount, false);
       RefreshPage();
     }
     #endregion

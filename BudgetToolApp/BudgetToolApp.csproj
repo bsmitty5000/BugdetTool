@@ -76,11 +76,11 @@
     <Compile Include="EditSoftBillForm.Designer.cs">
       <DependentUpon>EditSoftBillForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="EditTransactionForm.cs">
+    <Compile Include="EditSbTransactionForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="EditTransactionForm.Designer.cs">
-      <DependentUpon>EditTransactionForm.cs</DependentUpon>
+    <Compile Include="EditSbTransactionForm.Designer.cs">
+      <DependentUpon>EditSbTransactionForm.cs</DependentUpon>
     </Compile>
     <Compile Include="MainLaunch.cs">
       <SubType>Form</SubType>
@@ -111,8 +111,8 @@
     <EmbeddedResource Include="EditSoftBillForm.resx">
       <DependentUpon>EditSoftBillForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="EditTransactionForm.resx">
-      <DependentUpon>EditTransactionForm.cs</DependentUpon>
+    <EmbeddedResource Include="EditSbTransactionForm.resx">
+      <DependentUpon>EditSbTransactionForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainLaunch.resx">
       <DependentUpon>MainLaunch.cs</DependentUpon>

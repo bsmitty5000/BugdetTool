@@ -6,23 +6,14 @@ namespace BudgetToolApp
 {
   public partial class EditSoftBillForm : Form
   {
-    private SoftBill _sb;
     public event EventHandler<NewSoftBillAddedEventArgs> NewSoftBillAdded;
-
-    public EditSoftBillForm(SoftBill sb)
+    private string _name;
+    private decimal _amount;
+    public EditSoftBillForm(string name, decimal amount)
     {
       InitializeComponent();
-
-      if(sb == null)
-      {
-        _sb = new SoftBill();
-      }
-      else
-      {
-        _sb = sb;
-      }
-      nameTb.Text = _sb.Name;
-      amountTb.Text = _sb.AmountBudgeted.ToString();
+      nameTb.Text = name;
+      amountTb.Text = amount.ToString();
     }
     private void saveBtn_Click_1(object sender, EventArgs e)
     {
@@ -31,17 +22,18 @@ namespace BudgetToolApp
       decimal amount;
       if (decimal.TryParse(amountTb.Text, out amount))
       {
-        _sb.AmountBudgeted = amount;
+        _amount = amount;
       }
       else
       {
-        amountTb.Text = _sb.AmountBudgeted.ToString();
+        amountTb.Text = _amount.ToString();
         MessageBox.Show("Invalid amount!");
         return;
       }
-      _sb.Name = nameTb.Text;
+      _name = nameTb.Text;
 
-      args.NewSoftBill = _sb;
+      args.Name = _name;
+      args.Amount = _amount;
       OnNewSoftBillAdded(args);
 
       this.Close();
@@ -58,6 +50,7 @@ namespace BudgetToolApp
   }
   public class NewSoftBillAddedEventArgs : EventArgs
   {
-    public SoftBill NewSoftBill { get; set; }
+    public string Name{ get; set; }
+    public decimal Amount { get; set; }
   }
 }

@@ -5,17 +5,16 @@ using BudgetToolLib;
 
 namespace BudgetToolApp
 {
-  public partial class EditTransactionForm : Form
+  public partial class EditSbTransactionForm : Form
   {
     private SoftBillTransaction _sbt;
     private YearTop _year;
     private AccountBase _selectedAccount;
     private DateTime _selectedDate;
     private bool _eventsOn;
-    private bool _annualGroup;
-    public event EventHandler<NewTransactionEventArgs> NewTransactionAdded;
+    public event EventHandler<NewSbTransactionEventArgs> NewTransactionAdded;
 
-    public EditTransactionForm(SoftBillTransaction sbt, AccountBase account, YearTop year)
+    public EditSbTransactionForm(YearTop year)
     {
       InitializeComponent();
 
@@ -26,24 +25,15 @@ namespace BudgetToolApp
 
       _year = year;
 
-      if (sbt == null)
-      {
-        _sbt = _year.GetSoftBillTransaction(string.Empty, 0, DateTime.Today.Month);
-        _sbt.Date = DateTime.Today;
-      }
-      else
-      {
-        _sbt = sbt;
-      }
+      _sbt = _year.GetSoftBillTransaction(string.Empty, 0, DateTime.Today.Month);
 
       foreach (var keyValue in _year.Accounts)
       {
         accountCb.Items.Add(keyValue.Value.Name);
       }
-      accountCb.SelectedItem = account.Name;
       dateDtp.Value = DateTime.Today;
 
-      UpdateTpl();
+      UpdateEntireTpl();
     }
 
     private void remainder_Click(object sender, EventArgs e)
@@ -100,15 +90,16 @@ namespace BudgetToolApp
           _sbt.SoftGroupSplit.Add(key, 0);
         }
       }
-      UpdateTpl();
+      UpdateEntireTpl();
     }
 
     private void dateDtp_ValueChanged(object sender, EventArgs e)
     {
       _selectedDate = dateDtp.Value;
-      if(_selectedDate.Month != _sbt.Date.Month)
+      if(!annualPurchaseCb.Checked && (_selectedDate.Month != _sbt.Date.Month))
       {
-        UpdateSbtMonth();
+        _sbt = _year.GetSoftBillTransaction(_sbt.Description, _sbt.Amount, _selectedDate.Month);
+        UpdateEntireTpl();
       }
     }
 
@@ -136,7 +127,7 @@ namespace BudgetToolApp
     protected virtual void OnNewTransactionBillAdded()
     {
       SaveOffUIFields();
-      NewTransactionEventArgs args = new NewTransactionEventArgs();
+      NewSbTransactionEventArgs args = new NewSbTransactionEventArgs();
       args.NewTransaction = _sbt;
 
       NewTransactionAdded?.Invoke(this, args);
@@ -148,13 +139,32 @@ namespace BudgetToolApp
       //not copying here to clear out the softbill groups
       //but keep the account and date the same, seems like it would be
       //convenient that way
-      SoftBillTransaction temp = _year.GetSoftBillTransaction(string.Empty, 0, _selectedDate.Month);
+      SoftBillTransaction temp;
+      if (annualPurchaseCb.Checked)
+      {
+        temp = _year.GetSoftBillTransaction(string.Empty, 0, 0);
+      }
+      else
+      {
+        temp = _year.GetSoftBillTransaction(string.Empty, 0, _selectedDate.Month);
+      }
       temp.AccountUsed = _sbt.AccountUsed;
       temp.Date = _selectedDate;
       _sbt = temp;
-      UpdateTpl();
+      UpdateTplText();
     }
-    private void UpdateTpl()
+    private void UpdateTplText()
+    {
+      _eventsOn = false;
+      foreach (var kvp in _sbt.SoftGroupSplit)
+      {
+        TextBox txtValue = softBillSplitTpl.Controls[kvp.Key + "_tb"] as TextBox;
+        txtValue.Text = kvp.Value.ToString();
+      }
+      _eventsOn = true;
+    }
+
+    private void UpdateEntireTpl()
     {
       int i = 0;
       _eventsOn = false;
@@ -195,13 +205,6 @@ namespace BudgetToolApp
       _eventsOn = true;
     }
 
-    private void UpdateSbtMonth()
-    {
-      SoftBillTransaction temp = _year.GetSoftBillTransaction(_sbt.Description, _sbt.Amount, _selectedDate.Month);
-      _sbt = temp;
-      UpdateTpl();
-    }
-
     private void SaveOffUIFields()
     {
       _sbt.AccountUsed = _year.Accounts[accountCb.Text];
@@ -224,16 +227,22 @@ namespace BudgetToolApp
     }
     private void UpdateSbGroupAmounts()
     {
-      foreach (var item in softBillSplitTpl.Controls)
+
+      List<string> keyList = new List<string>(_sbt.SoftGroupSplit.Keys);
+
+      foreach (var sb in keyList)
       {
-        if (item.GetType().Name.Contains("TextBox"))
+        TextBox txtValue = softBillSplitTpl.Controls[sb + "_tb"] as TextBox;
+        decimal amount;
+        if (decimal.TryParse(txtValue.Text, out amount))
         {
-          TextBox textBox = (TextBox)item;
-          string sbKey = textBox.Name.Split('_')[0];
-          if (_sbt.SoftGroupSplit.ContainsKey(sbKey))
-          {
-            _sbt.SoftGroupSplit[sbKey] = Decimal.Parse(textBox.Text);
-          }
+          _sbt.SoftGroupSplit[sb] = amount;
+        }
+        else
+        {
+          txtValue.Text = _sbt.SoftGroupSplit[sb].ToString();
+          MessageBox.Show("Invalid amount!");
+          return;
         }
       }
     }
@@ -255,8 +264,8 @@ namespace BudgetToolApp
       }
     }
   }
-  public class NewTransactionEventArgs : EventArgs
+  public class NewSbTransactionEventArgs : EventArgs
   {
-    public Transaction NewTransaction { get; set; }
+    public SoftBillTransaction NewTransaction { get; set; }
   }
 }
