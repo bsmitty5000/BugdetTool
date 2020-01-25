@@ -14,6 +14,7 @@ namespace BudgetToolLib
     Annualy
   }
 
+  [Serializable()]
   public class HardBill
   {
     public string Name { get; set; }
@@ -66,7 +67,7 @@ namespace BudgetToolLib
     {
       while(NextBillDue <= date)
       {
-        PaymentAccount.NewDebitTransaction(new Transaction() { Description = Name, Date = NextBillDue, Amount = this.Amount, AccountUsed = PaymentAccount });
+        PaymentAccount.NewDebitTransaction(new Transaction() { Description = Name, Date = NextBillDue, Amount = this.Amount });
         switch (Frequency)
         {
           case HardBillFrequencyEnum.Monthly:

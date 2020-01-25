@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace BudgetToolLib
 {
+  [Serializable()]
   public class YearTop
   {
+    public DateTime TimeLastLoaded { get; set; }
     /* Add to dictionary directly */
     public Dictionary<string, AccountBase> Accounts { get; set; }
 
@@ -108,36 +109,25 @@ namespace BudgetToolLib
     {
       YearTop jsonYear = null;
 
-      using (StreamReader sr = new StreamReader(filepath))
+      if (File.Exists(filepath))
       {
-        string line;
-        line = sr.ReadToEnd();
-        jsonYear = JsonConvert.DeserializeObject<YearTop>(line, new JsonSerializerSettings
-        {
-          TypeNameHandling = TypeNameHandling.Auto,
-          PreserveReferencesHandling = PreserveReferencesHandling.Objects
-        });
+        Console.WriteLine("Reading saved file");
+        Stream openFileStream = File.OpenRead(filepath);
+        BinaryFormatter deserializer = new BinaryFormatter();
+        jsonYear = (YearTop)deserializer.Deserialize(openFileStream);
+        jsonYear.TimeLastLoaded = DateTime.Now;
+        openFileStream.Close();
       }
-
       return jsonYear;
     }
-    public void SaveToFile(Stream s)
+    public void SaveToFile(string filepath)
     {
-      JsonSerializer serializer = new JsonSerializer();
-      serializer.Converters.Add(new JavaScriptDateTimeConverter());
-      serializer.NullValueHandling = NullValueHandling.Ignore;
-
-      using (StreamWriter sw = new StreamWriter(s))
-      {
-        string jsonTypeNameAuto = JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings
-        {
-          TypeNameHandling = TypeNameHandling.Auto,
-          PreserveReferencesHandling = PreserveReferencesHandling.Objects
-        });
-
-        sw.Write(jsonTypeNameAuto);
-      }
+      Stream SaveFileStream = File.Create(filepath);
+      BinaryFormatter serializer = new BinaryFormatter();
+      serializer.Serialize(SaveFileStream, this);
+      SaveFileStream.Close();
     }
+
     public void RemoveSoftBill(string name)
     {
       foreach (var group in MonthlySoftBills)

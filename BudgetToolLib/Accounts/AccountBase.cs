@@ -53,10 +53,11 @@ namespace BudgetToolLib
     }
   }
 
+  [Serializable()]
   public abstract class AccountBase
   {
-    public decimal StartingAmount { get; set; }
-    public DateTime StartingDate { get; set; }
+    private decimal _startingAmount;
+    public DateTime StartingDate { get; private set; }
     public List<Transaction> Transactions { get; set; }
     public string Name { get; set; }
     public decimal CurrentBalance
@@ -72,7 +73,7 @@ namespace BudgetToolLib
 
     public AccountBase(AccountBase account)
     {
-      StartingAmount = account.StartingAmount;
+      _startingAmount = account._startingAmount;
       StartingDate = account.StartingDate;
       Transactions = new List<Transaction>();
       foreach (var t in account.Transactions)
@@ -87,17 +88,15 @@ namespace BudgetToolLib
       StartingDate = startingDate ?? DateTime.MinValue;
       Transactions = new List<Transaction>();
       Name = name;
-      StartingAmount = startingAmount;
+      _startingAmount = startingAmount;
     }
     public Dictionary<DateTime, decimal> BalanceHistory
     {
       get
       {
-        Dictionary<DateTime, decimal> balanceHistory = new Dictionary<DateTime, decimal>();
-        decimal lastVal = 0;
+        Dictionary<DateTime, decimal> balanceHistory = new Dictionary<DateTime, decimal>() { { StartingDate, _startingAmount } };
+        decimal lastVal = _startingAmount;
 
-        balanceHistory.Add(StartingDate, StartingAmount);
-        lastVal = StartingAmount;
         //greater than starting date so transactions on starting date do not affect startingBalance
         foreach (var t in Transactions.Where(p => p.Date > StartingDate).OrderBy(p => p.Date).ToList())
         {

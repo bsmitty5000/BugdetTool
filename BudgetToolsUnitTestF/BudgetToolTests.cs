@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,13 +21,10 @@ namespace BudgetToolsUnitTestF
 
     //annuals
     private HardBill carRegistration;
-    private SoftBill vacation;
 
     //monthlys
     private HardBill electricity;
     private HardBill cable;
-    private SoftBill food;
-    private SoftBill gas;
 
     //top
     private YearTop yearTop;
@@ -45,13 +43,10 @@ namespace BudgetToolsUnitTestF
 
       //annuals
       carRegistration = new HardBill("carRegistration", 1000, new DateTime(2020, 12, 31), HardBillFrequencyEnum.Annualy, credit);
-      vacation = new SoftBill("vacation", 7500);
 
       //monthlys
       electricity = new HardBill("electricity", 150, new DateTime(2020, 1, 15), HardBillFrequencyEnum.Monthly, checking);
       cable = new HardBill("cable", 75, new DateTime(2020, 1, 20), HardBillFrequencyEnum.Monthly, credit);
-      food = new SoftBill("food", 500);
-      gas = new SoftBill("gas", 400);
 
       yearTop = new YearTop();
       yearTop.InitializeYear();
@@ -64,12 +59,12 @@ namespace BudgetToolsUnitTestF
       yearTop.IncomeSources.Add(bonus.Name, bonus);
 
       yearTop.HardBills.Add(carRegistration.Name, carRegistration);
-      yearTop.AddSoftBill(vacation, true);
+      yearTop.AddSoftBill("vacation", 7500, true);
 
       yearTop.HardBills.Add(electricity.Name, electricity);
       yearTop.HardBills.Add(cable.Name, cable);
-      yearTop.AddSoftBill(food, false);
-      yearTop.AddSoftBill(gas, false);
+      yearTop.AddSoftBill("food", 500, false);
+      yearTop.AddSoftBill("gas", 100, false);
 
     }
 
@@ -89,9 +84,10 @@ namespace BudgetToolsUnitTestF
       amount = 100;
       description = "grocery store";
       date = new DateTime(2020, 1, 15);
-      sbt = yearTop.GetSoftBillTransaction(description, amount, date);
+      sbt = yearTop.GetSoftBillTransaction(description, amount, date.Month);
+      sbt.Date = date;
       sbt.SoftGroupSplit["food"] = amount;
-      yearTop.LogPurchase(sbt, credit);
+      credit.NewDebitTransaction(sbt);
 
       creditExpected += amount; 
       Assert.AreEqual(creditExpected, yearTop.Accounts["credit"].BalanceHistory.Last().Value);
@@ -100,9 +96,10 @@ namespace BudgetToolsUnitTestF
       amount = 150;
       description = "grocery store";
       date = new DateTime(2020, 1, 16);
-      sbt = yearTop.GetSoftBillTransaction(description, amount, date);
+      sbt = yearTop.GetSoftBillTransaction(description, amount, date.Month);
+      sbt.Date = date;
       sbt.SoftGroupSplit["food"] = amount;
-      yearTop.LogPurchase(sbt, credit);
+      credit.NewDebitTransaction(sbt);
 
       creditExpected += amount;
       Assert.AreEqual(creditExpected, yearTop.Accounts["credit"].BalanceHistory.Last().Value);
@@ -111,9 +108,10 @@ namespace BudgetToolsUnitTestF
       amount = 150;
       description = "gas station";
       date = new DateTime(2020, 1, 16);
-      sbt = yearTop.GetSoftBillTransaction(description, amount, date);
+      sbt = yearTop.GetSoftBillTransaction(description, amount, date.Month);
+      sbt.Date = date;
       sbt.SoftGroupSplit["gas"] = amount;
-      yearTop.LogPurchase(sbt, checking);
+      checking.NewDebitTransaction(sbt);
 
       checkingExpected -= amount;
       Assert.AreEqual(checkingExpected, yearTop.Accounts["checking"].BalanceHistory.Last().Value);
@@ -121,9 +119,10 @@ namespace BudgetToolsUnitTestF
       amount = 50;
       description = "gas station";
       date = new DateTime(2020, 1, 20);
-      sbt = yearTop.GetSoftBillTransaction(description, amount, date);
+      sbt = yearTop.GetSoftBillTransaction(description, amount, date.Month);
+      sbt.Date = date;
       sbt.SoftGroupSplit["gas"] = amount;
-      yearTop.LogPurchase(sbt, checking);
+      checking.NewDebitTransaction(sbt);
 
       checkingExpected -= amount;
       Assert.AreEqual(checkingExpected, yearTop.Accounts["checking"].BalanceHistory.Last().Value);
@@ -168,6 +167,67 @@ namespace BudgetToolsUnitTestF
       yearTop.FastForward(new DateTime(2020, 12, 31));
 
       Console.WriteLine("Done");
+    }
+
+    [Test]
+    public void SerializeTest()
+    {
+      string filepath = @"C:\Users\Batman\budgets\BudgetTest.bin";
+      yearTop.FastForward(new DateTime(2020, 12, 31));
+
+      //transaction details
+      decimal amount;
+      string description;
+      DateTime date;
+      SoftBillTransaction sbt;
+
+      /* Credit checks */
+      amount = 100;
+      description = "grocery store";
+      date = new DateTime(2020, 1, 15);
+      sbt = yearTop.GetSoftBillTransaction(description, amount, date.Month);
+      sbt.SoftGroupSplit["food"] = amount;
+      credit.Transactions.Add(sbt);
+
+      /* Checking checks */
+      amount = 150;
+      description = "gas station";
+      date = new DateTime(2020, 1, 16);
+      sbt = yearTop.GetSoftBillTransaction(description, amount, date.Month);
+      sbt.SoftGroupSplit["gas"] = amount;
+      checking.Transactions.Add(sbt);
+
+      yearTop.SaveToFile(filepath);
+
+      YearTop desYearTop = YearTop.LoadFromFile(filepath);
+
+      foreach (var kvp in yearTop.Accounts)
+      {
+        AccountBase origAccount = kvp.Value;
+        AccountBase copyAccount = desYearTop.Accounts[kvp.Key];
+
+        Assert.AreEqual(origAccount.CurrentBalance, copyAccount.CurrentBalance);
+        for(int i = 0; i < origAccount.Transactions.Count; i++)
+        {
+          Transaction origT = origAccount.Transactions[i];
+          Transaction copyT = copyAccount.Transactions[i];
+
+          Assert.AreEqual(origT.Amount, copyT.Amount);
+          Assert.AreEqual(origT.Date, copyT.Date);
+          Assert.AreEqual(origT.Description, copyT.Description);
+
+          if(origT.GetType().Name.Contains("SoftBill"))
+          {
+            SoftBillTransaction origSbt = origT as SoftBillTransaction;
+            SoftBillTransaction copySbt = copyT as SoftBillTransaction;
+
+            foreach (var item in origSbt.SoftGroupSplit)
+            {
+              Assert.AreEqual(item.Value, copySbt.SoftGroupSplit[item.Key]);
+            }
+          }
+        }
+      }
     }
   }
 }

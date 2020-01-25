@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace BudgetToolLib
 {
+  [Serializable()]
   public class CheckingAccount : AccountBase
   {
     public CheckingAccount()

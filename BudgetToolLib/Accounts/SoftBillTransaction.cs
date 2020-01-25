@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace BudgetToolLib
 {
+  [Serializable()]
   public class SoftBillTransaction : Transaction
   {    
     public Dictionary<string, decimal> SoftGroupSplit { get; set; }

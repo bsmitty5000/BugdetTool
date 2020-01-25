@@ -14,6 +14,7 @@ namespace BudgetToolLib
     Annualy = 52
   }
 
+  [Serializable()]
   public class Income
   {
     private DateTime _firstDeposit;
@@ -102,7 +103,7 @@ namespace BudgetToolLib
       //todo: maybe make the deposit only happen if it's during the week
       while(NextDeposit <= date)
       {
-        DepositAccount.NewCreditTransaction(new Transaction() { Description = Name, Date = NextDeposit, Amount = PaydayAmount, AccountUsed = DepositAccount });
+        DepositAccount.NewCreditTransaction(new Transaction() { Description = Name, Date = NextDeposit, Amount = PaydayAmount });
         NextDeposit = NextDeposit.AddDays((double)PaydayFrequency * 7);
         NumPaydaysPaidThisYear++;
 

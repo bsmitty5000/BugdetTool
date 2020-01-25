@@ -93,7 +93,8 @@ namespace BudgetToolApp
     private void purchasesDelete_Click(object sender, EventArgs e)
     {
       Transaction t = transactionsLv.SelectedItems[0].Tag as Transaction;
-      if(!t.AccountUsed.Transactions.Remove(t))
+      string accountName = transactionsLv.SelectedItems[0].SubItems[2].Text;
+      if(!_year.Accounts[accountName].Transactions.Remove(t))
       {
         throw new ArgumentException("Could not find transaction!");
       }
@@ -119,7 +120,7 @@ namespace BudgetToolApp
     {
       if (e.NewTransaction != null)
       {
-        e.NewTransaction.AccountUsed.NewDebitTransaction(e.NewTransaction);
+        e.Account.NewDebitTransaction(e.NewTransaction);
       }
       RefreshPage();
     }
@@ -194,30 +195,27 @@ namespace BudgetToolApp
         }
       }
 
-      if (_allDatesTransactions)
+      transactionsLv.Items.Clear();
+      foreach (var account in displayAccounts)
       {
-        foreach (var account in displayAccounts)
+        if (_allDatesTransactions)
         {
           displayTransactions.AddRange(account.Transactions.ToList());
         }
-      }
-      else
-      {
-        foreach (var account in displayAccounts)
+        else
         {
           displayTransactions.AddRange(account.Transactions.Where(p => (p.Date.Month == _dateSelected.Month)).ToList());
         }
-      }
 
-      transactionsLv.Items.Clear();
-      foreach (var t in displayTransactions.OrderBy(t => t.Date).ToList())
-      {
-        ListViewItem lvi = new ListViewItem(t.Description);
-        lvi.SubItems.Add(t.Amount.ToString());
-        lvi.SubItems.Add(t.AccountUsed.Name);
-        lvi.SubItems.Add(t.Date.ToShortDateString());
-        lvi.Tag = t;
-        transactionsLv.Items.Add(lvi);
+        foreach (var t in displayTransactions.OrderBy(t => t.Date).ToList())
+        {
+          ListViewItem lvi = new ListViewItem(t.Description);
+          lvi.SubItems.Add(t.Amount.ToString());
+          lvi.SubItems.Add(account.Name); //subitems 2?
+          lvi.SubItems.Add(t.Date.ToShortDateString());
+          lvi.Tag = t;
+          transactionsLv.Items.Add(lvi);
+        }
       }
     }
 

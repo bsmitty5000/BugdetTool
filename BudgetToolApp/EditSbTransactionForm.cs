@@ -128,6 +128,7 @@ namespace BudgetToolApp
     {
       SaveOffUIFields();
       NewSbTransactionEventArgs args = new NewSbTransactionEventArgs();
+      args.Account = _year.Accounts[accountCb.Text];
       args.NewTransaction = _sbt;
 
       NewTransactionAdded?.Invoke(this, args);
@@ -148,7 +149,6 @@ namespace BudgetToolApp
       {
         temp = _year.GetSoftBillTransaction(string.Empty, 0, _selectedDate.Month);
       }
-      temp.AccountUsed = _sbt.AccountUsed;
       temp.Date = _selectedDate;
       _sbt = temp;
       UpdateTplText();
@@ -207,7 +207,6 @@ namespace BudgetToolApp
 
     private void SaveOffUIFields()
     {
-      _sbt.AccountUsed = _year.Accounts[accountCb.Text];
       _sbt.Description = descriptionTb.Text;
       _sbt.Date = dateDtp.Value;
 
@@ -266,6 +265,7 @@ namespace BudgetToolApp
   }
   public class NewSbTransactionEventArgs : EventArgs
   {
+    public AccountBase Account { get; set; }
     public SoftBillTransaction NewTransaction { get; set; }
   }
 }
