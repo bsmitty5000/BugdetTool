@@ -297,7 +297,6 @@ namespace BudgetToolApp
       if (e.NewHardBill != null)
       {
         _year.HardBills.Add(e.NewHardBill.Name, e.NewHardBill);
-        e.NewHardBill.PayBill(e.NewHardBill.PaymentAccount.StartingDate);
       }
       RefreshPage();
     }
@@ -483,6 +482,7 @@ namespace BudgetToolApp
     private void manageMonthsBtn_Click_1(object sender, EventArgs e)
     {
       var manageBudget = new ManageBudget(_year);
+      this.Close();
       manageBudget.Show();
     }
 

@@ -40,6 +40,7 @@
       this.label4 = new System.Windows.Forms.Label();
       this.label2 = new System.Windows.Forms.Label();
       this.label1 = new System.Windows.Forms.Label();
+      this.autoPayCb = new System.Windows.Forms.CheckBox();
       this.SuspendLayout();
       // 
       // frequencyCb
@@ -77,7 +78,7 @@
       // 
       // cancelBtn
       // 
-      this.cancelBtn.Location = new System.Drawing.Point(185, 168);
+      this.cancelBtn.Location = new System.Drawing.Point(184, 193);
       this.cancelBtn.Name = "cancelBtn";
       this.cancelBtn.Size = new System.Drawing.Size(75, 23);
       this.cancelBtn.TabIndex = 50;
@@ -87,7 +88,7 @@
       // 
       // saveBtn
       // 
-      this.saveBtn.Location = new System.Drawing.Point(73, 168);
+      this.saveBtn.Location = new System.Drawing.Point(72, 193);
       this.saveBtn.Name = "saveBtn";
       this.saveBtn.Size = new System.Drawing.Size(75, 23);
       this.saveBtn.TabIndex = 32;
@@ -144,11 +145,23 @@
       this.label1.TabIndex = 55;
       this.label1.Text = "Name";
       // 
+      // autoPayCb
+      // 
+      this.autoPayCb.AutoSize = true;
+      this.autoPayCb.Font = new System.Drawing.Font("Franklin Gothic Medium", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.autoPayCb.Location = new System.Drawing.Point(115, 150);
+      this.autoPayCb.Name = "autoPayCb";
+      this.autoPayCb.Size = new System.Drawing.Size(70, 19);
+      this.autoPayCb.TabIndex = 56;
+      this.autoPayCb.Text = "Auto Pay";
+      this.autoPayCb.UseVisualStyleBackColor = true;
+      // 
       // EditHardBillForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(342, 228);
+      this.Controls.Add(this.autoPayCb);
       this.Controls.Add(this.frequencyCb);
       this.Controls.Add(this.label3);
       this.Controls.Add(this.firstBillDueDtp);
@@ -182,5 +195,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckBox autoPayCb;
     }
 }

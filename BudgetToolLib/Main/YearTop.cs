@@ -90,7 +90,6 @@ namespace BudgetToolLib
         HardBills[hb.Key].PaymentAccount = Accounts[hb.Value.PaymentAccount.Name];
       }
     }
-    
     public void InitializeYear()
     {
       MonthlySoftBills = new List<SoftBillGroup>();
@@ -127,7 +126,6 @@ namespace BudgetToolLib
       serializer.Serialize(SaveFileStream, this);
       SaveFileStream.Close();
     }
-
     public void RemoveSoftBill(string name)
     {
       foreach (var group in MonthlySoftBills)
@@ -200,7 +198,10 @@ namespace BudgetToolLib
 
       foreach (var hb in HardBills)
       {
-        hb.Value.PayBill(date);
+        if(hb.Value.AutoPay)
+        {
+          hb.Value.PayAutoPayBill(date);
+        }
       }
     }
   }

@@ -14,7 +14,6 @@ namespace BudgetToolLib
     {
       SoftGroupSplit = new Dictionary<string, decimal>();
     }
-
     public SoftBillTransaction(SoftBillTransaction sb) : base(sb)
     {
       SoftGroupSplit = new Dictionary<string, decimal>();

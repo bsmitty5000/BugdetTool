@@ -156,7 +156,7 @@ namespace BudgetToolsUnitTestF
     public void SimpleHardBillTest()
     {
       decimal checkingExpected = yearTop.Accounts["checking"].BalanceHistory.Last().Value;
-      electricity.PayBill(new DateTime(2020, 2, 14));
+      electricity.PayAutoPayBill(new DateTime(2020, 2, 14));
 
       checkingExpected -= electricity.Amount;
       Assert.AreEqual(checkingExpected, yearTop.Accounts["checking"].BalanceHistory.Last().Value);

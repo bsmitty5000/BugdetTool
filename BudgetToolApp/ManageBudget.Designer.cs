@@ -56,7 +56,15 @@
       this.purchasesCms = new System.Windows.Forms.ContextMenuStrip(this.components);
       this.purchasesDelete = new System.Windows.Forms.ToolStripMenuItem();
       this.purchasesEdit = new System.Windows.Forms.ToolStripMenuItem();
+      this.hardBillsLv = new System.Windows.Forms.ListView();
+      this.AnnualHbName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+      this.AnnualHbAmount = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+      this.NextDueDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+      this.label5 = new System.Windows.Forms.Label();
+      this.hbCms = new System.Windows.Forms.ContextMenuStrip(this.components);
+      this.hbPay = new System.Windows.Forms.ToolStripMenuItem();
       this.purchasesCms.SuspendLayout();
+      this.hbCms.SuspendLayout();
       this.SuspendLayout();
       // 
       // accountsLv
@@ -128,7 +136,7 @@
       this.transactionsLv.HideSelection = false;
       this.transactionsLv.Location = new System.Drawing.Point(380, 32);
       this.transactionsLv.Name = "transactionsLv";
-      this.transactionsLv.Size = new System.Drawing.Size(408, 284);
+      this.transactionsLv.Size = new System.Drawing.Size(380, 284);
       this.transactionsLv.TabIndex = 7;
       this.transactionsLv.UseCompatibleStateImageBehavior = false;
       this.transactionsLv.View = System.Windows.Forms.View.Details;
@@ -151,7 +159,7 @@
       // columnHeader4
       // 
       this.columnHeader4.Text = "Date";
-      this.columnHeader4.Width = 93;
+      this.columnHeader4.Width = 71;
       // 
       // label4
       // 
@@ -291,7 +299,7 @@
       // purchasesDelete
       // 
       this.purchasesDelete.Name = "purchasesDelete";
-      this.purchasesDelete.Size = new System.Drawing.Size(180, 22);
+      this.purchasesDelete.Size = new System.Drawing.Size(107, 22);
       this.purchasesDelete.Text = "Delete";
       this.purchasesDelete.Click += new System.EventHandler(this.purchasesDelete_Click);
       // 
@@ -299,15 +307,71 @@
       // 
       this.purchasesEdit.Enabled = false;
       this.purchasesEdit.Name = "purchasesEdit";
-      this.purchasesEdit.Size = new System.Drawing.Size(180, 22);
+      this.purchasesEdit.Size = new System.Drawing.Size(107, 22);
       this.purchasesEdit.Text = "Edit";
       this.purchasesEdit.Click += new System.EventHandler(this.purchasesEdit_Click);
+      // 
+      // hardBillsLv
+      // 
+      this.hardBillsLv.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.AnnualHbName,
+            this.AnnualHbAmount,
+            this.NextDueDate});
+      this.hardBillsLv.Font = new System.Drawing.Font("Franklin Gothic Medium", 8.25F);
+      this.hardBillsLv.HideSelection = false;
+      this.hardBillsLv.Location = new System.Drawing.Point(766, 32);
+      this.hardBillsLv.Name = "hardBillsLv";
+      this.hardBillsLv.Size = new System.Drawing.Size(319, 284);
+      this.hardBillsLv.TabIndex = 46;
+      this.hardBillsLv.UseCompatibleStateImageBehavior = false;
+      this.hardBillsLv.View = System.Windows.Forms.View.Details;
+      // 
+      // AnnualHbName
+      // 
+      this.AnnualHbName.Text = "Name";
+      this.AnnualHbName.Width = 107;
+      // 
+      // AnnualHbAmount
+      // 
+      this.AnnualHbAmount.Text = "Amount";
+      this.AnnualHbAmount.Width = 98;
+      // 
+      // NextDueDate
+      // 
+      this.NextDueDate.Text = "Next Due Date";
+      this.NextDueDate.Width = 90;
+      // 
+      // label5
+      // 
+      this.label5.AutoSize = true;
+      this.label5.Font = new System.Drawing.Font("Franklin Gothic Medium", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.label5.Location = new System.Drawing.Point(763, 11);
+      this.label5.Name = "label5";
+      this.label5.Size = new System.Drawing.Size(54, 15);
+      this.label5.TabIndex = 47;
+      this.label5.Text = "Hard Bills";
+      // 
+      // hbCms
+      // 
+      this.hbCms.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.hbPay});
+      this.hbCms.Name = "annualHbCms";
+      this.hbCms.Size = new System.Drawing.Size(94, 26);
+      // 
+      // hbPay
+      // 
+      this.hbPay.Name = "hbPay";
+      this.hbPay.Size = new System.Drawing.Size(180, 22);
+      this.hbPay.Text = "Pay";
+      this.hbPay.Click += new System.EventHandler(this.hbPay_Click);
       // 
       // ManageBudget
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(800, 450);
+      this.ClientSize = new System.Drawing.Size(1097, 450);
+      this.Controls.Add(this.label5);
+      this.Controls.Add(this.hardBillsLv);
       this.Controls.Add(this.accountInfoLv);
       this.Controls.Add(this.showAnnualCb);
       this.Controls.Add(this.allDatesCb);
@@ -326,6 +390,7 @@
       this.Name = "ManageBudget";
       this.Text = "ManageBudget";
       this.purchasesCms.ResumeLayout(false);
+      this.hbCms.ResumeLayout(false);
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -360,5 +425,12 @@
     private System.Windows.Forms.ContextMenuStrip purchasesCms;
     private System.Windows.Forms.ToolStripMenuItem purchasesDelete;
     private System.Windows.Forms.ToolStripMenuItem purchasesEdit;
-  }
+        private System.Windows.Forms.ListView hardBillsLv;
+        private System.Windows.Forms.ColumnHeader AnnualHbName;
+        private System.Windows.Forms.ColumnHeader AnnualHbAmount;
+        private System.Windows.Forms.ColumnHeader NextDueDate;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ContextMenuStrip hbCms;
+        private System.Windows.Forms.ToolStripMenuItem hbPay;
+    }
 }

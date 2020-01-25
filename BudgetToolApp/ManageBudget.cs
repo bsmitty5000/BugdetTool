@@ -16,11 +16,13 @@ namespace BudgetToolApp
     private YearTop _yearFastForward;
     private DateTime _dateSelected;
     private List<string> _selectedAccounts;
-    private Transaction _transToEdit;
     AccountBase _selectedAccount;
+    private bool _skipRefreshing;
 
     public ManageBudget(YearTop year)
     {
+      _skipRefreshing = true;
+
       InitializeComponent();
 
       if(year == null)
@@ -49,6 +51,7 @@ namespace BudgetToolApp
 
       accountsLv.ItemChecked += AccountsLv_ItemChecked;
       transactionsLv.MouseUp += new MouseEventHandler(purchasesLv_MouseUp);
+      hardBillsLv.MouseUp += new MouseEventHandler(hardBillsLv_MouseUp);
 
       accountsLv.Items.Clear();
       foreach (var account in _year.Accounts)
@@ -58,7 +61,40 @@ namespace BudgetToolApp
       }
       accountsLv.Items[0].Checked = true;
 
+      _skipRefreshing = false;
       RefreshPage();
+    }
+
+    private void hardBillsLv_MouseUp(object sender, MouseEventArgs e)
+    {
+      int index = -1;
+      HardBill hardBill = null;
+
+      if (e.Button == MouseButtons.Right)
+      {
+        if (hardBillsLv.Items.Count > 0)
+        {
+          ListViewItem selectedItem = hardBillsLv.GetItemAt(e.X, e.Y);
+          if (selectedItem != null)
+          {
+            index = selectedItem.Index;
+            hardBill = selectedItem.Tag as HardBill;
+          }
+        }
+
+        if ((hardBill != null) && (!hardBill.AutoPay))
+        {
+          hbPay.Enabled = true;
+          //purchasesEdit.Enabled = true;
+        }
+        else
+        {
+          hbPay.Enabled = false;
+          //purchasesEdit.Enabled = false;
+        }
+        hbCms.Show(this, new Point(e.X + ((Control)sender).Left + 20, e.Y + ((Control)sender).Top + 20));
+        //accountCms.Show(this, new Point(e.X, e.Y));
+      }
     }
 
     private void purchasesLv_MouseUp(object sender, MouseEventArgs e)
@@ -142,6 +178,9 @@ namespace BudgetToolApp
 
     private void RefreshPage()
     {
+      if (_skipRefreshing)
+        return;
+
       YearTop localYt;
       if (_yearFastForward == null)
       {
@@ -158,6 +197,8 @@ namespace BudgetToolApp
       accountInfoLv.Items.Clear();
       foreach (ListViewItem item in accountsLv.Items)
       {
+        if (item == null)
+          continue;
         ListViewItem lvi = new ListViewItem(localYt.Accounts[item.Text].GetBalance(_dateSelected).ToString());
         accountInfoLv.Items.Add(lvi);
       }
@@ -219,8 +260,26 @@ namespace BudgetToolApp
           lvi.SubItems.Add(account.Name); //subitems 2?
           lvi.SubItems.Add(t.Date.ToShortDateString());
           lvi.Tag = t;
+          if(t.Date < account.StartingDate)
+          {
+            lvi.BackColor = Color.LightGray;
+          }
           transactionsLv.Items.Add(lvi);
         }
+      }
+
+      hardBillsLv.Items.Clear();
+      foreach (var hb in localYt.HardBills)
+      {
+        ListViewItem lvi = new ListViewItem(hb.Key);
+        lvi.SubItems.Add(hb.Value.Amount.ToString());
+        lvi.SubItems.Add(hb.Value.NextBillDue.ToShortDateString());
+        if(hb.Value.NextBillDue <= _dateSelected)
+        {
+          lvi.BackColor = Color.Red;
+        }
+        lvi.Tag = hb.Value;
+        hardBillsLv.Items.Add(lvi);
       }
     }
 
@@ -260,8 +319,16 @@ namespace BudgetToolApp
 
     private void editBudgetBtn_Click(object sender, EventArgs e)
     {
+      var editBudgetTop = new EditBudgetTop(_year);
       this.Close();
+      editBudgetTop.Show();
     }
 
+    private void hbPay_Click(object sender, EventArgs e)
+    {
+      HardBill hb = hardBillsLv.SelectedItems[0].Tag as HardBill;
+      hb.ManuallyPayBill(_dateSelected);
+      RefreshPage();
+    }
   }
 }

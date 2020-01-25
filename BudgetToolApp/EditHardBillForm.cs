@@ -25,7 +25,8 @@ namespace BudgetToolApp
           0,
           DateTime.Today,
           HardBillFrequencyEnum.Monthly,
-          null);
+          null,
+          false);
       }
 
       if (year == null)
@@ -50,6 +51,7 @@ namespace BudgetToolApp
       firstBillDueDtp.Value = _hardBill.FirstBillDue;
       frequencyCb.SelectedItem = _hardBill.Frequency.ToString();
       accountCb.SelectedItem = _hardBill.PaymentAccount != null ? _hardBill.PaymentAccount.Name : string.Empty;
+      autoPayCb.Checked = _hardBill.AutoPay;
     }
 
     private void saveBtn_Click(object sender, EventArgs e)
@@ -77,6 +79,8 @@ namespace BudgetToolApp
       _hardBill.NextBillDue = firstBillDueDtp.Value;
 
       _hardBill.PaymentAccount = _year.Accounts[accountCb.Text];
+
+      _hardBill.AutoPay = autoPayCb.Checked;
 
       args.NewHardBill = _hardBill;
       OnNewHardBillAdded(args);

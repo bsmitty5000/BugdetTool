@@ -23,6 +23,7 @@ namespace BudgetToolLib
     public DateTime NextBillDue { get; set; }
     public HardBillFrequencyEnum Frequency { get; set; }
     public AccountBase PaymentAccount { get; set; }
+    public bool AutoPay { get; set; }
 
     public decimal AnnualAmount
     {
@@ -44,15 +45,15 @@ namespace BudgetToolLib
     public HardBill()
     { }
 
-    public HardBill(string name, decimal amount, DateTime firstBillDue, HardBillFrequencyEnum frequency, AccountBase paymentSource)
+    public HardBill(string name, decimal amount, DateTime firstBillDue, HardBillFrequencyEnum frequency, AccountBase paymentSource, bool autoPay)
     {
       Name = name;
       Amount = amount;
       FirstBillDue = firstBillDue;
       Frequency = frequency;
       PaymentAccount = paymentSource;
+      AutoPay = autoPay;
     }
-
     public HardBill(HardBill hb)
     {
       this.Name = hb.Name;
@@ -61,9 +62,9 @@ namespace BudgetToolLib
       this.Frequency = hb.Frequency;
       this.PaymentAccount = AccountBaseFactory.CopyAccountBase(hb.PaymentAccount);
       this.NextBillDue = hb.NextBillDue;
+      this.AutoPay = hb.AutoPay;
     }
-
-    public void PayBill(DateTime date)
+    public void PayAutoPayBill(DateTime date)
     {
       while(NextBillDue <= date)
       {
@@ -80,6 +81,23 @@ namespace BudgetToolLib
           default:
             return;
         }
+      }
+    }
+
+    public void ManuallyPayBill(DateTime date)
+    {
+      PaymentAccount.NewDebitTransaction(new Transaction() { Description = Name, Date = date, Amount = this.Amount });
+      switch (Frequency)
+      {
+        case HardBillFrequencyEnum.Monthly:
+          NextBillDue = NextBillDue.AddMonths(1);
+          break;
+        case HardBillFrequencyEnum.Weekly:
+          NextBillDue = NextBillDue.AddDays(7);
+          break;
+        // Nothing to do for now for annuals because i'm only concentrating on a single year at a time
+        default:
+          return;
       }
     }
   }

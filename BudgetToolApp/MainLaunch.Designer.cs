@@ -76,6 +76,7 @@
       this.logPurchasesBtn.TabIndex = 3;
       this.logPurchasesBtn.Text = "Log Purchases";
       this.logPurchasesBtn.UseVisualStyleBackColor = true;
+      this.logPurchasesBtn.Click += new System.EventHandler(this.logPurchasesBtn_Click);
       // 
       // changeSelectedBtn
       // 

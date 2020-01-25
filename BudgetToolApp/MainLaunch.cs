@@ -74,5 +74,18 @@ namespace BudgetToolApp
       var editBudgetTop = new EditBudgetTop(null);
       editBudgetTop.ShowDialog();
     }
+
+    private void logPurchasesBtn_Click(object sender, EventArgs e)
+    {
+      if(File.Exists(_selectedBudgetFilepath))
+      {
+        var manageBudget = new ManageBudget(YearTop.LoadFromFile(_selectedBudgetFilepath));
+        manageBudget.ShowDialog();
+      }
+      else
+      {
+        MessageBox.Show("select a valid file to load from!");
+      }
+    }
   }
 }

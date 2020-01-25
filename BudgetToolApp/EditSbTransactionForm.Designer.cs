@@ -61,7 +61,7 @@
       this.softBillSplitTpl.ColumnCount = 3;
       this.softBillSplitTpl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 51.33333F));
       this.softBillSplitTpl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 48.66667F));
-      this.softBillSplitTpl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 176F));
+      this.softBillSplitTpl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 177F));
       this.softBillSplitTpl.Font = new System.Drawing.Font("Franklin Gothic Medium", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.softBillSplitTpl.Location = new System.Drawing.Point(336, 72);
       this.softBillSplitTpl.Name = "softBillSplitTpl";
@@ -93,7 +93,7 @@
       // cancelAndCloseBtn
       // 
       this.cancelAndCloseBtn.Font = new System.Drawing.Font("Franklin Gothic Medium", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.cancelAndCloseBtn.Location = new System.Drawing.Point(15, 198);
+      this.cancelAndCloseBtn.Location = new System.Drawing.Point(140, 164);
       this.cancelAndCloseBtn.Name = "cancelAndCloseBtn";
       this.cancelAndCloseBtn.Size = new System.Drawing.Size(110, 28);
       this.cancelAndCloseBtn.TabIndex = 51;
@@ -180,7 +180,7 @@
       // resetBtn
       // 
       this.resetBtn.Font = new System.Drawing.Font("Franklin Gothic Medium", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.resetBtn.Location = new System.Drawing.Point(15, 234);
+      this.resetBtn.Location = new System.Drawing.Point(12, 198);
       this.resetBtn.Name = "resetBtn";
       this.resetBtn.Size = new System.Drawing.Size(110, 27);
       this.resetBtn.TabIndex = 59;
@@ -191,7 +191,7 @@
       // logAndNewBtn
       // 
       this.logAndNewBtn.Font = new System.Drawing.Font("Franklin Gothic Medium", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.logAndNewBtn.Location = new System.Drawing.Point(15, 267);
+      this.logAndNewBtn.Location = new System.Drawing.Point(140, 198);
       this.logAndNewBtn.Name = "logAndNewBtn";
       this.logAndNewBtn.Size = new System.Drawing.Size(110, 28);
       this.logAndNewBtn.TabIndex = 60;
@@ -199,11 +199,11 @@
       this.logAndNewBtn.UseVisualStyleBackColor = true;
       this.logAndNewBtn.Click += new System.EventHandler(this.logAndNewBtn_Click);
       // 
-      // EditTransactionForm
+      // EditSbTransactionForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 15F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(800, 519);
+      this.ClientSize = new System.Drawing.Size(800, 412);
       this.Controls.Add(this.logAndNewBtn);
       this.Controls.Add(this.resetBtn);
       this.Controls.Add(this.annualPurchaseCb);
@@ -220,7 +220,7 @@
       this.Controls.Add(this.label2);
       this.Controls.Add(this.label1);
       this.Font = new System.Drawing.Font("Franklin Gothic Medium", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.Name = "EditTransactionForm";
+      this.Name = "EditSbTransactionForm";
       this.Text = "EditTransactionForm";
       this.ResumeLayout(false);
       this.PerformLayout();
