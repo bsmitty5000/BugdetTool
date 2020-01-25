@@ -424,7 +424,7 @@ namespace BudgetToolApp
 
     private void monthlySbEdit_Click_1(object sender, EventArgs e)
     {
-      string name = annualSbLv.SelectedItems[0].SubItems[0].Text;
+      string name = monthlySbLv.SelectedItems[0].SubItems[0].Text;
       decimal amount = decimal.Parse(annualSbLv.SelectedItems[0].SubItems[1].Text);
 
       var editSoftBill = new EditSoftBillForm(name, amount);
@@ -465,7 +465,6 @@ namespace BudgetToolApp
 
     private void saveYearBtn_Click_1(object sender, EventArgs e)
     {
-      Stream myStream;
       SaveFileDialog saveFileDialog1 = new SaveFileDialog();
 
       saveFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
@@ -474,14 +473,10 @@ namespace BudgetToolApp
 
       if (saveFileDialog1.ShowDialog() == DialogResult.OK)
       {
-        if ((myStream = saveFileDialog1.OpenFile()) != null)
-        {
-          Properties.Settings.Default["BudgetFile"] = saveFileDialog1.FileName;
-          Properties.Settings.Default.Save();
+        Properties.Settings.Default["BudgetFile"] = saveFileDialog1.FileName;
+        Properties.Settings.Default.Save();
 
-          _year.SaveToFile(myStream);
-          myStream.Close();
-        }
+        _year.SaveToFile(saveFileDialog1.FileName);
       }
     }
 

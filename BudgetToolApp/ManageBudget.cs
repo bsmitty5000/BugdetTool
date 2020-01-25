@@ -98,6 +98,7 @@ namespace BudgetToolApp
       {
         throw new ArgumentException("Could not find transaction!");
       }
+      RefreshPage();
     }
 
     private void purchasesEdit_Click(object sender, EventArgs e)
@@ -120,7 +121,11 @@ namespace BudgetToolApp
     {
       if (e.NewTransaction != null)
       {
-        e.Account.NewDebitTransaction(e.NewTransaction);
+        if(!_year.Accounts.ContainsKey(e.AccountName))
+        {
+          throw new ArgumentException("could not find that account! Transaction not added.");
+        }
+        _year.Accounts[e.AccountName].NewDebitTransaction(e.NewTransaction);
       }
       RefreshPage();
     }
@@ -200,11 +205,11 @@ namespace BudgetToolApp
       {
         if (_allDatesTransactions)
         {
-          displayTransactions.AddRange(account.GetTransactions().ToList());
+          displayTransactions = account.GetTransactions().ToList();
         }
         else
         {
-          displayTransactions.AddRange(account.GetTransactions().Where(p => (p.Date.Month == _dateSelected.Month)).ToList());
+          displayTransactions = account.GetTransactions().Where(p => (p.Date.Month == _dateSelected.Month)).ToList();
         }
 
         foreach (var t in displayTransactions.OrderBy(t => t.Date).ToList())

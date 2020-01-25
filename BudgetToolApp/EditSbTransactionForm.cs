@@ -9,7 +9,6 @@ namespace BudgetToolApp
   {
     private SoftBillTransaction _sbt;
     private YearTop _year;
-    private AccountBase _selectedAccount;
     private DateTime _selectedDate;
     private bool _eventsOn;
     public event EventHandler<NewSbTransactionEventArgs> NewTransactionAdded;
@@ -128,7 +127,7 @@ namespace BudgetToolApp
     {
       SaveOffUIFields();
       NewSbTransactionEventArgs args = new NewSbTransactionEventArgs();
-      args.Account = _year.Accounts[accountCb.Text];
+      args.AccountName = accountCb.Text;
       args.NewTransaction = _sbt;
 
       NewTransactionAdded?.Invoke(this, args);
@@ -265,7 +264,7 @@ namespace BudgetToolApp
   }
   public class NewSbTransactionEventArgs : EventArgs
   {
-    public AccountBase Account { get; set; }
+    public string AccountName { get; set; }
     public SoftBillTransaction NewTransaction { get; set; }
   }
 }
