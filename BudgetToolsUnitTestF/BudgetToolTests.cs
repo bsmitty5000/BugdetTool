@@ -187,7 +187,7 @@ namespace BudgetToolsUnitTestF
       date = new DateTime(2020, 1, 15);
       sbt = yearTop.GetSoftBillTransaction(description, amount, date.Month);
       sbt.SoftGroupSplit["food"] = amount;
-      credit.Transactions.Add(sbt);
+      credit.NewDebitTransaction(sbt);
 
       /* Checking checks */
       amount = 150;
@@ -195,7 +195,7 @@ namespace BudgetToolsUnitTestF
       date = new DateTime(2020, 1, 16);
       sbt = yearTop.GetSoftBillTransaction(description, amount, date.Month);
       sbt.SoftGroupSplit["gas"] = amount;
-      checking.Transactions.Add(sbt);
+      checking.NewDebitTransaction(sbt);
 
       yearTop.SaveToFile(filepath);
 
@@ -207,10 +207,12 @@ namespace BudgetToolsUnitTestF
         AccountBase copyAccount = desYearTop.Accounts[kvp.Key];
 
         Assert.AreEqual(origAccount.CurrentBalance, copyAccount.CurrentBalance);
-        for(int i = 0; i < origAccount.Transactions.Count; i++)
+        IReadOnlyList<Transaction> origTs = origAccount.GetTransactions();
+        IReadOnlyList<Transaction> copyTs = copyAccount.GetTransactions();
+        for (int i = 0; i < origTs.Count; i++)
         {
-          Transaction origT = origAccount.Transactions[i];
-          Transaction copyT = copyAccount.Transactions[i];
+          Transaction origT = origTs[i];
+          Transaction copyT = copyTs[i];
 
           Assert.AreEqual(origT.Amount, copyT.Amount);
           Assert.AreEqual(origT.Date, copyT.Date);

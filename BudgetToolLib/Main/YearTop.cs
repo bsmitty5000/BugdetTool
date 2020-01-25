@@ -173,7 +173,7 @@ namespace BudgetToolLib
 
       foreach (var kvpAcc in Accounts)
       {
-        foreach (var trans in kvpAcc.Value.Transactions)
+        foreach (var trans in kvpAcc.Value.GetTransactions())
         {
           if((trans.Date.Month == month) && (trans.GetType().Name.Contains("SoftBill")))
           {

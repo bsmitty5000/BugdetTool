@@ -57,9 +57,9 @@ namespace BudgetToolLib
   public abstract class AccountBase
   {
     private decimal _startingAmount;
-    public DateTime StartingDate { get; private set; }
-    public List<Transaction> Transactions { get; set; }
+    protected List<Transaction> _transactions { get; set; }
     public string Name { get; set; }
+    public DateTime StartingDate { get; private set; }
     public decimal CurrentBalance
     {
       get
@@ -75,10 +75,10 @@ namespace BudgetToolLib
     {
       _startingAmount = account._startingAmount;
       StartingDate = account.StartingDate;
-      Transactions = new List<Transaction>();
-      foreach (var t in account.Transactions)
+      _transactions = new List<Transaction>();
+      foreach (var t in account._transactions)
       {
-        Transactions.Add(new Transaction(t));
+        _transactions.Add(new Transaction(t));
       }
       Name = account.Name;
     }
@@ -86,7 +86,7 @@ namespace BudgetToolLib
     public AccountBase(string name, decimal startingAmount, DateTime? startingDate = null)
     {
       StartingDate = startingDate ?? DateTime.MinValue;
-      Transactions = new List<Transaction>();
+      _transactions = new List<Transaction>();
       Name = name;
       _startingAmount = startingAmount;
     }
@@ -98,7 +98,7 @@ namespace BudgetToolLib
         decimal lastVal = _startingAmount;
 
         //greater than starting date so transactions on starting date do not affect startingBalance
-        foreach (var t in Transactions.Where(p => p.Date > StartingDate).OrderBy(p => p.Date).ToList())
+        foreach (var t in _transactions.Where(p => p.Date > StartingDate).OrderBy(p => p.Date).ToList())
         {
           lastVal += t.Amount;
           balanceHistory[t.Date] = lastVal;
@@ -110,8 +110,14 @@ namespace BudgetToolLib
 
     public abstract void NewDebitTransaction(Transaction transaction);
     public abstract void NewCreditTransaction(Transaction transaction);
-    public abstract void UpdateInitialBalance(decimal amount);
-
+    public IReadOnlyList<Transaction> GetTransactions()
+    {
+      return _transactions.AsReadOnly();
+    }
+    public bool Remove(Transaction t)
+    {
+      return _transactions.Remove(t);
+    }
     public decimal GetBalance(DateTime date)
     {
       var balanceHistory = BalanceHistory;

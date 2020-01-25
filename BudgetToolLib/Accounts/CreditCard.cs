@@ -26,7 +26,7 @@ namespace BudgetToolLib
       {
         throw new ArgumentException("Transaction amount should be positive. Use Debit vs Credit");
       }
-      Transactions.Add(transaction);
+      _transactions.Add(transaction);
     }
 
     public override void NewCreditTransaction(Transaction transaction)
@@ -36,12 +36,7 @@ namespace BudgetToolLib
         throw new ArgumentException("Transaction amount should be positive. Use Debit vs Credit");
       }
       transaction.Amount = -1 * transaction.Amount;
-      Transactions.Add(transaction);
-    }
-
-    public override void UpdateInitialBalance(decimal amount)
-    {
-      throw new NotImplementedException();
+      _transactions.Add(transaction);
     }
   }
 }

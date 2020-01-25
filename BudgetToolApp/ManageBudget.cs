@@ -94,7 +94,7 @@ namespace BudgetToolApp
     {
       Transaction t = transactionsLv.SelectedItems[0].Tag as Transaction;
       string accountName = transactionsLv.SelectedItems[0].SubItems[2].Text;
-      if(!_year.Accounts[accountName].Transactions.Remove(t))
+      if(!_year.Accounts[accountName].Remove(t))
       {
         throw new ArgumentException("Could not find transaction!");
       }
@@ -200,11 +200,11 @@ namespace BudgetToolApp
       {
         if (_allDatesTransactions)
         {
-          displayTransactions.AddRange(account.Transactions.ToList());
+          displayTransactions.AddRange(account.GetTransactions().ToList());
         }
         else
         {
-          displayTransactions.AddRange(account.Transactions.Where(p => (p.Date.Month == _dateSelected.Month)).ToList());
+          displayTransactions.AddRange(account.GetTransactions().Where(p => (p.Date.Month == _dateSelected.Month)).ToList());
         }
 
         foreach (var t in displayTransactions.OrderBy(t => t.Date).ToList())
