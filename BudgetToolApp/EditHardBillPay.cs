@@ -7,6 +7,7 @@ namespace BudgetToolApp
   public partial class EditHardBillPay : Form
   {
     private HardBill _hb;
+    public event EventHandler<EventArgs> NewHardBillPayEvent;
     public EditHardBillPay(HardBill hb)
     {
       InitializeComponent();
@@ -34,7 +35,13 @@ namespace BudgetToolApp
       DateTime paymentDate = paymentDateDtp.Value;
 
       _hb.PayBill(paymentDate, amount);
+      OnHardBillPaid(null);
       this.Close();
+    }
+
+    private void OnHardBillPaid(object p)
+    {
+      NewHardBillPayEvent.Invoke(null, null);
     }
 
     private void cancelBtn_Click(object sender, EventArgs e)

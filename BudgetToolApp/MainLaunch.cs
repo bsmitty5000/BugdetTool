@@ -66,13 +66,13 @@ namespace BudgetToolApp
     private void editBudgetBtn_Click(object sender, EventArgs e)
     {
       var editBudgetTop = new EditBudgetTop(YearTop.LoadFromFile(_selectedBudgetFilepath));
-      editBudgetTop.ShowDialog();
+      editBudgetTop.Show();
     }
 
     private void newBudgetBtn_Click(object sender, EventArgs e)
     {
       var editBudgetTop = new EditBudgetTop(null);
-      editBudgetTop.ShowDialog();
+      editBudgetTop.Show();
     }
 
     private void logPurchasesBtn_Click(object sender, EventArgs e)
@@ -80,7 +80,7 @@ namespace BudgetToolApp
       if(File.Exists(_selectedBudgetFilepath))
       {
         var manageBudget = new ManageBudget(YearTop.LoadFromFile(_selectedBudgetFilepath));
-        manageBudget.ShowDialog();
+        manageBudget.Show();
       }
       else
       {

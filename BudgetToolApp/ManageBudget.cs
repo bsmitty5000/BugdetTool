@@ -269,14 +269,22 @@ namespace BudgetToolApp
       }
 
       hardBillsLv.Items.Clear();
-      foreach (var hb in localYt.HardBills)
+
+      var hbList = localYt.HardBills.ToList();
+      hbList.Sort((pair1, pair2) => pair1.Value.NextBillDue.CompareTo(pair2.Value.NextBillDue));
+
+      foreach (var hb in hbList)
       {
         ListViewItem lvi = new ListViewItem(hb.Key);
         lvi.SubItems.Add(hb.Value.Amount.ToString());
         lvi.SubItems.Add(hb.Value.NextBillDue.ToShortDateString());
-        if(hb.Value.NextBillDue <= _dateSelected)
+        if((hb.Value.AutoPay == false) && (hb.Value.NextBillDue <= _dateSelected))
         {
           lvi.BackColor = Color.Red;
+        }
+        else if(hb.Value.AutoPay)
+        {
+          lvi.BackColor = Color.LightGreen;
         }
         lvi.Tag = hb.Value;
         hardBillsLv.Items.Add(lvi);
@@ -324,10 +332,15 @@ namespace BudgetToolApp
       editBudgetTop.Show();
     }
 
+    private void RefreshPage_Handler(object sender, EventArgs e)
+    {
+      RefreshPage();
+    }
     private void hbPay_Click(object sender, EventArgs e)
     {
       HardBill hb = hardBillsLv.SelectedItems[0].Tag as HardBill;
       EditHardBillPay editHardBillPay = new EditHardBillPay(hb);
+      editHardBillPay.NewHardBillPayEvent += RefreshPage_Handler;
       editHardBillPay.Show();
       RefreshPage();
     }

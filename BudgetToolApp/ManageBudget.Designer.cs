@@ -73,6 +73,7 @@
       this.accountsLv.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.AccountName});
       this.accountsLv.Font = new System.Drawing.Font("Franklin Gothic Medium", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.accountsLv.FullRowSelect = true;
       this.accountsLv.HideSelection = false;
       this.accountsLv.Location = new System.Drawing.Point(12, 78);
       this.accountsLv.Name = "accountsLv";
@@ -133,6 +134,7 @@
             this.columnHeader3,
             this.columnHeader4});
       this.transactionsLv.Font = new System.Drawing.Font("Franklin Gothic Medium", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.transactionsLv.FullRowSelect = true;
       this.transactionsLv.HideSelection = false;
       this.transactionsLv.Location = new System.Drawing.Point(380, 32);
       this.transactionsLv.Name = "transactionsLv";
@@ -275,9 +277,9 @@
             this.columnHeader9});
       this.accountInfoLv.Font = new System.Drawing.Font("Franklin Gothic Medium", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.accountInfoLv.HideSelection = false;
-      this.accountInfoLv.Location = new System.Drawing.Point(163, 78);
+      this.accountInfoLv.Location = new System.Drawing.Point(145, 78);
       this.accountInfoLv.Name = "accountInfoLv";
-      this.accountInfoLv.Size = new System.Drawing.Size(190, 97);
+      this.accountInfoLv.Size = new System.Drawing.Size(208, 97);
       this.accountInfoLv.TabIndex = 17;
       this.accountInfoLv.UseCompatibleStateImageBehavior = false;
       this.accountInfoLv.View = System.Windows.Forms.View.Details;
@@ -318,6 +320,7 @@
             this.AnnualHbAmount,
             this.NextDueDate});
       this.hardBillsLv.Font = new System.Drawing.Font("Franklin Gothic Medium", 8.25F);
+      this.hardBillsLv.FullRowSelect = true;
       this.hardBillsLv.HideSelection = false;
       this.hardBillsLv.Location = new System.Drawing.Point(766, 32);
       this.hardBillsLv.Name = "hardBillsLv";
@@ -361,7 +364,7 @@
       // hbPay
       // 
       this.hbPay.Name = "hbPay";
-      this.hbPay.Size = new System.Drawing.Size(180, 22);
+      this.hbPay.Size = new System.Drawing.Size(93, 22);
       this.hbPay.Text = "Pay";
       this.hbPay.Click += new System.EventHandler(this.hbPay_Click);
       // 
