@@ -46,7 +46,6 @@
       this.startingDateDtp.Name = "startingDateDtp";
       this.startingDateDtp.Size = new System.Drawing.Size(200, 20);
       this.startingDateDtp.TabIndex = 23;
-      this.startingDateDtp.ValueChanged += new System.EventHandler(this.startingDateDtp_ValueChanged_1);
       // 
       // label5
       // 
@@ -64,7 +63,6 @@
       this.typeCb.Name = "typeCb";
       this.typeCb.Size = new System.Drawing.Size(121, 21);
       this.typeCb.TabIndex = 21;
-      this.typeCb.SelectedIndexChanged += new System.EventHandler(this.typeCb_SelectedIndexChanged_1);
       // 
       // cancelBtn
       // 
@@ -92,7 +90,6 @@
       this.balanceTb.Name = "balanceTb";
       this.balanceTb.Size = new System.Drawing.Size(100, 20);
       this.balanceTb.TabIndex = 18;
-      this.balanceTb.TextChanged += new System.EventHandler(this.balanceTb_TextChanged_1);
       // 
       // nameTb
       // 
@@ -100,7 +97,6 @@
       this.nameTb.Name = "nameTb";
       this.nameTb.Size = new System.Drawing.Size(100, 20);
       this.nameTb.TabIndex = 17;
-      this.nameTb.TextChanged += new System.EventHandler(this.nameTb_TextChanged_1);
       // 
       // label3
       // 
