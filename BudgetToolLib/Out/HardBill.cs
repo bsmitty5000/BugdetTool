@@ -11,6 +11,8 @@ namespace BudgetToolLib
   {
     Weekly,
     Monthly,
+    Quarterly,
+    BiAnnually,
     Annualy
   }
 
@@ -29,7 +31,7 @@ namespace BudgetToolLib
     {
       get
       {
-        switch(Frequency)
+        switch (Frequency)
         {
           case HardBillFrequencyEnum.Annualy:
             return Amount;
@@ -64,33 +66,36 @@ namespace BudgetToolLib
       this.NextBillDue = hb.NextBillDue;
       this.AutoPay = hb.AutoPay;
     }
-    public void PayAutoPayBill(DateTime date)
+    public void PayBill(DateTime date, decimal amount = 0)
     {
-      while(NextBillDue <= date)
+      decimal amountToPay = amount == 0 ? Amount : amount;
+
+      PaymentAccount.NewDebitTransaction(new Transaction() { Description = Name, Date = date, Amount = this.Amount });
+      incrementNextBillDue();
+    }
+    public void PerformAutoPay(DateTime date)
+    {
+      if (AutoPay == false)
+        return;
+
+      while (NextBillDue <= date)
       {
-        PaymentAccount.NewDebitTransaction(new Transaction() { Description = Name, Date = NextBillDue, Amount = this.Amount });
-        switch (Frequency)
-        {
-          case HardBillFrequencyEnum.Monthly:
-            NextBillDue = NextBillDue.AddMonths(1);
-            break;
-          case HardBillFrequencyEnum.Weekly:
-            NextBillDue = NextBillDue.AddDays(7);
-            break;
-            // Nothing to do for now for annuals because i'm only concentrating on a single year at a time
-          default:
-            return;
-        }
+        PaymentAccount.NewDebitTransaction(new Transaction() { Description = Name, Date = NextBillDue, Amount = Amount });
+        incrementNextBillDue();
       }
     }
-
-    public void ManuallyPayBill(DateTime date)
+    private void incrementNextBillDue()
     {
-      PaymentAccount.NewDebitTransaction(new Transaction() { Description = Name, Date = date, Amount = this.Amount });
       switch (Frequency)
       {
         case HardBillFrequencyEnum.Monthly:
           NextBillDue = NextBillDue.AddMonths(1);
+          break;
+        case HardBillFrequencyEnum.Quarterly:
+          NextBillDue = NextBillDue.AddMonths(3);
+          break;
+        case HardBillFrequencyEnum.BiAnnually:
+          NextBillDue = NextBillDue.AddMonths(6);
           break;
         case HardBillFrequencyEnum.Weekly:
           NextBillDue = NextBillDue.AddDays(7);

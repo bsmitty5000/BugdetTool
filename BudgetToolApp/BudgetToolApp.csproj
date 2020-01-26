@@ -64,6 +64,12 @@
     <Compile Include="EditHardBillForm.Designer.cs">
       <DependentUpon>EditHardBillForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="EditHardBillPay.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditHardBillPay.Designer.cs">
+      <DependentUpon>EditHardBillPay.cs</DependentUpon>
+    </Compile>
     <Compile Include="EditIncomeForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -104,6 +110,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="EditHardBillForm.resx">
       <DependentUpon>EditHardBillForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditHardBillPay.resx">
+      <DependentUpon>EditHardBillPay.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="EditIncomeForm.resx">
       <DependentUpon>EditIncomeForm.cs</DependentUpon>

@@ -327,7 +327,8 @@ namespace BudgetToolApp
     private void hbPay_Click(object sender, EventArgs e)
     {
       HardBill hb = hardBillsLv.SelectedItems[0].Tag as HardBill;
-      hb.ManuallyPayBill(_dateSelected);
+      EditHardBillPay editHardBillPay = new EditHardBillPay(hb);
+      editHardBillPay.Show();
       RefreshPage();
     }
   }

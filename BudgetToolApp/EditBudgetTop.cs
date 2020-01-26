@@ -227,7 +227,6 @@ namespace BudgetToolApp
       {
         _year.IncomeSources.Remove(e.NewIncome.Name);
         _year.IncomeSources.Add(e.NewIncome.Name, e.NewIncome);
-        e.NewIncome.MakeDeposits(e.NewIncome.DepositAccount.StartingDate);
       }
       RefreshPage();
     }
@@ -297,6 +296,7 @@ namespace BudgetToolApp
       if (e.NewHardBill != null)
       {
         _year.HardBills.Add(e.NewHardBill.Name, e.NewHardBill);
+
       }
       RefreshPage();
     }

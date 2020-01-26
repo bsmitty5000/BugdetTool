@@ -200,7 +200,7 @@ namespace BudgetToolLib
       {
         if(hb.Value.AutoPay)
         {
-          hb.Value.PayAutoPayBill(date);
+          hb.Value.PerformAutoPay(date);
         }
       }
     }
