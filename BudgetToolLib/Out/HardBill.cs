@@ -70,7 +70,7 @@ namespace BudgetToolLib
     {
       decimal amountToPay = amount == 0 ? Amount : amount;
 
-      PaymentAccount.NewDebitTransaction(new Transaction() { Description = Name, Date = date, Amount = this.Amount });
+      PaymentAccount.NewDebitTransaction(new Transaction() { Description = Name, Date = date, Amount = amount });
       incrementNextBillDue();
     }
     public void PerformAutoPay(DateTime date)

@@ -133,6 +133,14 @@ namespace BudgetToolLib
         group.SoftBills.Remove(name);
       }
     }
+    public void RemoveSoftBill(string name, int month)
+    {
+      MonthlySoftBills[month].SoftBills.Remove(name);
+    }
+    public void AddSoftBill(string name, decimal startingAmount, int month)
+    {
+      MonthlySoftBills[month].SoftBills[name] = startingAmount;
+    }
     public void AddSoftBill(string name, decimal startingAmount, Boolean annualGroup)
     {
       if (annualGroup)

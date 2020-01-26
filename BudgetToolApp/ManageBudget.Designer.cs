@@ -40,7 +40,7 @@
       this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
       this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
       this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-      this.label4 = new System.Windows.Forms.Label();
+      this.softBillsLbl = new System.Windows.Forms.Label();
       this.softBillsLv = new System.Windows.Forms.ListView();
       this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
       this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -63,8 +63,13 @@
       this.label5 = new System.Windows.Forms.Label();
       this.hbCms = new System.Windows.Forms.ContextMenuStrip(this.components);
       this.hbPay = new System.Windows.Forms.ToolStripMenuItem();
+      this.sbCms = new System.Windows.Forms.ContextMenuStrip(this.components);
+      this.sbAdd = new System.Windows.Forms.ToolStripMenuItem();
+      this.sbDelete = new System.Windows.Forms.ToolStripMenuItem();
+      this.sbEdit = new System.Windows.Forms.ToolStripMenuItem();
       this.purchasesCms.SuspendLayout();
       this.hbCms.SuspendLayout();
+      this.sbCms.SuspendLayout();
       this.SuspendLayout();
       // 
       // accountsLv
@@ -163,15 +168,15 @@
       this.columnHeader4.Text = "Date";
       this.columnHeader4.Width = 71;
       // 
-      // label4
+      // softBillsLbl
       // 
-      this.label4.AutoSize = true;
-      this.label4.Font = new System.Drawing.Font("Franklin Gothic Medium", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label4.Location = new System.Drawing.Point(13, 186);
-      this.label4.Name = "label4";
-      this.label4.Size = new System.Drawing.Size(50, 15);
-      this.label4.TabIndex = 9;
-      this.label4.Text = "Soft Bills";
+      this.softBillsLbl.AutoSize = true;
+      this.softBillsLbl.Font = new System.Drawing.Font("Franklin Gothic Medium", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.softBillsLbl.Location = new System.Drawing.Point(13, 199);
+      this.softBillsLbl.Name = "softBillsLbl";
+      this.softBillsLbl.Size = new System.Drawing.Size(87, 15);
+      this.softBillsLbl.TabIndex = 9;
+      this.softBillsLbl.Text = "Soft Bills Month:";
       // 
       // softBillsLv
       // 
@@ -181,7 +186,7 @@
             this.columnHeader7});
       this.softBillsLv.Font = new System.Drawing.Font("Franklin Gothic Medium", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.softBillsLv.HideSelection = false;
-      this.softBillsLv.Location = new System.Drawing.Point(12, 204);
+      this.softBillsLv.Location = new System.Drawing.Point(12, 224);
       this.softBillsLv.Name = "softBillsLv";
       this.softBillsLv.Size = new System.Drawing.Size(341, 223);
       this.softBillsLv.TabIndex = 8;
@@ -263,7 +268,7 @@
       // 
       this.showAnnualCb.AutoSize = true;
       this.showAnnualCb.Font = new System.Drawing.Font("Franklin Gothic Medium", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.showAnnualCb.Location = new System.Drawing.Point(69, 185);
+      this.showAnnualCb.Location = new System.Drawing.Point(265, 199);
       this.showAnnualCb.Name = "showAnnualCb";
       this.showAnnualCb.Size = new System.Drawing.Size(88, 19);
       this.showAnnualCb.TabIndex = 16;
@@ -368,6 +373,36 @@
       this.hbPay.Text = "Pay";
       this.hbPay.Click += new System.EventHandler(this.hbPay_Click);
       // 
+      // sbCms
+      // 
+      this.sbCms.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.sbAdd,
+            this.sbDelete,
+            this.sbEdit});
+      this.sbCms.Name = "annualHbCms";
+      this.sbCms.Size = new System.Drawing.Size(181, 92);
+      // 
+      // sbAdd
+      // 
+      this.sbAdd.Name = "sbAdd";
+      this.sbAdd.Size = new System.Drawing.Size(180, 22);
+      this.sbAdd.Text = "Add";
+      this.sbAdd.Click += new System.EventHandler(this.sbAdd_Click);
+      // 
+      // sbDelete
+      // 
+      this.sbDelete.Name = "sbDelete";
+      this.sbDelete.Size = new System.Drawing.Size(180, 22);
+      this.sbDelete.Text = "Delete";
+      this.sbDelete.Click += new System.EventHandler(this.sbDelete_Click);
+      // 
+      // sbEdit
+      // 
+      this.sbEdit.Name = "sbEdit";
+      this.sbEdit.Size = new System.Drawing.Size(180, 22);
+      this.sbEdit.Text = "Edit";
+      this.sbEdit.Click += new System.EventHandler(this.sbEdit_Click);
+      // 
       // ManageBudget
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -382,7 +417,7 @@
       this.Controls.Add(this.logDepositBtn);
       this.Controls.Add(this.logPurchaseBtn);
       this.Controls.Add(this.editBudgetBtn);
-      this.Controls.Add(this.label4);
+      this.Controls.Add(this.softBillsLbl);
       this.Controls.Add(this.softBillsLv);
       this.Controls.Add(this.transactionsLv);
       this.Controls.Add(this.label3);
@@ -394,6 +429,7 @@
       this.Text = "ManageBudget";
       this.purchasesCms.ResumeLayout(false);
       this.hbCms.ResumeLayout(false);
+      this.sbCms.ResumeLayout(false);
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -412,7 +448,7 @@
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ColumnHeader columnHeader4;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label softBillsLbl;
         private System.Windows.Forms.ListView softBillsLv;
         private System.Windows.Forms.ColumnHeader columnHeader5;
         private System.Windows.Forms.ColumnHeader columnHeader6;
@@ -435,5 +471,9 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ContextMenuStrip hbCms;
         private System.Windows.Forms.ToolStripMenuItem hbPay;
+        private System.Windows.Forms.ContextMenuStrip sbCms;
+        private System.Windows.Forms.ToolStripMenuItem sbAdd;
+        private System.Windows.Forms.ToolStripMenuItem sbDelete;
+        private System.Windows.Forms.ToolStripMenuItem sbEdit;
     }
 }

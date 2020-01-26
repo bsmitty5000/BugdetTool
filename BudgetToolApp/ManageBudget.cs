@@ -7,14 +7,33 @@ using BudgetToolLib;
 
 namespace BudgetToolApp
 {
+
   public partial class ManageBudget : Form
   {
+    string[] Months = 
+    {
+      "Annual",
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    };
+
     private bool _showAnnual;
     private bool _allAccountTransactions;
     private bool _allDatesTransactions;
     private YearTop _year;
     private YearTop _yearFastForward;
     private DateTime _dateSelected;
+    private int _monthSelected;
     private List<string> _selectedAccounts;
     AccountBase _selectedAccount;
     private bool _skipRefreshing;
@@ -52,6 +71,7 @@ namespace BudgetToolApp
       accountsLv.ItemChecked += AccountsLv_ItemChecked;
       transactionsLv.MouseUp += new MouseEventHandler(purchasesLv_MouseUp);
       hardBillsLv.MouseUp += new MouseEventHandler(hardBillsLv_MouseUp);
+      softBillsLv.MouseUp += new MouseEventHandler(softBillsLv_MouseUp);
 
       accountsLv.Items.Clear();
       foreach (var account in _year.Accounts)
@@ -62,6 +82,74 @@ namespace BudgetToolApp
       accountsLv.Items[0].Checked = true;
 
       _skipRefreshing = false;
+      RefreshPage();
+    }
+
+    private void softBillsLv_MouseUp(object sender, MouseEventArgs e)
+    {
+      int index = -1;
+
+      if (e.Button == MouseButtons.Right)
+      {
+        if (softBillsLv.Items.Count > 0)
+        {
+          ListViewItem selectedItem = softBillsLv.GetItemAt(e.X, e.Y);
+          if (selectedItem != null)
+          {
+            index = selectedItem.Index;
+          }
+        }
+
+        if (_year.Accounts.Count > 0)
+        {
+          sbAdd.Enabled = true;
+        }
+        else
+        {
+          sbAdd.Enabled = false;
+        }
+
+        if (index > -1)
+        {
+          sbDelete.Enabled = true;
+          sbEdit.Enabled = true;
+        }
+        else
+        {
+          sbDelete.Enabled = false;
+          sbEdit.Enabled = false;
+        }
+        sbCms.Show(this, new Point(e.X + ((Control)sender).Left + 20, e.Y + ((Control)sender).Top + 20));
+        //accountCms.Show(this, new Point(e.X, e.Y));
+      }
+    }
+    private void sbAdd_Click(object sender, EventArgs e)
+    {
+      var editSoftBill = new EditSoftBillForm(string.Empty, 0);
+      editSoftBill.NewSoftBillAdded += NewSoftBill_Added;
+      editSoftBill.Show();
+    }
+
+    private void sbDelete_Click(object sender, EventArgs e)
+    {
+      string name = softBillsLv.SelectedItems[0].SubItems[0].Text;
+      _year.RemoveSoftBill(name, _monthSelected);
+      RefreshPage();
+    }
+
+    private void sbEdit_Click(object sender, EventArgs e)
+    {
+      string name = softBillsLv.SelectedItems[0].SubItems[0].Text;
+      decimal amount = decimal.Parse(softBillsLv.SelectedItems[0].SubItems[1].Text);
+
+      var editSoftBill = new EditSoftBillForm(name, amount);
+      editSoftBill.NewSoftBillAdded += NewSoftBill_Added;
+      editSoftBill.ShowDialog();
+      RefreshPage();
+    }
+    private void NewSoftBill_Added(object sender, NewSoftBillAddedEventArgs e)
+    {
+      _year.AddSoftBill(e.Name, e.Amount, _monthSelected);
       RefreshPage();
     }
 
@@ -191,6 +279,7 @@ namespace BudgetToolApp
         localYt = _yearFastForward;
       }
 
+
       //using accountsLv here so the order matches up
       //accountsLv is for name & selection
       //accountInfoLv is to display any info for each of those accounts
@@ -213,6 +302,8 @@ namespace BudgetToolApp
         monthSelected = _dateSelected.Month;
       }
 
+      softBillsLbl.Text = string.Format("Soft Bills Month: {0}", Months[monthSelected]);
+      //update softbilllbl
       softBillsLv.Items.Clear();
       foreach (var softBill in localYt.MonthlySoftBills[monthSelected].SoftBills)
       {
@@ -295,6 +386,11 @@ namespace BudgetToolApp
     {
       _dateSelected = dateDtp.Value;
 
+      if(!showAnnualCb.Checked)
+      {
+        _monthSelected = dateDtp.Value.Month;
+      }
+
       if (_dateSelected > DateTime.Today)
       {
         _yearFastForward = new YearTop(_year);
@@ -310,6 +406,16 @@ namespace BudgetToolApp
     private void showAnnualCb_CheckedChanged(object sender, EventArgs e)
     {
       _showAnnual = showAnnualCb.Checked;
+
+      if(_showAnnual)
+      {
+        _monthSelected = 0;
+      }
+      else
+      {
+        _monthSelected = _dateSelected.Month;
+      }
+
       RefreshPage();
     }
 
@@ -344,5 +450,6 @@ namespace BudgetToolApp
       editHardBillPay.Show();
       RefreshPage();
     }
+
   }
 }
