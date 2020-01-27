@@ -15,27 +15,15 @@ namespace BudgetToolLib
   }
 
   [Serializable()]
-  public class Income
+  public class Income : IIncome
   {
-    private DateTime _firstDeposit;
     public string Name { get; set; }
     public decimal PaydayAmount { get; set; }
     public IncomeFrequencyEnum PaydayFrequency { get; set; }
-    public AccountBase DepositAccount { get; set; }
-    public DateTime FirstDeposit
-    {
-      get
-      {
-        return _firstDeposit;
-      }
-      set
-      {
-        _firstDeposit = value;
-        NextDeposit = value;
-      }
-    }
-    public DateTime NextDeposit { get; set; }
-    public int NumPaydaysPaidThisYear { get; set; }
+    public IAccountBase DepositAccount { get; set; }
+    public DateTime FirstDeposit { get; private set; }
+    public DateTime NextDeposit { get; private set; }
+    public int NumPaydaysPaidThisYear { get; private set; }
     public decimal AnnualAmount
     {
       get
@@ -69,7 +57,7 @@ namespace BudgetToolLib
       FirstDeposit = DateTime.Today;
     }
 
-    public Income(string name, decimal paydayAmount, IncomeFrequencyEnum incomeFrequency, AccountBase depositAccount, DateTime firstDeposit)
+    public Income(string name, decimal paydayAmount, IncomeFrequencyEnum incomeFrequency, IAccountBase depositAccount, DateTime firstDeposit)
     {
       Name = name;
       PaydayAmount = paydayAmount;
@@ -80,16 +68,16 @@ namespace BudgetToolLib
       NumPaydaysPaidThisYear = 0;
     }
 
-    public Income(Income i)
-    {
-      Name = i.Name;
-      PaydayAmount = i.PaydayAmount;
-      PaydayFrequency = i.PaydayFrequency;
-      DepositAccount = AccountBaseFactory.CopyAccountBase(i.DepositAccount);
-      FirstDeposit = i.FirstDeposit;
-      NextDeposit = i.NextDeposit;
-      NumPaydaysPaidThisYear = i.NumPaydaysPaidThisYear;
-    }
+    //public Income(Income i)
+    //{
+    //  Name = i.Name;
+    //  PaydayAmount = i.PaydayAmount;
+    //  PaydayFrequency = i.PaydayFrequency;
+    //  DepositAccount = AccountBaseFactory.CopyAccountBase(i.DepositAccount);
+    //  FirstDeposit = i.FirstDeposit;
+    //  NextDeposit = i.NextDeposit;
+    //  NumPaydaysPaidThisYear = i.NumPaydaysPaidThisYear;
+    //}
 
     public void MakeDeposits(DateTime date)
     {

@@ -6,21 +6,12 @@ namespace BudgetToolApp
 {
   public partial class EditIncomeForm : Form
   {
-    private Income _income;
+    private IIncome _income;
     private YearTop _year;
     public event EventHandler<NewIncomeAddedEventArgs> NewIncomeAdded;
-    public EditIncomeForm(Income income, YearTop year)
+    public EditIncomeForm(IIncome income, YearTop year)
     {
       InitializeComponent();
-
-      if (income != null)
-      {
-        _income = income;
-      }
-      else
-      {
-        _income = new Income();
-      }
 
       if (year == null)
       {
@@ -33,43 +24,66 @@ namespace BudgetToolApp
 
       frequencyCb.Items.AddRange(Enum.GetNames(typeof(IncomeFrequencyEnum)));
 
-      foreach (var account in _year.Accounts)
+      var accountList = _year.GetAccountsNames();
+      foreach (var account in accountList)
       {
-        accountCb.Items.Add(account.Value.Name);
+        accountCb.Items.Add(account);
       }
 
-      nameTb.Text = _income.Name;
-      amountTb.Text = _income.PaydayAmount.ToString();
-      frequencyCb.SelectedItem = _income.PaydayFrequency.ToString();
-      accountCb.SelectedItem = _income.DepositAccount != null ? _income.DepositAccount.Name : string.Empty;
-      firstDepositDtp.Value = _income.FirstDeposit;
+      if (income != null)
+      {
+        _income = income;
+        nameTb.Text = _income.Name;
+        nameTb.ReadOnly = true;
+
+        firstDepositDtp.Value = _income.FirstDeposit;
+        firstDepositDtp.Enabled = false;
+
+        //editable fields
+        amountTb.Text = _income.PaydayAmount.ToString();
+        frequencyCb.SelectedItem = _income.PaydayFrequency.ToString();
+        accountCb.SelectedItem = _income.DepositAccount.Name;
+      }
+      else
+      {
+        _income = null;
+        firstDepositDtp.Value = DateTime.Today;
+      }
     }
     private void saveBtn_Click_1(object sender, EventArgs e)
     {
       NewIncomeAddedEventArgs args = new NewIncomeAddedEventArgs();
 
       decimal amount;
-      if (decimal.TryParse(amountTb.Text, out amount))
+      if (!decimal.TryParse(amountTb.Text, out amount))
       {
-        _income.PaydayAmount = amount;
-      }
-      else
-      {
-        amountTb.Text = _income.PaydayAmount.ToString();
+        amountTb.Text = 0.ToString();
         MessageBox.Show("Invalid amount!");
         return;
       }
-      _income.Name = nameTb.Text;
 
-      IncomeFrequencyEnum enumParse;
-      Enum.TryParse(frequencyCb.SelectedItem.ToString(), out enumParse);
-      _income.PaydayFrequency = enumParse;
+      string name = nameTb.Text;
+      DateTime firstDeposit = firstDepositDtp.Value;
 
-      _income.DepositAccount = _year.Accounts[accountCb.Text];
+      IncomeFrequencyEnum frequency;
+      Enum.TryParse(frequencyCb.SelectedItem.ToString(), out frequency);
 
-      _income.FirstDeposit = firstDepositDtp.Value;
+      string accountName = accountCb.Text;
 
-      args.NewIncome = _income;
+      if (_income == null)
+      {
+        _income = new Income(name, amount, frequency, _year.GetAccount(accountName), firstDeposit);
+        args.NewIncome = _income;
+      }
+      else
+      {
+        _income.DepositAccount = _year.GetAccount(accountName);
+        _income.PaydayAmount = amount;
+        _income.PaydayFrequency = frequency;
+
+        args.NewIncome = null;
+      }
+
       OnNewIncomeAdded(args);
 
       this.Close();
@@ -85,6 +99,6 @@ namespace BudgetToolApp
   }
   public class NewIncomeAddedEventArgs : EventArgs
   {
-    public Income NewIncome { get; set; }
+    public IIncome NewIncome { get; set; }
   }
 }

@@ -26,9 +26,10 @@ namespace BudgetToolApp
 
       _sbt = _year.GetSoftBillTransaction(string.Empty, 0, DateTime.Today.Month);
 
-      foreach (var keyValue in _year.Accounts)
+      var accounts = _year.GetAccounts();
+      foreach (var keyValue in accounts)
       {
-        accountCb.Items.Add(keyValue.Value.Name);
+        accountCb.Items.Add(keyValue.Name);
       }
       dateDtp.Value = DateTime.Today;
 

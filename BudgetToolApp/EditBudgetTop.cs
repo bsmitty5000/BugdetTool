@@ -21,7 +21,6 @@ namespace BudgetToolApp
       else
       {
         _year = new YearTop();
-        _year.InitializeYear();
       }
 
       accountsLv.MouseUp += new MouseEventHandler(accountsLv_MouseUp);
@@ -42,49 +41,49 @@ namespace BudgetToolApp
     private void RefreshPage()
     {
       accountsLv.Items.Clear();
-      foreach (var account in _year.Accounts)
+      var accounts = _year.GetAccounts();
+      foreach (var account in accounts)
       {
-        ListViewItem lvi = new ListViewItem(account.Key);
-        lvi.SubItems.Add(account.Value.GetType().Name);
-        lvi.SubItems.Add(account.Value.BalanceHistory[account.Value.StartingDate].ToString());
-        lvi.Tag = account.Value;
+        ListViewItem lvi = new ListViewItem(account.Name);
+        lvi.SubItems.Add(account.GetType().Name);
+        lvi.SubItems.Add(account.BalanceHistory[account.StartingDate].ToString());
         accountsLv.Items.Add(lvi);
       }
 
       incomeLv.Items.Clear();
-      foreach (var incomeSrc in _year.IncomeSources)
+      var incomes = _year.GetIncomeSources();
+      foreach (var incomeSrc in incomes)
       {
-        ListViewItem lvi = new ListViewItem(incomeSrc.Key);
-        lvi.SubItems.Add(incomeSrc.Value.PaydayAmount.ToString());
-        lvi.SubItems.Add(incomeSrc.Value.PaydayFrequency.ToString());
-        lvi.SubItems.Add(incomeSrc.Value.DepositAccount.Name);
-        lvi.Tag = incomeSrc.Value;
+        ListViewItem lvi = new ListViewItem(incomeSrc.Name);
+        lvi.SubItems.Add(incomeSrc.PaydayAmount.ToString());
+        lvi.SubItems.Add(incomeSrc.PaydayFrequency.ToString());
+        lvi.SubItems.Add(incomeSrc.DepositAccount.Name);
         incomeLv.Items.Add(lvi);
       }
 
+      var hardBills = _year.GetHardBills();
       hardBillsLv.Items.Clear();
-      foreach (var hardBill in _year.HardBills)
+      foreach (var hardBill in hardBills)
       {
-        ListViewItem lvi = new ListViewItem(hardBill.Key);
-        lvi.SubItems.Add(hardBill.Value.Amount.ToString());
-        lvi.SubItems.Add(hardBill.Value.Frequency.ToString());
-        lvi.SubItems.Add(hardBill.Value.PaymentAccount.Name);
-        lvi.SubItems.Add(hardBill.Value.FirstBillDue.ToString("d"));
-        lvi.Tag = hardBill.Value;
+        ListViewItem lvi = new ListViewItem(hardBill.Name);
+        lvi.SubItems.Add(hardBill.Amount.ToString());
+        lvi.SubItems.Add(hardBill.Frequency.ToString());
+        lvi.SubItems.Add(hardBill.PaymentAccount.Name);
+        lvi.SubItems.Add(hardBill.FirstBillDue.ToString("d"));
         hardBillsLv.Items.Add(lvi);
       }
 
       annualSbLv.Items.Clear();
-      foreach (var softBill in _year.MonthlySoftBills[0].SoftBills)
+      var softBillGroups = _year.GetSoftBillGroups();
+      foreach (var softBill in softBillGroups[0].SoftBills)
       {
         ListViewItem lvi = new ListViewItem(softBill.Key);
         lvi.SubItems.Add(softBill.Value.ToString());
-        lvi.Tag = softBill.Value;
         annualSbLv.Items.Add(lvi);
       }
 
       monthlySbLv.Items.Clear();
-      foreach (var softBill in _year.MonthlySoftBills[1].SoftBills)
+      foreach (var softBill in softBillGroups[1].SoftBills)
       {
         ListViewItem lvi = new ListViewItem(softBill.Key);
         lvi.SubItems.Add(softBill.Value.ToString());
@@ -143,8 +142,8 @@ namespace BudgetToolApp
 
     private void deleteAccount_Click(object sender, EventArgs e)
     {
-      AccountBase accountSelected = accountsLv.SelectedItems[0].Tag as AccountBase;
-      _year.Accounts.Remove(accountSelected.Name);
+      string accountSelected = accountsLv.SelectedItems[0].SubItems[0].Text;
+      _year.RemoveAccount(accountSelected);
       RefreshPage();
     }
 
@@ -152,8 +151,8 @@ namespace BudgetToolApp
     {
       if (e.NewAccount != null)
       {
-        _year.Accounts.Remove(e.NewAccount.Name);
-        _year.Accounts.Add(e.NewAccount.Name, e.NewAccount);
+        _year.RemoveAccount(e.NewAccount.Name);
+        _year.AddAccount(e.NewAccount);
       }
       RefreshPage();
     }
@@ -175,7 +174,7 @@ namespace BudgetToolApp
           }
         }
 
-        if (_year.Accounts.Count > 0)
+        if (_year.GetAccounts().Count > 0)
         {
           incomeAdd.Enabled = true;
         }
@@ -207,16 +206,16 @@ namespace BudgetToolApp
 
     private void incomeDelete_Click_1(object sender, EventArgs e)
     {
-      Income incomeSelected = incomeLv.SelectedItems[0].Tag as Income;
-      _year.IncomeSources.Remove(incomeSelected.Name);
+      string incomeSelected = incomeLv.SelectedItems[0].SubItems[0].Text;
+      _year.RemoveIncomeSource(incomeSelected);
       RefreshPage();
     }
 
     private void incomeEdit_Click_1(object sender, EventArgs e)
     {
-      Income incomeSelected = incomeLv.SelectedItems[0].Tag as Income;
+      string incomeSelected = incomeLv.SelectedItems[0].SubItems[0].Text;
 
-      var createNewIncome = new EditIncomeForm(incomeSelected, _year);
+      var createNewIncome = new EditIncomeForm(_year.GetIncomeSource(incomeSelected), _year);
       createNewIncome.NewIncomeAdded += RefreshPage_Handler;
       createNewIncome.Show();
     }
@@ -225,8 +224,8 @@ namespace BudgetToolApp
     {
       if (e.NewIncome != null)
       {
-        _year.IncomeSources.Remove(e.NewIncome.Name);
-        _year.IncomeSources.Add(e.NewIncome.Name, e.NewIncome);
+        _year.RemoveIncomeSource(e.NewIncome.Name);
+        _year.AddIncomeSource(e.NewIncome);
       }
       RefreshPage();
     }
@@ -248,7 +247,7 @@ namespace BudgetToolApp
           }
         }
 
-        if (_year.Accounts.Count > 0)
+        if (_year.GetAccounts().Count > 0)
         {
           annualHbAdd.Enabled = true;
         }
@@ -279,15 +278,15 @@ namespace BudgetToolApp
     }
     private void annualHbDelete_Click_1(object sender, EventArgs e)
     {
-      HardBill hardBill = hardBillsLv.SelectedItems[0].Tag as HardBill;
-      _year.HardBills.Remove(hardBill.Name);
+      string hardBill = hardBillsLv.SelectedItems[0].SubItems[0].Text;
+      _year.RemoveHardBill(hardBill);
       RefreshPage();
     }
     private void annualHbEdit_Click_1(object sender, EventArgs e)
     {
-      HardBill hardBill = hardBillsLv.SelectedItems[0].Tag as HardBill;
+      string hardBill = hardBillsLv.SelectedItems[0].SubItems[0].Text;
 
-      var editHardBill = new EditHardBillForm(hardBill, _year);
+      var editHardBill = new EditHardBillForm(_year.GetHardBill(hardBill), _year);
       editHardBill.NewHardBillAdded += RefreshPage_Handler;
       editHardBill.ShowDialog();
     }
@@ -295,7 +294,7 @@ namespace BudgetToolApp
     {
       if (e.NewHardBill != null)
       {
-        _year.HardBills.Add(e.NewHardBill.Name, e.NewHardBill);
+        _year.AddHardBill(e.NewHardBill);
 
       }
       RefreshPage();
@@ -316,7 +315,7 @@ namespace BudgetToolApp
           }
         }
 
-        if (_year.Accounts.Count > 0)
+        if (_year.GetAccounts().Count > 0)
         {
           annualSbAdd.Enabled = true;
         }
@@ -384,7 +383,7 @@ namespace BudgetToolApp
           }
         }
 
-        if (_year.Accounts.Count > 0)
+        if (_year.GetAccounts().Count > 0)
         {
           monthlySbAdd.Enabled = true;
         }

@@ -17,9 +17,9 @@ namespace BudgetToolLib
     {
     }
 
-    public CheckingAccount(CheckingAccount ca) : base(ca)
-    {
-    }
+    //public CheckingAccount(CheckingAccount ca) : base(ca)
+    //{
+    //}
 
     public override void NewDebitTransaction(Transaction transaction)
     {

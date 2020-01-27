@@ -13,25 +13,25 @@ namespace BudgetToolsUnitTestF
   [TestFixture]
   public class BudgetToolTests
   {
-    private AccountBase checking;
-    private AccountBase credit;
-
-    private Income salary;
-    private Income bonus;
-
-    //annuals
-    private HardBill carRegistration;
-
-    //monthlys
-    private HardBill electricity;
-    private HardBill cable;
-
     //top
     private YearTop yearTop;
 
     [SetUp]
     public void Init()
     {
+      IAccountBase checking;
+      IAccountBase credit;
+
+      IIncome salary;
+      IIncome bonus;
+
+      //annuals
+      IHardBill carRegistration;
+
+      //monthlys
+      IHardBill electricity;
+      IHardBill cable;
+
       DateTime startingDate = new DateTime(2020, 1, 1);
       //create accounts
       checking = new CheckingAccount("checking", 5000, startingDate);
@@ -42,27 +42,27 @@ namespace BudgetToolsUnitTestF
       bonus = new Income("bonus", 1500, IncomeFrequencyEnum.BiAnnualy, checking, new DateTime(2020, 1, 10));
 
       //annuals
-      carRegistration = new HardBill("carRegistration", 1000, new DateTime(2020, 12, 31), HardBillFrequencyEnum.Annualy, credit);
+      carRegistration = new HardBill("carRegistration", 1000, new DateTime(2020, 12, 31), HardBillFrequencyEnum.Annualy, credit, false);
 
       //monthlys
-      electricity = new HardBill("electricity", 150, new DateTime(2020, 1, 15), HardBillFrequencyEnum.Monthly, checking);
-      cable = new HardBill("cable", 75, new DateTime(2020, 1, 20), HardBillFrequencyEnum.Monthly, credit);
+      electricity = new HardBill("electricity", 150, new DateTime(2020, 1, 15), HardBillFrequencyEnum.Monthly, checking, true);
+      cable = new HardBill("cable", 75, new DateTime(2020, 1, 20), HardBillFrequencyEnum.Monthly, credit, true);
 
       yearTop = new YearTop();
       yearTop.InitializeYear();
 
       //wire up top
-      yearTop.Accounts.Add(checking.Name, checking);
-      yearTop.Accounts.Add(credit.Name, credit);
+      yearTop.AddAccount(checking);
+      yearTop.AddAccount(credit);
 
-      yearTop.IncomeSources.Add(salary.Name, salary);
-      yearTop.IncomeSources.Add(bonus.Name, bonus);
+      yearTop.AddIncomeSource(salary);
+      yearTop.AddIncomeSource(bonus);
 
-      yearTop.HardBills.Add(carRegistration.Name, carRegistration);
+      yearTop.AddHardBill(carRegistration);
       yearTop.AddSoftBill("vacation", 7500, true);
 
-      yearTop.HardBills.Add(electricity.Name, electricity);
-      yearTop.HardBills.Add(cable.Name, cable);
+      yearTop.AddHardBill(electricity);
+      yearTop.AddHardBill(cable);
       yearTop.AddSoftBill("food", 500, false);
       yearTop.AddSoftBill("gas", 100, false);
 
@@ -71,8 +71,8 @@ namespace BudgetToolsUnitTestF
     [Test]
     public void SimplePurchaseTest()
     {
-      decimal creditExpected = yearTop.Accounts["credit"].BalanceHistory.Last().Value;
-      decimal checkingExpected = yearTop.Accounts["checking"].BalanceHistory.Last().Value;
+      decimal creditExpected = yearTop.GetAccount("credit").CurrentBalance;
+      decimal checkingExpected = yearTop.GetAccount("checking").CurrentBalance;
 
       //transaction details
       decimal amount;
@@ -87,10 +87,10 @@ namespace BudgetToolsUnitTestF
       sbt = yearTop.GetSoftBillTransaction(description, amount, date.Month);
       sbt.Date = date;
       sbt.SoftGroupSplit["food"] = amount;
-      credit.NewDebitTransaction(sbt);
+      yearTop.GetAccount("credit").NewDebitTransaction(sbt);
 
       creditExpected += amount; 
-      Assert.AreEqual(creditExpected, yearTop.Accounts["credit"].BalanceHistory.Last().Value);
+      Assert.AreEqual(creditExpected, yearTop.GetAccount("credit").CurrentBalance);
 
       /* Credit checks */
       amount = 150;
@@ -99,10 +99,10 @@ namespace BudgetToolsUnitTestF
       sbt = yearTop.GetSoftBillTransaction(description, amount, date.Month);
       sbt.Date = date;
       sbt.SoftGroupSplit["food"] = amount;
-      credit.NewDebitTransaction(sbt);
+      yearTop.GetAccount("credit").NewDebitTransaction(sbt);
 
       creditExpected += amount;
-      Assert.AreEqual(creditExpected, yearTop.Accounts["credit"].BalanceHistory.Last().Value);
+      Assert.AreEqual(creditExpected, yearTop.GetAccount("credit").CurrentBalance);
 
       /* Checking checks */
       amount = 150;
@@ -111,10 +111,10 @@ namespace BudgetToolsUnitTestF
       sbt = yearTop.GetSoftBillTransaction(description, amount, date.Month);
       sbt.Date = date;
       sbt.SoftGroupSplit["gas"] = amount;
-      checking.NewDebitTransaction(sbt);
+      yearTop.GetAccount("checking").NewDebitTransaction(sbt);
 
       checkingExpected -= amount;
-      Assert.AreEqual(checkingExpected, yearTop.Accounts["checking"].BalanceHistory.Last().Value);
+      Assert.AreEqual(checkingExpected, yearTop.GetAccount("checking").CurrentBalance);
 
       amount = 50;
       description = "gas station";
@@ -122,44 +122,44 @@ namespace BudgetToolsUnitTestF
       sbt = yearTop.GetSoftBillTransaction(description, amount, date.Month);
       sbt.Date = date;
       sbt.SoftGroupSplit["gas"] = amount;
-      checking.NewDebitTransaction(sbt);
+      yearTop.GetAccount("checking").NewDebitTransaction(sbt);
 
       checkingExpected -= amount;
-      Assert.AreEqual(checkingExpected, yearTop.Accounts["checking"].BalanceHistory.Last().Value);
+      Assert.AreEqual(checkingExpected, yearTop.GetAccount("checking").CurrentBalance);
     }
 
     [Test]
     public void SimpleIncomeTest()
     {
-      decimal checkingExpected = yearTop.Accounts["checking"].BalanceHistory.Last().Value;
-      salary.MakeDeposits(new DateTime(2020, 1, 10));
+      decimal checkingExpected = yearTop.GetAccount("checking").CurrentBalance;
+      yearTop.GetIncomeSource("salary").MakeDeposits(new DateTime(2020, 1, 10));
 
-      checkingExpected += salary.PaydayAmount;
-      Assert.AreEqual(checkingExpected, yearTop.Accounts["checking"].BalanceHistory.Last().Value);
+      checkingExpected += yearTop.GetIncomeSource("salary").PaydayAmount;
+      Assert.AreEqual(checkingExpected, yearTop.GetAccount("checking").CurrentBalance);
 
-      salary.MakeDeposits(new DateTime(2020, 1, 23));
+      yearTop.GetIncomeSource("salary").MakeDeposits(new DateTime(2020, 1, 23));
 
-      //checkingExpected += salary.PaydayAmount;
-      Assert.AreEqual(checkingExpected, yearTop.Accounts["checking"].BalanceHistory.Last().Value);
+      //checkingExpected += yearTop.GetIncomeSource("salary").PaydayAmount;
+      Assert.AreEqual(checkingExpected, yearTop.GetAccount("checking").CurrentBalance);
 
-      salary.MakeDeposits(new DateTime(2020, 1, 24));
+      yearTop.GetIncomeSource("salary").MakeDeposits(new DateTime(2020, 1, 24));
 
-      checkingExpected += salary.PaydayAmount;
-      Assert.AreEqual(checkingExpected, yearTop.Accounts["checking"].BalanceHistory.Last().Value);
+      checkingExpected += yearTop.GetIncomeSource("salary").PaydayAmount;
+      Assert.AreEqual(checkingExpected, yearTop.GetAccount("checking").CurrentBalance);
 
-      checkingExpected = yearTop.Accounts["checking"].BalanceHistory.First().Value + salary.AnnualAmount;
-      salary.MakeDeposits(new DateTime(2020, 12, 31));
+      checkingExpected = yearTop.GetAccount("checking").StartingBalance + yearTop.GetIncomeSource("salary").AnnualAmount;
+      yearTop.GetIncomeSource("salary").MakeDeposits(new DateTime(2020, 12, 31));
 
-      Assert.AreEqual(checkingExpected, yearTop.Accounts["checking"].BalanceHistory.Last().Value);
+      Assert.AreEqual(checkingExpected, yearTop.GetAccount("checking").CurrentBalance);
     }
     [Test]
     public void SimpleHardBillTest()
     {
-      decimal checkingExpected = yearTop.Accounts["checking"].BalanceHistory.Last().Value;
-      electricity.PayAutoPayBill(new DateTime(2020, 2, 14));
+      decimal checkingExpected = yearTop.GetAccount("checking").CurrentBalance;
+      yearTop.GetHardBill("electricity").PerformAutoPay(new DateTime(2020, 2, 14));
 
-      checkingExpected -= electricity.Amount;
-      Assert.AreEqual(checkingExpected, yearTop.Accounts["checking"].BalanceHistory.Last().Value);
+      checkingExpected -= yearTop.GetHardBill("electricity").Amount;
+      Assert.AreEqual(checkingExpected, yearTop.GetAccount("checking").CurrentBalance);
     }
     [Test]
     public void FastForwardYearTest()
@@ -187,7 +187,7 @@ namespace BudgetToolsUnitTestF
       date = new DateTime(2020, 1, 15);
       sbt = yearTop.GetSoftBillTransaction(description, amount, date.Month);
       sbt.SoftGroupSplit["food"] = amount;
-      credit.NewDebitTransaction(sbt);
+      yearTop.GetAccount("credit").NewDebitTransaction(sbt);
 
       /* Checking checks */
       amount = 150;
@@ -195,16 +195,17 @@ namespace BudgetToolsUnitTestF
       date = new DateTime(2020, 1, 16);
       sbt = yearTop.GetSoftBillTransaction(description, amount, date.Month);
       sbt.SoftGroupSplit["gas"] = amount;
-      checking.NewDebitTransaction(sbt);
+      yearTop.GetAccount("checking").NewDebitTransaction(sbt);
 
       yearTop.SaveToFile(filepath);
 
       YearTop desYearTop = YearTop.LoadFromFile(filepath);
 
-      foreach (var kvp in yearTop.Accounts)
+      var accountNames = yearTop.GetAccountsNames();
+      foreach (var name in accountNames)
       {
-        AccountBase origAccount = kvp.Value;
-        AccountBase copyAccount = desYearTop.Accounts[kvp.Key];
+        IAccountBase origAccount = yearTop.GetAccount(name);
+        IAccountBase copyAccount = desYearTop.GetAccount(name);
 
         Assert.AreEqual(origAccount.CurrentBalance, copyAccount.CurrentBalance);
         IReadOnlyList<Transaction> origTs = origAccount.GetTransactions();

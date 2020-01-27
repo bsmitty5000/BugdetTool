@@ -35,7 +35,7 @@ namespace BudgetToolApp
     private DateTime _dateSelected;
     private int _monthSelected;
     private List<string> _selectedAccounts;
-    AccountBase _selectedAccount;
+    IAccountBase _selectedAccount;
     private bool _skipRefreshing;
 
     public ManageBudget(YearTop year)
@@ -55,9 +55,10 @@ namespace BudgetToolApp
       _allAccountTransactions = false;
       _allDatesTransactions = false;
       _selectedAccounts = new List<string>();
-      _selectedAccount = year.Accounts.First().Value;
+      var accounts = _year.GetAccounts();
+      _selectedAccount = accounts.First();
 
-      if(_year.Accounts.Count <= 0)
+      if(accounts.Count <= 0)
       {
         throw new ArgumentException("Must instantiate at least one account.");
       }
@@ -74,9 +75,9 @@ namespace BudgetToolApp
       softBillsLv.MouseUp += new MouseEventHandler(softBillsLv_MouseUp);
 
       accountsLv.Items.Clear();
-      foreach (var account in _year.Accounts)
+      foreach (var account in accounts)
       {
-        ListViewItem lvi = new ListViewItem(account.Key);
+        ListViewItem lvi = new ListViewItem(account.Name);
         accountsLv.Items.Add(lvi);
       }
       accountsLv.Items[0].Checked = true;
@@ -100,7 +101,7 @@ namespace BudgetToolApp
           }
         }
 
-        if (_year.Accounts.Count > 0)
+        if (_year.GetAccounts().Count > 0)
         {
           sbAdd.Enabled = true;
         }
@@ -156,7 +157,7 @@ namespace BudgetToolApp
     private void hardBillsLv_MouseUp(object sender, MouseEventArgs e)
     {
       int index = -1;
-      HardBill hardBill = null;
+      IHardBill hardBill = null;
 
       if (e.Button == MouseButtons.Right)
       {
@@ -166,7 +167,7 @@ namespace BudgetToolApp
           if (selectedItem != null)
           {
             index = selectedItem.Index;
-            hardBill = selectedItem.Tag as HardBill;
+            hardBill = _year.GetHardBill(selectedItem.SubItems[0].Text);
           }
         }
 
@@ -218,7 +219,7 @@ namespace BudgetToolApp
     {
       Transaction t = transactionsLv.SelectedItems[0].Tag as Transaction;
       string accountName = transactionsLv.SelectedItems[0].SubItems[2].Text;
-      if(!_year.Accounts[accountName].Remove(t))
+      if(!_year.GetAccount(accountName).RemoveTransaction(t))
       {
         throw new ArgumentException("Could not find transaction!");
       }
@@ -245,11 +246,7 @@ namespace BudgetToolApp
     {
       if (e.NewTransaction != null)
       {
-        if(!_year.Accounts.ContainsKey(e.AccountName))
-        {
-          throw new ArgumentException("could not find that account! Transaction not added.");
-        }
-        _year.Accounts[e.AccountName].NewDebitTransaction(e.NewTransaction);
+        _year.GetAccount(e.AccountName).NewDebitTransaction(e.NewTransaction);
       }
       RefreshPage();
     }
@@ -269,16 +266,17 @@ namespace BudgetToolApp
       if (_skipRefreshing)
         return;
 
+      //i wonder if i'll ever notice how slow this is..
       YearTop localYt;
-      if (_yearFastForward == null)
+      if (_dateSelected > DateTime.Today)
       {
-        localYt = _year;
+        localYt = _year.Copy();
+        localYt.FastForward(_dateSelected);
       }
       else
       {
-        localYt = _yearFastForward;
+        localYt = _year;
       }
-
 
       //using accountsLv here so the order matches up
       //accountsLv is for name & selection
@@ -288,7 +286,7 @@ namespace BudgetToolApp
       {
         if (item == null)
           continue;
-        ListViewItem lvi = new ListViewItem(localYt.Accounts[item.Text].GetBalance(_dateSelected).ToString());
+        ListViewItem lvi = new ListViewItem(localYt.GetAccount(item.Text).GetBalance(_dateSelected).ToString());
         accountInfoLv.Items.Add(lvi);
       }
 
@@ -315,20 +313,21 @@ namespace BudgetToolApp
       }
 
       List<Transaction> displayTransactions = new List<Transaction>();
-      List<AccountBase> displayAccounts = new List<AccountBase>();
+      List<IAccountBase> displayAccounts = new List<IAccountBase>();
 
       if (_allAccountTransactions)
       {
-        foreach (var account in localYt.Accounts)
+        var accounts = localYt.GetAccounts();
+        foreach (var account in accounts)
         {
-          displayAccounts.Add(account.Value);
+          displayAccounts.Add(account);
         }
       }
       else
       {
         foreach (var account in _selectedAccounts)
         {
-          displayAccounts.Add(localYt.Accounts[account]);
+          displayAccounts.Add(localYt.GetAccount(account));
         }
       }
 
@@ -361,23 +360,22 @@ namespace BudgetToolApp
 
       hardBillsLv.Items.Clear();
 
-      var hbList = localYt.HardBills.ToList();
-      hbList.Sort((pair1, pair2) => pair1.Value.NextBillDue.CompareTo(pair2.Value.NextBillDue));
+      var hbList = localYt.GetHardBills();
+      hbList.Sort((pair1, pair2) => pair1.NextBillDue.CompareTo(pair2.NextBillDue));
 
       foreach (var hb in hbList)
       {
-        ListViewItem lvi = new ListViewItem(hb.Key);
-        lvi.SubItems.Add(hb.Value.Amount.ToString());
-        lvi.SubItems.Add(hb.Value.NextBillDue.ToShortDateString());
-        if((hb.Value.AutoPay == false) && (hb.Value.NextBillDue <= _dateSelected))
+        ListViewItem lvi = new ListViewItem(hb.Name);
+        lvi.SubItems.Add(hb.Amount.ToString());
+        lvi.SubItems.Add(hb.NextBillDue.ToShortDateString());
+        if((hb.AutoPay == false) && (hb.NextBillDue <= _dateSelected))
         {
           lvi.BackColor = Color.Red;
         }
-        else if(hb.Value.AutoPay)
+        else if(hb.AutoPay)
         {
           lvi.BackColor = Color.LightGreen;
         }
-        lvi.Tag = hb.Value;
         hardBillsLv.Items.Add(lvi);
       }
     }
@@ -391,15 +389,6 @@ namespace BudgetToolApp
         _monthSelected = dateDtp.Value.Month;
       }
 
-      if (_dateSelected > DateTime.Today)
-      {
-        _yearFastForward = new YearTop(_year);
-        _yearFastForward.FastForward(_dateSelected);
-      }
-      else
-      {
-        _yearFastForward = null;
-      }
       RefreshPage();
     }
 
@@ -444,8 +433,8 @@ namespace BudgetToolApp
     }
     private void hbPay_Click(object sender, EventArgs e)
     {
-      HardBill hb = hardBillsLv.SelectedItems[0].Tag as HardBill;
-      EditHardBillPay editHardBillPay = new EditHardBillPay(hb);
+      string hb = hardBillsLv.SelectedItems[0].SubItems[0].Text;
+      EditHardBillPay editHardBillPay = new EditHardBillPay(_year.GetHardBill(hb));
       editHardBillPay.NewHardBillPayEvent += RefreshPage_Handler;
       editHardBillPay.Show();
       RefreshPage();

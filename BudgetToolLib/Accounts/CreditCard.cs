@@ -17,9 +17,9 @@ namespace BudgetToolLib
     {
     }
 
-    public CreditCard(CreditCard cc) :  base(cc)
-    {
-    }
+    //public CreditCard(CreditCard cc) :  base(cc)
+    //{
+    //}
     public override void NewDebitTransaction(Transaction transaction)
     {
       if (transaction.Amount < 0)

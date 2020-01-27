@@ -7,27 +7,12 @@ namespace BudgetToolApp
   public partial class EditHardBillForm : Form
   {
     private YearTop _year;
-    private HardBill _hardBill;
+    private IHardBill _hardBill;
     public event EventHandler<NewHardBillAddedEventArgs> NewHardBillAdded;
 
-    public EditHardBillForm(HardBill hardBill, YearTop year)
+    public EditHardBillForm(IHardBill hardBill, YearTop year)
     {
       InitializeComponent();
-
-      if (hardBill != null)
-      {
-        _hardBill = hardBill;
-      }
-      else
-      {
-        _hardBill = new HardBill(
-          string.Empty,
-          0,
-          DateTime.Today,
-          HardBillFrequencyEnum.Monthly,
-          null,
-          false);
-      }
 
       if (year == null)
       {
@@ -38,51 +23,70 @@ namespace BudgetToolApp
         _year = year;
       }
 
+
       frequencyCb.Items.AddRange(Enum.GetNames(typeof(HardBillFrequencyEnum)));
 
-      foreach (var account in _year.Accounts)
+      var accountList = _year.GetAccountsNames();
+      foreach (var account in accountList)
       {
-        accountCb.Items.Add(account.Value.Name);
+        accountCb.Items.Add(account);
       }
-      accountCb.SelectedItem = accountCb.Items[0];
 
-      nameTb.Text = _hardBill.Name;
-      amountTb.Text = _hardBill.Amount.ToString();
-      firstBillDueDtp.Value = _hardBill.FirstBillDue;
-      frequencyCb.SelectedItem = _hardBill.Frequency.ToString();
-      accountCb.SelectedItem = _hardBill.PaymentAccount != null ? _hardBill.PaymentAccount.Name : string.Empty;
-      autoPayCb.Checked = _hardBill.AutoPay;
+      if (hardBill != null)
+      {
+        _hardBill = hardBill;
+        nameTb.Text = _hardBill.Name;
+        nameTb.ReadOnly = true;
+
+        firstBillDueDtp.Value = _hardBill.FirstBillDue;
+        firstBillDueDtp.Enabled = false;
+
+        //editable
+        amountTb.Text = _hardBill.Amount.ToString();
+        frequencyCb.SelectedItem = _hardBill.Frequency.ToString();
+        accountCb.SelectedItem = _hardBill.PaymentAccount.Name;
+        autoPayCb.Checked = _hardBill.AutoPay;
+      }
+      else
+      {
+        _hardBill = null;
+      }
+
     }
 
     private void saveBtn_Click(object sender, EventArgs e)
     {
       NewHardBillAddedEventArgs args = new NewHardBillAddedEventArgs();
 
+      string name = nameTb.Text;
+      DateTime firstBillDue = firstBillDueDtp.Value;
+
       decimal amount;
-      if (decimal.TryParse(amountTb.Text, out amount))
-      {
-        _hardBill.Amount = amount;
-      }
-      else
+      if (!decimal.TryParse(amountTb.Text, out amount))
       {
         amountTb.Text = _hardBill.Amount.ToString();
         MessageBox.Show("Invalid amount!");
         return;
       }
-      _hardBill.Name = nameTb.Text;
 
-      HardBillFrequencyEnum enumParse;
-      Enum.TryParse(frequencyCb.SelectedItem.ToString(), out enumParse);
-      _hardBill.Frequency = enumParse;
+      HardBillFrequencyEnum frequency;
+      Enum.TryParse(frequencyCb.SelectedItem.ToString(), out frequency);
 
-      _hardBill.FirstBillDue = firstBillDueDtp.Value;
-      _hardBill.NextBillDue = firstBillDueDtp.Value;
+      string accountName = accountCb.Text;
+      bool autoPay = autoPayCb.Checked;
 
-      _hardBill.PaymentAccount = _year.Accounts[accountCb.Text];
-
-      _hardBill.AutoPay = autoPayCb.Checked;
-
-      args.NewHardBill = _hardBill;
+      if(_hardBill == null)
+      {
+        args.NewHardBill = new HardBill(name, amount, firstBillDue, frequency, _year.GetAccount(accountName), autoPay);
+      }
+      else
+      {
+        _hardBill.Amount = amount;
+        _hardBill.Frequency = frequency;
+        _hardBill.PaymentAccount = _year.GetAccount(accountName);
+        _hardBill.AutoPay = autoPay;
+        args.NewHardBill = null;
+      }
       OnNewHardBillAdded(args);
 
       this.Close();

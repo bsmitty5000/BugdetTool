@@ -26,14 +26,14 @@ namespace BudgetToolLib
     {
       SoftBills = new Dictionary<string, decimal>();
     }
-    public SoftBillGroup(SoftBillGroup s)
-    {
-      SoftBills = new Dictionary<string, decimal>();
-      foreach (var sb in s.SoftBills)
-      {
-        SoftBills.Add(sb.Key, sb.Value);
-      }
-    }
+    //public SoftBillGroup(SoftBillGroup s)
+    //{
+    //  SoftBills = new Dictionary<string, decimal>();
+    //  foreach (var sb in s.SoftBills)
+    //  {
+    //    SoftBills.Add(sb.Key, sb.Value);
+    //  }
+    //}
     public SoftBillTransaction CreateSoftBillTransaction()
     {
       SoftBillTransaction sbt = new SoftBillTransaction();

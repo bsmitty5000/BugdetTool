@@ -26,7 +26,6 @@ namespace BudgetToolGui
       else
       {
         _year = new YearTop();
-        _year.InitializeYear();
       }
 
       accountsLv.MouseUp += new MouseEventHandler(accountsLv_MouseUp);

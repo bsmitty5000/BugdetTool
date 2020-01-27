@@ -6,9 +6,9 @@ namespace BudgetToolApp
 {
   public partial class EditHardBillPay : Form
   {
-    private HardBill _hb;
+    private IHardBill _hb;
     public event EventHandler<EventArgs> NewHardBillPayEvent;
-    public EditHardBillPay(HardBill hb)
+    public EditHardBillPay(IHardBill hb)
     {
       InitializeComponent();
 

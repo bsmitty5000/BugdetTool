@@ -17,14 +17,14 @@ namespace BudgetToolLib
   }
 
   [Serializable()]
-  public class HardBill
+  public class HardBill : IHardBill
   {
     public string Name { get; set; }
     public decimal Amount { get; set; }
     public DateTime FirstBillDue { get; set; }
     public DateTime NextBillDue { get; set; }
     public HardBillFrequencyEnum Frequency { get; set; }
-    public AccountBase PaymentAccount { get; set; }
+    public IAccountBase PaymentAccount { get; set; }
     public bool AutoPay { get; set; }
 
     public decimal AnnualAmount
@@ -44,28 +44,36 @@ namespace BudgetToolLib
         }
       }
     }
+    #region Constructors
     public HardBill()
     { }
-
-    public HardBill(string name, decimal amount, DateTime firstBillDue, HardBillFrequencyEnum frequency, AccountBase paymentSource, bool autoPay)
+    public HardBill(string name, decimal amount, DateTime firstBillDue, HardBillFrequencyEnum frequency, IAccountBase paymentSource, bool autoPay)
     {
       Name = name;
       Amount = amount;
       FirstBillDue = firstBillDue;
+      NextBillDue = firstBillDue;
       Frequency = frequency;
       PaymentAccount = paymentSource;
       AutoPay = autoPay;
     }
-    public HardBill(HardBill hb)
+    //public HardBill(HardBill hb)
+    //{
+    //  this.Name = hb.Name;
+    //  this.Amount = hb.Amount;
+    //  this.FirstBillDue = hb.FirstBillDue;
+    //  this.Frequency = hb.Frequency;
+    //  this.PaymentAccount = AccountBaseFactory.CopyAccountBase(hb.PaymentAccount);
+    //  this.NextBillDue = hb.NextBillDue;
+    //  this.AutoPay = hb.AutoPay;
+    //}
+    #endregion
+
+    public void AssignPaymentAccount(IAccountBase account)
     {
-      this.Name = hb.Name;
-      this.Amount = hb.Amount;
-      this.FirstBillDue = hb.FirstBillDue;
-      this.Frequency = hb.Frequency;
-      this.PaymentAccount = AccountBaseFactory.CopyAccountBase(hb.PaymentAccount);
-      this.NextBillDue = hb.NextBillDue;
-      this.AutoPay = hb.AutoPay;
+      PaymentAccount = account;
     }
+
     public void PayBill(DateTime date, decimal amount = 0)
     {
       decimal amountToPay = amount == 0 ? Amount : amount;
