@@ -16,7 +16,7 @@ namespace BudgetToolLib
     void NewDebitTransaction(Transaction transaction);
     void NewCreditTransaction(Transaction transaction);
     IReadOnlyList<Transaction> GetTransactions();
-    bool RemoveTransaction(Transaction t);
+    bool RemoveTransaction(long transactionId);
     decimal GetBalance(DateTime date);
   }
 }

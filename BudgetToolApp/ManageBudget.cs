@@ -31,7 +31,7 @@ namespace BudgetToolApp
     private bool _allAccountTransactions;
     private bool _allDatesTransactions;
     private YearTop _year;
-    private YearTop _yearFastForward;
+    private bool _fastForwardNoEditing;
     private DateTime _dateSelected;
     private int _monthSelected;
     private List<string> _selectedAccounts;
@@ -86,6 +86,7 @@ namespace BudgetToolApp
       RefreshPage();
     }
 
+    #region soft bills
     private void softBillsLv_MouseUp(object sender, MouseEventArgs e)
     {
       int index = -1;
@@ -130,14 +131,12 @@ namespace BudgetToolApp
       editSoftBill.NewSoftBillAdded += NewSoftBill_Added;
       editSoftBill.Show();
     }
-
     private void sbDelete_Click(object sender, EventArgs e)
     {
       string name = softBillsLv.SelectedItems[0].SubItems[0].Text;
       _year.RemoveSoftBill(name, _monthSelected);
       RefreshPage();
     }
-
     private void sbEdit_Click(object sender, EventArgs e)
     {
       string name = softBillsLv.SelectedItems[0].SubItems[0].Text;
@@ -153,7 +152,9 @@ namespace BudgetToolApp
       _year.AddSoftBill(e.Name, e.Amount, _monthSelected);
       RefreshPage();
     }
+    #endregion
 
+    #region hard bills
     private void hardBillsLv_MouseUp(object sender, MouseEventArgs e)
     {
       int index = -1;
@@ -185,7 +186,17 @@ namespace BudgetToolApp
         //accountCms.Show(this, new Point(e.X, e.Y));
       }
     }
+    private void hbPay_Click(object sender, EventArgs e)
+    {
+      string hb = hardBillsLv.SelectedItems[0].SubItems[0].Text;
+      EditHardBillPay editHardBillPay = new EditHardBillPay(_year.GetHardBill(hb));
+      editHardBillPay.NewHardBillPayEvent += RefreshPage_Handler;
+      editHardBillPay.Show();
+      RefreshPage();
+    }
+    #endregion
 
+    #region transactions
     private void purchasesLv_MouseUp(object sender, MouseEventArgs e)
     {
       int index = -1;
@@ -201,7 +212,7 @@ namespace BudgetToolApp
           }
         }
 
-        if (index > -1)
+        if ((!_fastForwardNoEditing) && index > -1)
         {
           purchasesDelete.Enabled = true;
           //purchasesEdit.Enabled = true;
@@ -219,13 +230,12 @@ namespace BudgetToolApp
     {
       Transaction t = transactionsLv.SelectedItems[0].Tag as Transaction;
       string accountName = transactionsLv.SelectedItems[0].SubItems[2].Text;
-      if(!_year.GetAccount(accountName).RemoveTransaction(t))
+      if(!_year.GetAccount(accountName).RemoveTransaction(t.TransactionId))
       {
         throw new ArgumentException("Could not find transaction!");
       }
       RefreshPage();
     }
-
     private void purchasesEdit_Click(object sender, EventArgs e)
     {
       //_transToEdit = transactionsLv.SelectedItems[0].Tag as Transaction;
@@ -237,11 +247,10 @@ namespace BudgetToolApp
     }
     private void logPurchaseBtn_Click(object sender, EventArgs e)
     {
-      var editSbTransactionForm = new EditSbTransactionForm(_year);
+      var editSbTransactionForm = new EditSbTransactionForm(_year, _dateSelected);
       editSbTransactionForm.NewTransactionAdded += NewSbTransaction_Added;
       editSbTransactionForm.Show();
     }
-
     private void NewSbTransaction_Added(object sender, NewSbTransactionEventArgs e)
     {
       if (e.NewTransaction != null)
@@ -250,7 +259,9 @@ namespace BudgetToolApp
       }
       RefreshPage();
     }
+    #endregion
 
+    #region accounts
     private void AccountsLv_ItemChecked(object sender, ItemCheckedEventArgs e)
     {
       _selectedAccounts = new List<string>();
@@ -260,6 +271,8 @@ namespace BudgetToolApp
       }
       RefreshPage();
     }
+
+    #endregion
 
     private void RefreshPage()
     {
@@ -272,10 +285,12 @@ namespace BudgetToolApp
       {
         localYt = _year.Copy();
         localYt.FastForward(_dateSelected);
+        _fastForwardNoEditing = true;
       }
       else
       {
         localYt = _year;
+        _fastForwardNoEditing = false;
       }
 
       //using accountsLv here so the order matches up
@@ -290,24 +305,15 @@ namespace BudgetToolApp
         accountInfoLv.Items.Add(lvi);
       }
 
-      int monthSelected;
-      if(_showAnnual)
-      {
-        monthSelected = 0;
-      }
-      else
-      {
-        monthSelected = _dateSelected.Month;
-      }
-
-      softBillsLbl.Text = string.Format("Soft Bills Month: {0}", Months[monthSelected]);
+      var softBillUsage = localYt.GetSoftBillUsed(_monthSelected);
+      softBillsLbl.Text = string.Format("Soft Bills Month: {0}", Months[_monthSelected]);
       //update softbilllbl
       softBillsLv.Items.Clear();
-      foreach (var softBill in localYt.MonthlySoftBills[monthSelected].SoftBills)
+      foreach (var softBill in localYt.GetSoftBillGroup(_monthSelected))
       {
         ListViewItem lvi = new ListViewItem(softBill.Key);
         lvi.SubItems.Add(softBill.Value.ToString());
-        lvi.SubItems.Add((softBill.Value/* - softBill.Value.AmountUsed*/).ToString());
+        lvi.SubItems.Add((softBill.Value - softBillUsage[softBill.Key]).ToString());
         lvi.Tag = softBill.Value;
         softBillsLv.Items.Add(lvi);
       }
@@ -380,6 +386,7 @@ namespace BudgetToolApp
       }
     }
 
+    #region misc
     private void dateDtp_ValueChanged(object sender, EventArgs e)
     {
       _dateSelected = dateDtp.Value;
@@ -391,7 +398,6 @@ namespace BudgetToolApp
 
       RefreshPage();
     }
-
     private void showAnnualCb_CheckedChanged(object sender, EventArgs e)
     {
       _showAnnual = showAnnualCb.Checked;
@@ -407,38 +413,26 @@ namespace BudgetToolApp
 
       RefreshPage();
     }
-
     private void allAccountsCb_CheckedChanged(object sender, EventArgs e)
     {
       _allAccountTransactions = allAccountsCb.Checked;
       RefreshPage();
     }
-
     private void allDatesCb_CheckedChanged(object sender, EventArgs e)
     {
       _allDatesTransactions = allDatesCb.Checked;
       RefreshPage();
     }
-
     private void editBudgetBtn_Click(object sender, EventArgs e)
     {
       var editBudgetTop = new EditBudgetTop(_year);
       this.Close();
       editBudgetTop.Show();
     }
-
     private void RefreshPage_Handler(object sender, EventArgs e)
     {
       RefreshPage();
     }
-    private void hbPay_Click(object sender, EventArgs e)
-    {
-      string hb = hardBillsLv.SelectedItems[0].SubItems[0].Text;
-      EditHardBillPay editHardBillPay = new EditHardBillPay(_year.GetHardBill(hb));
-      editHardBillPay.NewHardBillPayEvent += RefreshPage_Handler;
-      editHardBillPay.Show();
-      RefreshPage();
-    }
-
+    #endregion
   }
 }

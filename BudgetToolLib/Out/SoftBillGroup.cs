@@ -34,16 +34,7 @@ namespace BudgetToolLib
     //    SoftBills.Add(sb.Key, sb.Value);
     //  }
     //}
-    public SoftBillTransaction CreateSoftBillTransaction()
-    {
-      SoftBillTransaction sbt = new SoftBillTransaction();
-      foreach (var sb in SoftBills)
-      {
-        sbt.SoftGroupSplit.Add(sb.Key, 0);
-      }
-      return sbt;
-    }
-    public List<string> GetSoftBillKeys()
+    public IReadOnlyList<string> GetSoftBillKeys()
     {
       return SoftBills.Keys.ToList();
     }

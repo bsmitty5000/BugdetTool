@@ -14,13 +14,18 @@ namespace BudgetToolLib
     {
       SoftGroupSplit = new Dictionary<string, decimal>();
     }
-    public SoftBillTransaction(SoftBillTransaction sb) : base(sb)
+    public SoftBillTransaction(string description, decimal amount, DateTime date, Dictionary<string, decimal> split) : 
+      base(description, amount, date)
     {
-      SoftGroupSplit = new Dictionary<string, decimal>();
-      foreach (var kvp in sb.SoftGroupSplit)
-      {
-        SoftGroupSplit.Add(kvp.Key, kvp.Value);
-      }
+      SoftGroupSplit = split;
     }
+    //public SoftBillTransaction(SoftBillTransaction sb) : base(sb)
+    //{
+    //  SoftGroupSplit = new Dictionary<string, decimal>();
+    //  foreach (var kvp in sb.SoftGroupSplit)
+    //  {
+    //    SoftGroupSplit.Add(kvp.Key, kvp.Value);
+    //  }
+    //}
   }
 }

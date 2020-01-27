@@ -18,7 +18,7 @@ namespace BudgetToolLib
     /* Add to dictionary directly */
     private Dictionary<string, IIncome> _income;
     private Dictionary<string, IHardBill> _hardBills;
-    public List<SoftBillGroup> MonthlySoftBills { get; set; }
+    private List<SoftBillGroup> _monthlySoftBills;
 
     public YearTop()
     {
@@ -71,7 +71,7 @@ namespace BudgetToolLib
       get
       {
         decimal annualSb = 0;
-        foreach (var group in MonthlySoftBills)
+        foreach (var group in _monthlySoftBills)
         {
           annualSb += group.TotalSoftBillAmountBudgeted;
         }
@@ -83,13 +83,13 @@ namespace BudgetToolLib
     #region Constructor Helpers
     public void InitializeYear()
     {
-      MonthlySoftBills = new List<SoftBillGroup>();
+      _monthlySoftBills = new List<SoftBillGroup>();
       /* BudgetGroup[0] = Year
        * BudgetGroup[1:12] = Months
        */
       for (int i = 0; i < 13; i++)
       {
-        MonthlySoftBills.Add(new SoftBillGroup());
+        _monthlySoftBills.Add(new SoftBillGroup());
       }
       _income = new Dictionary<string, IIncome>();
       _accounts = new Dictionary<string, IAccountBase>();
@@ -122,45 +122,37 @@ namespace BudgetToolLib
     #region SoftBill Access
     public void RemoveSoftBill(string name)
     {
-      foreach (var group in MonthlySoftBills)
+      foreach (var group in _monthlySoftBills)
       {
         group.SoftBills.Remove(name);
       }
     }
     public void RemoveSoftBill(string name, int month)
     {
-      MonthlySoftBills[month].SoftBills.Remove(name);
+      _monthlySoftBills[month].SoftBills.Remove(name);
     }
     public void AddSoftBill(string name, decimal startingAmount, int month)
     {
-      MonthlySoftBills[month].SoftBills[name] = startingAmount;
+      _monthlySoftBills[month].SoftBills[name] = startingAmount;
     }
     public void AddSoftBill(string name, decimal startingAmount, Boolean annualGroup)
     {
       if (annualGroup)
       {
-        MonthlySoftBills[0].SoftBills[name] = startingAmount;
+        _monthlySoftBills[0].SoftBills[name] = startingAmount;
       }
       else
       {
         /* important to start at 1 here */
-        for (int i = 1; i < MonthlySoftBills.Count; i++)
+        for (int i = 1; i < _monthlySoftBills.Count; i++)
         {
-          MonthlySoftBills[i].SoftBills[name] = startingAmount;
+          _monthlySoftBills[i].SoftBills[name] = startingAmount;
         }
       }
     }
-    public SoftBillTransaction GetSoftBillTransaction(string description, decimal amount, int month)
-    {
-      SoftBillTransaction sbt = MonthlySoftBills[month].CreateSoftBillTransaction();
-      //sbt.Date = new DateTime(DateTime.Today.Year, month, DateTime.Today.Day);
-      sbt.Description = description;
-      sbt.Amount = amount;
-      return sbt;
-    }
     public IReadOnlyList<string> GetSoftBillKeys(int month)
     {
-      return MonthlySoftBills[month].GetSoftBillKeys();
+      return _monthlySoftBills[month].GetSoftBillKeys();
     }
     public Dictionary<string, decimal> GetSoftBillUsed(int month)
     {
@@ -191,9 +183,9 @@ namespace BudgetToolLib
 
       return softBillTotals;
     }
-    public IReadOnlyList<SoftBillGroup> GetSoftBillGroups()
+    public IReadOnlyDictionary<string,decimal> GetSoftBillGroup(int month)
     {
-      return MonthlySoftBills.AsReadOnly();
+      return _monthlySoftBills[month].SoftBills;
     }
     #endregion
 

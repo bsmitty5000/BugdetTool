@@ -74,8 +74,7 @@ namespace BudgetToolApp
       }
 
       annualSbLv.Items.Clear();
-      var softBillGroups = _year.GetSoftBillGroups();
-      foreach (var softBill in softBillGroups[0].SoftBills)
+      foreach (var softBill in _year.GetSoftBillGroup(0))
       {
         ListViewItem lvi = new ListViewItem(softBill.Key);
         lvi.SubItems.Add(softBill.Value.ToString());
@@ -83,7 +82,7 @@ namespace BudgetToolApp
       }
 
       monthlySbLv.Items.Clear();
-      foreach (var softBill in softBillGroups[1].SoftBills)
+      foreach (var softBill in _year.GetSoftBillGroup(1))
       {
         ListViewItem lvi = new ListViewItem(softBill.Key);
         lvi.SubItems.Add(softBill.Value.ToString());

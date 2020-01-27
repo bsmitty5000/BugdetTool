@@ -90,9 +90,26 @@ namespace BudgetToolLib
     {
       return _transactions.AsReadOnly();
     }
-    public bool RemoveTransaction(Transaction t)
+    public bool RemoveTransaction(long transactionId)
     {
-      return _transactions.Remove(t);
+      Transaction transaction = null;
+      foreach (var t in _transactions)
+      {
+        if(t.TransactionId == transactionId)
+        {
+          transaction = t;
+          break;
+        }
+      }
+
+      if(transaction != null)
+      {
+        return _transactions.Remove(transaction);
+      }
+      else
+      {
+        return false;
+      }
     }
     public decimal GetBalance(DateTime date)
     {

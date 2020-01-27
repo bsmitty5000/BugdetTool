@@ -118,7 +118,6 @@
       this.amountTb.Name = "amountTb";
       this.amountTb.Size = new System.Drawing.Size(100, 20);
       this.amountTb.TabIndex = 49;
-      this.amountTb.TextChanged += new System.EventHandler(this.amountTb_TextChanged);
       // 
       // descriptionTb
       // 
