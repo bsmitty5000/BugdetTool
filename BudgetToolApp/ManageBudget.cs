@@ -302,6 +302,7 @@ namespace BudgetToolApp
         if (item == null)
           continue;
         ListViewItem lvi = new ListViewItem(localYt.GetAccount(item.Text).GetBalance(_dateSelected).ToString());
+        lvi.SubItems.Add(localYt.GetAccount(item.Text).StartingDate.ToShortDateString());
         accountInfoLv.Items.Add(lvi);
       }
 

@@ -67,6 +67,7 @@
       this.sbAdd = new System.Windows.Forms.ToolStripMenuItem();
       this.sbDelete = new System.Windows.Forms.ToolStripMenuItem();
       this.sbEdit = new System.Windows.Forms.ToolStripMenuItem();
+      this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
       this.purchasesCms.SuspendLayout();
       this.hbCms.SuspendLayout();
       this.sbCms.SuspendLayout();
@@ -279,7 +280,8 @@
       // accountInfoLv
       // 
       this.accountInfoLv.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader9});
+            this.columnHeader9,
+            this.columnHeader8});
       this.accountInfoLv.Font = new System.Drawing.Font("Franklin Gothic Medium", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.accountInfoLv.HideSelection = false;
       this.accountInfoLv.Location = new System.Drawing.Point(145, 78);
@@ -292,7 +294,7 @@
       // columnHeader9
       // 
       this.columnHeader9.Text = "Amount";
-      this.columnHeader9.Width = 138;
+      this.columnHeader9.Width = 95;
       // 
       // purchasesCms
       // 
@@ -380,28 +382,33 @@
             this.sbDelete,
             this.sbEdit});
       this.sbCms.Name = "annualHbCms";
-      this.sbCms.Size = new System.Drawing.Size(181, 92);
+      this.sbCms.Size = new System.Drawing.Size(108, 70);
       // 
       // sbAdd
       // 
       this.sbAdd.Name = "sbAdd";
-      this.sbAdd.Size = new System.Drawing.Size(180, 22);
+      this.sbAdd.Size = new System.Drawing.Size(107, 22);
       this.sbAdd.Text = "Add";
       this.sbAdd.Click += new System.EventHandler(this.sbAdd_Click);
       // 
       // sbDelete
       // 
       this.sbDelete.Name = "sbDelete";
-      this.sbDelete.Size = new System.Drawing.Size(180, 22);
+      this.sbDelete.Size = new System.Drawing.Size(107, 22);
       this.sbDelete.Text = "Delete";
       this.sbDelete.Click += new System.EventHandler(this.sbDelete_Click);
       // 
       // sbEdit
       // 
       this.sbEdit.Name = "sbEdit";
-      this.sbEdit.Size = new System.Drawing.Size(180, 22);
+      this.sbEdit.Size = new System.Drawing.Size(107, 22);
       this.sbEdit.Text = "Edit";
       this.sbEdit.Click += new System.EventHandler(this.sbEdit_Click);
+      // 
+      // columnHeader8
+      // 
+      this.columnHeader8.Text = "Start Date";
+      this.columnHeader8.Width = 95;
       // 
       // ManageBudget
       // 
@@ -475,5 +482,6 @@
         private System.Windows.Forms.ToolStripMenuItem sbAdd;
         private System.Windows.Forms.ToolStripMenuItem sbDelete;
         private System.Windows.Forms.ToolStripMenuItem sbEdit;
+        private System.Windows.Forms.ColumnHeader columnHeader8;
     }
 }
