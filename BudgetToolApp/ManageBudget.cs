@@ -192,7 +192,6 @@ namespace BudgetToolApp
       EditHardBillPay editHardBillPay = new EditHardBillPay(_year.GetHardBill(hb));
       editHardBillPay.NewHardBillPayEvent += RefreshPage_Handler;
       editHardBillPay.Show();
-      RefreshPage();
     }
     #endregion
 
@@ -390,7 +389,7 @@ namespace BudgetToolApp
     #region misc
     private void dateDtp_ValueChanged(object sender, EventArgs e)
     {
-      _dateSelected = dateDtp.Value;
+      _dateSelected = dateDtp.Value.Date;
 
       if(!showAnnualCb.Checked)
       {

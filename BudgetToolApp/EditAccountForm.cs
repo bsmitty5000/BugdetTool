@@ -31,7 +31,7 @@ namespace BudgetToolApp
         return;
       }
 
-      DateTime startingDate = startingDateDtp.Value;
+      DateTime startingDate = startingDateDtp.Value.Date;
 
       string name = nameTb.Text;
 

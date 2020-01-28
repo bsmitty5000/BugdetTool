@@ -108,7 +108,7 @@ namespace BudgetToolApp
 
     private void dateDtp_ValueChanged(object sender, EventArgs e)
     {
-      _dateSelected = dateDtp.Value;
+      _dateSelected = dateDtp.Value.Date;
       if ((!_annualSelected) && (_monthSelected != _dateSelected.Month))
       {
         _monthSelected = _dateSelected.Month;
@@ -146,7 +146,7 @@ namespace BudgetToolApp
     private bool OnNewTransactionBillAdded()
     {
       string description = descriptionTb.Text;
-      DateTime date = dateDtp.Value;
+      DateTime date = dateDtp.Value.Date;
 
       if (!grabTotalAmount())
       {

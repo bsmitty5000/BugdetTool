@@ -63,7 +63,7 @@ namespace BudgetToolApp
       }
 
       string name = nameTb.Text;
-      DateTime firstDeposit = firstDepositDtp.Value;
+      DateTime firstDeposit = firstDepositDtp.Value.Date;
 
       IncomeFrequencyEnum frequency;
       Enum.TryParse(frequencyCb.SelectedItem.ToString(), out frequency);

@@ -32,7 +32,7 @@ namespace BudgetToolApp
         MessageBox.Show("Invalid amount!");
         return;
       }
-      DateTime paymentDate = paymentDateDtp.Value;
+      DateTime paymentDate = paymentDateDtp.Value.Date;
 
       _hb.PayBill(paymentDate, amount);
       OnHardBillPaid(null);

@@ -59,7 +59,7 @@ namespace BudgetToolApp
       NewHardBillAddedEventArgs args = new NewHardBillAddedEventArgs();
 
       string name = nameTb.Text;
-      DateTime firstBillDue = firstBillDueDtp.Value;
+      DateTime firstBillDue = firstBillDueDtp.Value.Date;
 
       decimal amount;
       if (!decimal.TryParse(amountTb.Text, out amount))
