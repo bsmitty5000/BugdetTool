@@ -28,14 +28,12 @@ namespace BudgetToolApp
     };
 
     private bool _showAnnual;
-    private bool _allAccountTransactions;
     private bool _allDatesTransactions;
     private YearTop _year;
     private bool _fastForwardNoEditing;
     private DateTime _dateSelected;
     private int _monthSelected;
-    private List<string> _selectedAccounts;
-    IAccountBase _selectedAccount;
+    private string _selectedAccountName;
     private bool _skipRefreshing;
 
     public ManageBudget(YearTop year)
@@ -52,11 +50,9 @@ namespace BudgetToolApp
       _year = year;
       _dateSelected = DateTime.Today;
       _showAnnual = false;
-      _allAccountTransactions = false;
       _allDatesTransactions = false;
-      _selectedAccounts = new List<string>();
+      _selectedAccountName = string.Empty;
       var accounts = _year.GetAccounts();
-      _selectedAccount = accounts.First();
 
       if(accounts.Count <= 0)
       {
@@ -64,12 +60,10 @@ namespace BudgetToolApp
       }
       dateDtp.Value = DateTime.Today;
       showAnnualCb.Checked = false;
-      allAccountsCb.Checked = false;
       allDatesCb.Checked = false;
 
       _year.FastForward(DateTime.Today);
 
-      accountsLv.ItemChecked += AccountsLv_ItemChecked;
       transactionsLv.MouseUp += new MouseEventHandler(purchasesLv_MouseUp);
       hardBillsLv.MouseUp += new MouseEventHandler(hardBillsLv_MouseUp);
       softBillsLv.MouseUp += new MouseEventHandler(softBillsLv_MouseUp);
@@ -261,12 +255,15 @@ namespace BudgetToolApp
     #endregion
 
     #region accounts
-    private void AccountsLv_ItemChecked(object sender, ItemCheckedEventArgs e)
+    private void accountsLv_SelectedIndexChanged(object sender, EventArgs e)
     {
-      _selectedAccounts = new List<string>();
-      foreach (ListViewItem lvi in accountsLv.CheckedItems)
+      if (accountsLv.SelectedItems.Count > 0)
       {
-        _selectedAccounts.Add(lvi.Text);
+        _selectedAccountName = accountsLv.SelectedItems[0].Text;
+      }
+      else
+      {
+        _selectedAccountName = string.Empty;
       }
       RefreshPage();
     }
@@ -318,45 +315,30 @@ namespace BudgetToolApp
         softBillsLv.Items.Add(lvi);
       }
 
-      List<Transaction> displayTransactions = new List<Transaction>();
-      List<IAccountBase> displayAccounts = new List<IAccountBase>();
-
-      if (_allAccountTransactions)
-      {
-        var accounts = localYt.GetAccounts();
-        foreach (var account in accounts)
-        {
-          displayAccounts.Add(account);
-        }
-      }
-      else
-      {
-        foreach (var account in _selectedAccounts)
-        {
-          displayAccounts.Add(localYt.GetAccount(account));
-        }
-      }
-
       transactionsLv.Items.Clear();
-      foreach (var account in displayAccounts)
+      List<Transaction> displayTransactions = new List<Transaction>();
+      var accountNames = localYt.GetAccountsNames();
+      if(accountNames.Contains(_selectedAccountName))
       {
+        IAccountBase selectedAccount = localYt.GetAccount(_selectedAccountName);
+
         if (_allDatesTransactions)
         {
-          displayTransactions = account.GetTransactions().ToList();
+          displayTransactions = selectedAccount.GetTransactions().ToList();
         }
         else
         {
-          displayTransactions = account.GetTransactions().Where(p => (p.Date.Month == _dateSelected.Month)).ToList();
+          displayTransactions = selectedAccount.GetTransactions().Where(p => (p.Date.Month == _dateSelected.Month)).ToList();
         }
 
         foreach (var t in displayTransactions.OrderBy(t => t.Date).ToList())
         {
           ListViewItem lvi = new ListViewItem(t.Description);
           lvi.SubItems.Add(t.Amount.ToString());
-          lvi.SubItems.Add(account.Name); //subitems 2?
+          lvi.SubItems.Add(selectedAccount.Name); //subitems 2?
           lvi.SubItems.Add(t.Date.ToShortDateString());
           lvi.Tag = t;
-          if(t.Date < account.StartingDate)
+          if (t.Date < selectedAccount.StartingDate)
           {
             lvi.BackColor = Color.LightGray;
           }
@@ -365,10 +347,9 @@ namespace BudgetToolApp
       }
 
       hardBillsLv.Items.Clear();
-
       var hbList = localYt.GetHardBills();
       hbList.Sort((pair1, pair2) => pair1.NextBillDue.CompareTo(pair2.NextBillDue));
-
+      int count = 0;
       foreach (var hb in hbList)
       {
         ListViewItem lvi = new ListViewItem(hb.Name);
@@ -383,6 +364,30 @@ namespace BudgetToolApp
           lvi.BackColor = Color.LightGreen;
         }
         hardBillsLv.Items.Add(lvi);
+
+        count++;
+        if(count > 5)
+        {
+          break;
+        }
+      }
+
+      incomeLv.Items.Clear();
+      var incomeList = localYt.GetIncomeSources();
+      incomeList.Sort((pair1, pair2) => pair1.NextDeposit.CompareTo(pair2.NextDeposit));
+      count = 0;
+      foreach (var income in incomeList)
+      {
+        ListViewItem lvi = new ListViewItem(income.Name);
+        lvi.SubItems.Add(income.PaydayAmount.ToString());
+        lvi.SubItems.Add(income.NextDeposit.ToShortDateString());
+        incomeLv.Items.Add(lvi);
+
+        count++;
+        if (count > 5)
+        {
+          break;
+        }
       }
     }
 
@@ -413,11 +418,6 @@ namespace BudgetToolApp
 
       RefreshPage();
     }
-    private void allAccountsCb_CheckedChanged(object sender, EventArgs e)
-    {
-      _allAccountTransactions = allAccountsCb.Checked;
-      RefreshPage();
-    }
     private void allDatesCb_CheckedChanged(object sender, EventArgs e)
     {
       _allDatesTransactions = allDatesCb.Checked;
@@ -433,6 +433,23 @@ namespace BudgetToolApp
     {
       RefreshPage();
     }
-    #endregion
+        #endregion
+
+    private void saveBtn_Click(object sender, EventArgs e)
+    {
+      SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+      saveFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+      saveFileDialog1.FilterIndex = 2;
+      saveFileDialog1.RestoreDirectory = true;
+
+      if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+      {
+        Properties.Settings.Default["BudgetFile"] = saveFileDialog1.FileName;
+        Properties.Settings.Default.Save();
+
+        _year.SaveToFile(saveFileDialog1.FileName);
+      }
+    }
   }
 }

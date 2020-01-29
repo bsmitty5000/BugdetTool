@@ -48,11 +48,11 @@
       this.editBudgetBtn = new System.Windows.Forms.Button();
       this.logPurchaseBtn = new System.Windows.Forms.Button();
       this.logDepositBtn = new System.Windows.Forms.Button();
-      this.allAccountsCb = new System.Windows.Forms.CheckBox();
       this.allDatesCb = new System.Windows.Forms.CheckBox();
       this.showAnnualCb = new System.Windows.Forms.CheckBox();
       this.accountInfoLv = new System.Windows.Forms.ListView();
       this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+      this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
       this.purchasesCms = new System.Windows.Forms.ContextMenuStrip(this.components);
       this.purchasesDelete = new System.Windows.Forms.ToolStripMenuItem();
       this.purchasesEdit = new System.Windows.Forms.ToolStripMenuItem();
@@ -67,7 +67,12 @@
       this.sbAdd = new System.Windows.Forms.ToolStripMenuItem();
       this.sbDelete = new System.Windows.Forms.ToolStripMenuItem();
       this.sbEdit = new System.Windows.Forms.ToolStripMenuItem();
-      this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+      this.saveBtn = new System.Windows.Forms.Button();
+      this.label4 = new System.Windows.Forms.Label();
+      this.incomeLv = new System.Windows.Forms.ListView();
+      this.columnHeader10 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+      this.columnHeader11 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+      this.columnHeader12 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
       this.purchasesCms.SuspendLayout();
       this.hbCms.SuspendLayout();
       this.sbCms.SuspendLayout();
@@ -75,18 +80,19 @@
       // 
       // accountsLv
       // 
-      this.accountsLv.CheckBoxes = true;
       this.accountsLv.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.AccountName});
       this.accountsLv.Font = new System.Drawing.Font("Franklin Gothic Medium", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.accountsLv.FullRowSelect = true;
       this.accountsLv.HideSelection = false;
       this.accountsLv.Location = new System.Drawing.Point(12, 78);
+      this.accountsLv.MultiSelect = false;
       this.accountsLv.Name = "accountsLv";
       this.accountsLv.Size = new System.Drawing.Size(145, 97);
       this.accountsLv.TabIndex = 0;
       this.accountsLv.UseCompatibleStateImageBehavior = false;
       this.accountsLv.View = System.Windows.Forms.View.Details;
+      this.accountsLv.SelectedIndexChanged += new System.EventHandler(this.accountsLv_SelectedIndexChanged);
       // 
       // AccountName
       // 
@@ -212,9 +218,9 @@
       // editBudgetBtn
       // 
       this.editBudgetBtn.Font = new System.Drawing.Font("Franklin Gothic Medium", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.editBudgetBtn.Location = new System.Drawing.Point(380, 403);
+      this.editBudgetBtn.Location = new System.Drawing.Point(380, 399);
       this.editBudgetBtn.Name = "editBudgetBtn";
-      this.editBudgetBtn.Size = new System.Drawing.Size(75, 23);
+      this.editBudgetBtn.Size = new System.Drawing.Size(75, 27);
       this.editBudgetBtn.TabIndex = 11;
       this.editBudgetBtn.Text = "Edit Budget";
       this.editBudgetBtn.UseVisualStyleBackColor = true;
@@ -241,23 +247,11 @@
       this.logDepositBtn.Text = "Log Deposit";
       this.logDepositBtn.UseVisualStyleBackColor = true;
       // 
-      // allAccountsCb
-      // 
-      this.allAccountsCb.AutoSize = true;
-      this.allAccountsCb.Font = new System.Drawing.Font("Franklin Gothic Medium", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.allAccountsCb.Location = new System.Drawing.Point(451, 7);
-      this.allAccountsCb.Name = "allAccountsCb";
-      this.allAccountsCb.Size = new System.Drawing.Size(86, 19);
-      this.allAccountsCb.TabIndex = 14;
-      this.allAccountsCb.Text = "All Accounts";
-      this.allAccountsCb.UseVisualStyleBackColor = true;
-      this.allAccountsCb.CheckedChanged += new System.EventHandler(this.allAccountsCb_CheckedChanged);
-      // 
       // allDatesCb
       // 
       this.allDatesCb.AutoSize = true;
       this.allDatesCb.Font = new System.Drawing.Font("Franklin Gothic Medium", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.allDatesCb.Location = new System.Drawing.Point(543, 7);
+      this.allDatesCb.Location = new System.Drawing.Point(451, 7);
       this.allDatesCb.Name = "allDatesCb";
       this.allDatesCb.Size = new System.Drawing.Size(70, 19);
       this.allDatesCb.TabIndex = 15;
@@ -296,6 +290,11 @@
       this.columnHeader9.Text = "Amount";
       this.columnHeader9.Width = 95;
       // 
+      // columnHeader8
+      // 
+      this.columnHeader8.Text = "Start Date";
+      this.columnHeader8.Width = 95;
+      // 
       // purchasesCms
       // 
       this.purchasesCms.ImageScalingSize = new System.Drawing.Size(24, 24);
@@ -331,7 +330,7 @@
       this.hardBillsLv.HideSelection = false;
       this.hardBillsLv.Location = new System.Drawing.Point(766, 32);
       this.hardBillsLv.Name = "hardBillsLv";
-      this.hardBillsLv.Size = new System.Drawing.Size(319, 284);
+      this.hardBillsLv.Size = new System.Drawing.Size(319, 186);
       this.hardBillsLv.TabIndex = 46;
       this.hardBillsLv.UseCompatibleStateImageBehavior = false;
       this.hardBillsLv.View = System.Windows.Forms.View.Details;
@@ -357,9 +356,9 @@
       this.label5.Font = new System.Drawing.Font("Franklin Gothic Medium", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.label5.Location = new System.Drawing.Point(763, 11);
       this.label5.Name = "label5";
-      this.label5.Size = new System.Drawing.Size(54, 15);
+      this.label5.Size = new System.Drawing.Size(79, 15);
       this.label5.TabIndex = 47;
-      this.label5.Text = "Hard Bills";
+      this.label5.Text = "Upcoming Bills";
       // 
       // hbCms
       // 
@@ -405,22 +404,71 @@
       this.sbEdit.Text = "Edit";
       this.sbEdit.Click += new System.EventHandler(this.sbEdit_Click);
       // 
-      // columnHeader8
+      // saveBtn
       // 
-      this.columnHeader8.Text = "Start Date";
-      this.columnHeader8.Width = 95;
+      this.saveBtn.Font = new System.Drawing.Font("Franklin Gothic Medium", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.saveBtn.Location = new System.Drawing.Point(462, 399);
+      this.saveBtn.Name = "saveBtn";
+      this.saveBtn.Size = new System.Drawing.Size(88, 27);
+      this.saveBtn.TabIndex = 48;
+      this.saveBtn.Text = "Save Budget";
+      this.saveBtn.UseVisualStyleBackColor = true;
+      this.saveBtn.Click += new System.EventHandler(this.saveBtn_Click);
+      // 
+      // label4
+      // 
+      this.label4.AutoSize = true;
+      this.label4.Font = new System.Drawing.Font("Franklin Gothic Medium", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.label4.Location = new System.Drawing.Point(763, 219);
+      this.label4.Name = "label4";
+      this.label4.Size = new System.Drawing.Size(93, 15);
+      this.label4.TabIndex = 50;
+      this.label4.Text = "Upcoming Income";
+      // 
+      // incomeLv
+      // 
+      this.incomeLv.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader10,
+            this.columnHeader11,
+            this.columnHeader12});
+      this.incomeLv.Font = new System.Drawing.Font("Franklin Gothic Medium", 8.25F);
+      this.incomeLv.FullRowSelect = true;
+      this.incomeLv.HideSelection = false;
+      this.incomeLv.Location = new System.Drawing.Point(766, 240);
+      this.incomeLv.Name = "incomeLv";
+      this.incomeLv.Size = new System.Drawing.Size(319, 186);
+      this.incomeLv.TabIndex = 49;
+      this.incomeLv.UseCompatibleStateImageBehavior = false;
+      this.incomeLv.View = System.Windows.Forms.View.Details;
+      // 
+      // columnHeader10
+      // 
+      this.columnHeader10.Text = "Name";
+      this.columnHeader10.Width = 107;
+      // 
+      // columnHeader11
+      // 
+      this.columnHeader11.Text = "Amount";
+      this.columnHeader11.Width = 98;
+      // 
+      // columnHeader12
+      // 
+      this.columnHeader12.Text = "Next Due Date";
+      this.columnHeader12.Width = 90;
       // 
       // ManageBudget
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(1097, 450);
+      this.Controls.Add(this.label4);
+      this.Controls.Add(this.incomeLv);
+      this.Controls.Add(this.saveBtn);
       this.Controls.Add(this.label5);
       this.Controls.Add(this.hardBillsLv);
       this.Controls.Add(this.accountInfoLv);
       this.Controls.Add(this.showAnnualCb);
       this.Controls.Add(this.allDatesCb);
-      this.Controls.Add(this.allAccountsCb);
       this.Controls.Add(this.logDepositBtn);
       this.Controls.Add(this.logPurchaseBtn);
       this.Controls.Add(this.editBudgetBtn);
@@ -463,7 +511,6 @@
         private System.Windows.Forms.Button editBudgetBtn;
         private System.Windows.Forms.Button logPurchaseBtn;
         private System.Windows.Forms.Button logDepositBtn;
-        private System.Windows.Forms.CheckBox allAccountsCb;
         private System.Windows.Forms.CheckBox allDatesCb;
         private System.Windows.Forms.CheckBox showAnnualCb;
     private System.Windows.Forms.ListView accountInfoLv;
@@ -483,5 +530,11 @@
         private System.Windows.Forms.ToolStripMenuItem sbDelete;
         private System.Windows.Forms.ToolStripMenuItem sbEdit;
         private System.Windows.Forms.ColumnHeader columnHeader8;
+        private System.Windows.Forms.Button saveBtn;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ListView incomeLv;
+        private System.Windows.Forms.ColumnHeader columnHeader10;
+        private System.Windows.Forms.ColumnHeader columnHeader11;
+        private System.Windows.Forms.ColumnHeader columnHeader12;
     }
 }

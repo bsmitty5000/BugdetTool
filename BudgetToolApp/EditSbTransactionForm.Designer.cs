@@ -61,7 +61,7 @@
       this.softBillSplitTpl.ColumnCount = 3;
       this.softBillSplitTpl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 51.33333F));
       this.softBillSplitTpl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 48.66667F));
-      this.softBillSplitTpl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 177F));
+      this.softBillSplitTpl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 178F));
       this.softBillSplitTpl.Font = new System.Drawing.Font("Franklin Gothic Medium", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.softBillSplitTpl.Location = new System.Drawing.Point(336, 72);
       this.softBillSplitTpl.Name = "softBillSplitTpl";
@@ -69,7 +69,7 @@
       this.softBillSplitTpl.RowStyles.Add(new System.Windows.Forms.RowStyle());
       this.softBillSplitTpl.RowStyles.Add(new System.Windows.Forms.RowStyle());
       this.softBillSplitTpl.Size = new System.Drawing.Size(444, 55);
-      this.softBillSplitTpl.TabIndex = 54;
+      this.softBillSplitTpl.TabIndex = 52;
       // 
       // dateDtp
       // 
@@ -77,7 +77,7 @@
       this.dateDtp.Location = new System.Drawing.Point(120, 105);
       this.dateDtp.Name = "dateDtp";
       this.dateDtp.Size = new System.Drawing.Size(200, 20);
-      this.dateDtp.TabIndex = 53;
+      this.dateDtp.TabIndex = 51;
       this.dateDtp.ValueChanged += new System.EventHandler(this.dateDtp_ValueChanged);
       // 
       // label5
@@ -152,7 +152,7 @@
       this.accountCb.Location = new System.Drawing.Point(120, 74);
       this.accountCb.Name = "accountCb";
       this.accountCb.Size = new System.Drawing.Size(121, 23);
-      this.accountCb.TabIndex = 57;
+      this.accountCb.TabIndex = 50;
       // 
       // label4
       // 
